@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+    <link th:href="@{/plugins/bootstrap-select/css/bootstrap-select.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" rel="stylesheet" />
+    <title>OSP Sława - Szczegóły strażaka</title>
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+	<th:block th:include="html/preloader.html"></th:block>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <th:block th:include="html/search_bar.html"></th:block>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+	<th:block th:include="html/top_bar.html"></th:block>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+			<th:block th:include="html/user_info.html"></th:block>
+            <!-- #User Info -->
+            <!-- Menu -->
+			<th:block th:include="html/navigation.html"></th:block>
+            <!-- #Menu -->
+            <!-- Footer -->
+			<th:block th:include="html/footer.html"></th:block>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+		<th:block th:include="html/sidebar_right.html"></th:block>
+        <!-- #END# Right Sidebar -->
+    </section>
+    
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        	<!-- Modify below -->
+	
+            <!-- Actual content -->
+
+            <div class="row clearfix">
+				<div class="col-xs-12 col-sm-3">
+                    <div class="card profile-card">
+                        <div class="profile-header">&nbsp;</div>
+                        <div class="profile-body">
+                            <div class="image-area">
+                                <img src="../../images/user-lg.jpg" alt="Zdjęcie strażaka">
+                            </div>
+                            <div class="content-area">
+                                <h3 th:text="${firefighter.firstName + ' ' + firefighter.lastName}"></h3>
+                                <p th:text="${'Członek ' + firefighter.type.name}"></p>
+                                <p>Administrator</p>
+                            </div>
+                        </div>
+                        <div class="profile-footer">
+                            <ul>
+                                <li>
+                                    <span>ID w systemie</span>
+                                    <span th:text="${firefighter.id}"></span>
+                                </li>
+                                <li>
+                                    <span>Data dołączenia</span>
+                                    <span th:text="${firefighter.joinDate}"></span>
+                                </li>
+                                <li>
+                                    <span>Członek JOT?</span>
+                                    <span th:if="${(firefighter.isInJOT == false) || (firefighter.isInJOT == null)}" class="label label-danger">Nie</span>
+                                    <span th:if="${firefighter.isInJOT == true}" class="label label-success">Tak</span>
+                                </li>
+                                <li th:if="${firefighter.isInJOT == true}">
+                                    <span>Termin badań lekarskich</span>
+                                    <span th:text="${firefighter.joinDate}"></span>
+                                </li>                               
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-3 col-xs-12">
+					<div class="card profile-card">
+                        <div class="profile-footer">
+                            <ul class="list-group">
+                                <li>
+                                	<span>Imię:</span>
+                                	<span th:text="${firefighter.firstName}"></span>
+                                </li>
+                                <li>
+                                	<span>Drugie imię:</span>
+                                	<span th:text="${firefighter.secondName}"></span>
+                                </li>
+                                <li>
+                                	<span>Nazwisko:</span>
+                                	<span th:text="${firefighter.lastName}"></span>
+                                </li>
+                                <li>
+                                	<span>Data urodzenia:</span>
+                                	<span th:text="${firefighter.birthDate}"></span>
+                                </li>                                
+                                <li>
+                                	<span>Miejsce urodzenia:</span>
+                                	<span th:text="${firefighter.birthPlace}"></span>
+                                </li>
+                                <li>
+                                	<span>PESEL:</span>
+                                	<span th:text="${firefighter.pesel}"></span>
+                                </li>                                
+                                <li>
+                                	<span>Płeć:</span>
+                                	<span th:if="${firefighter.gender == 'M'}">Mężczyzna</span>
+                                    <span th:if="${firefighter.gender == 'K'}">Kobieta</span>
+                                </li>                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+					<div class="card profile-card">
+                        <div class="profile-footer">
+                            <ul class="list-group">
+                                <li>
+                                	<span>Ulica:</span>
+                                	<span th:text="${firefighter.addressStreet}"></span>
+                                </li>
+                                <li>
+                                	<span>Numer domu:</span>
+                                	<span th:text="${firefighter.address_1}"></span>
+                                </li>
+                                <li>
+                                	<span>Numer mieszkania:</span>
+                                	<span th:text="${firefighter.address_2}"></span>
+                                </li>
+                                <li>
+                                	<span>Kod pocztowy:</span>
+                                	<span th:text="${firefighter.addressPostalCode}"></span>
+                                </li>                                
+                                <li>
+                                	<span>Miejscowość:</span>
+                                	<span th:text="${firefighter.addressCity}"></span>
+                                </li>
+                                <li>
+                                	<span>Adres e-mail:</span>
+                                	<span th:text="${firefighter.email}"></span>
+                                </li>                                
+                                <li>
+                                	<span>Numer telefonu:</span>
+                                	<span th:text="${firefighter.phone}"></span>
+                                </li>                                
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                    <div class="card profile-card">
+                        <div class="header">
+                            <h2>Statystyki</h2>
+                        </div>
+                        <div class="profile-footer">
+                            <ul>
+                                <li>
+                                    <span>Wyjazdów łącznie</span>
+                                    <span>789</span>
+                                </li>
+                                <li>
+                                	<span>Godzin w akcji</span>
+                                    <span>3489</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+			</div>
+			
+			<div class="row clearfix">
+                <div th:if="${!trainings.firefighterTrainings.isEmpty()}" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="card">
+                        <div class="header">
+                            <h2>Wyszkolenie</h2>
+                        </div>
+                        <div class="body">
+	                        <div class="body table-responsive">
+	                            <table class="table table-striped">
+	                                <thead>
+	                                    <tr>
+	                                        <th>#</th>
+	                                        <th>Nazwa szkolenia</th>
+	                                        <th>Numer świadectwa</th>
+	                                        <th>Data uzyskania</th>
+	                                        <th>Organ wydający</th>
+	                                        <th>Ważne do</th>
+	                                    </tr>
+	                                </thead>
+	                                <tbody>
+	                                    <tr th:each="training, i : ${trainings.firefighterTrainings}">
+	                                        <th th:text="${i.index+1}" scope="row"></th>
+	                                        <td th:text="${training.training.name}"></td>
+	                                        <td th:text="${training.certificateNumber}"></td>
+	                                        <td th:text="${training.obtainDate}"></td>
+	                                        <td th:text="${training.issuedBy}"></td>
+	                                        <td th:text="${training.isExpiring} ? ${training.validUntil} : 'bezterminowo'"></td>
+	                                    </tr>
+	                                </tbody>
+	                            </table>
+	                        </div>                    
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+            <!-- #END# Input -->
+            <!-- #END# Actual content -->
+
+        </div>
+    </section>
+    <!-- #END# Main content -->
+    
+	<!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+	
+	
+	<!-- Page-specific scripts import -->
+	<!-- ############################ -->
+
+	<!-- Plugins import -->
+    <script th:src="@{/plugins/autosize/autosize.js}"></script>
+    
+    <!-- Custom Scripts for this page -->
+    
+
+	<!-- ################################## -->    
+   	<!-- #END# Page-specific scripts import -->   	
+</body>
+</html>

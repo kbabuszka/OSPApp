@@ -1,0 +1,115 @@
+package net.babuszka.osp.controller;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import net.babuszka.osp.model.FirefighterType;
+import net.babuszka.osp.model.FirefighterTypeWrapper;
+import net.babuszka.osp.service.FirefighterTypeService;
+
+@Controller
+public class FirefighterTypeController {
+	
+	@Value("${firefightertype.message.add.success}")
+	private String messageFirefighterTypeAdded;
+	@Value("${firefightertype.message.edit.success}")
+	private String messageFirefighterTypeEdited;
+	@Value("${firefightertype.message.delete.success}")
+	private String messageFirefighterTypeDeleted;
+	@Value("${firefightertype.message.delete.cannotdelete}")
+	private String messageFirefighterTypeNotDeleted;
+	@Value("${firefightertype.message.delete.notexist}")
+	private String messageFirefighterTypeNotExist;
+
+	@Autowired
+	private FirefighterTypeService firefighterTypeService;
+
+	public void setFirefighterTypeRepository(FirefighterTypeService firefighterTypeService) {
+		this.firefighterTypeService = firefighterTypeService;
+	}
+	
+	// Display page with firefighter types
+	@RequestMapping(path = "/manage/firefighter-types", method = RequestMethod.GET)
+	public String getAllFirefighterTypes(Model model) {
+		FirefighterTypeWrapper wrapper = new FirefighterTypeWrapper();
+		wrapper.setTypes(firefighterTypeService.getAllFirefighterTypes());
+		model.addAttribute("wrapper", wrapper);
+		model.addAttribute("firefighter_type", new FirefighterType());
+		return "manage_firefighter_types";
+	}
+	
+	// Submit new firefighter type form
+	@RequestMapping(path = "/manage/firefighter-types", method = RequestMethod.POST)
+	public String addFirefighterType(@ModelAttribute("firefighter_type") @Valid FirefighterType firefighterType, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+		if(bindingResult.hasErrors()) {
+			FirefighterTypeWrapper wrapper = new FirefighterTypeWrapper();
+			wrapper.setTypes(firefighterTypeService.getAllFirefighterTypes());
+			model.addAttribute("wrapper", wrapper);
+			return "manage_firefighter_types";
+		} else {
+			firefighterTypeService.saveFirefighterType(firefighterType);
+			redirectAttributes.addFlashAttribute("message", messageFirefighterTypeAdded);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+			return "redirect:/manage/firefighter-types";
+		}
+	}
+	
+	//Submit edit form of firefighter types
+	@RequestMapping(path = "/manage/firefighter-types/edit")
+	public String updateFirefighterTypes(@ModelAttribute("wrapper") @Valid FirefighterTypeWrapper wrapper, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+		
+		for(int i=0; i < wrapper.getTypes().size(); i++) {
+			if(wrapper.getTypes().get(i).getName().length() < 3) {
+				bindingResult.rejectValue("types[" + i + "].name", "firefightertype.name.size");
+			}
+			if(wrapper.getTypes().get(i).getName().length() == 0) {
+				bindingResult.rejectValue("types[" + i + "].name", "firefightertype.name.empty");
+			}
+		}
+		
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("wrapper", wrapper);
+			model.addAttribute("firefighter_type", new FirefighterType());
+			return "manage_firefighter_types";
+		} else {	
+			List<FirefighterType> types = wrapper.getTypes();
+			firefighterTypeService.updateFirefighterTypes(types);
+			redirectAttributes.addFlashAttribute("message", messageFirefighterTypeEdited);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+			return "redirect:/manage/firefighter-types";
+		}
+	}
+	
+	//Delete firefighter type
+	@RequestMapping(path = "/manage/firefighter-types/delete/{id}", method = RequestMethod.GET)
+	public String deleteFirefighterType(@PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {
+		if(firefighterTypeService.getFirefighterType(id) != null) {
+			firefighterTypeService.deleteFirefighterType(id);
+			if(firefighterTypeService.getFirefighterType(id) == null) {
+				redirectAttributes.addFlashAttribute("message", messageFirefighterTypeDeleted);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+			} else {
+				redirectAttributes.addFlashAttribute("message", messageFirefighterTypeNotDeleted);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+			}
+			return "redirect:/manage/firefighter-types";
+		} else {
+			redirectAttributes.addFlashAttribute("message", messageFirefighterTypeNotExist);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+			return "redirect:/manage/firefighter-types";
+		}
+
+	}
+}

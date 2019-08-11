@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+    <link th:href="@{/plugins/bootstrap-select/css/bootstrap-select.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/sweetalert/sweetalert.css}" href="../static/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    <title>OSP Sława - Edytuj strażaka</title>
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+	<th:block th:include="html/preloader.html"></th:block>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <th:block th:include="html/search_bar.html"></th:block>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+	<th:block th:include="html/top_bar.html"></th:block>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+			<th:block th:include="html/user_info.html"></th:block>
+            <!-- #User Info -->
+            <!-- Menu -->
+			<th:block th:include="html/navigation.html"></th:block>
+            <!-- #Menu -->
+            <!-- Footer -->
+			<th:block th:include="html/footer.html"></th:block>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+		<th:block th:include="html/sidebar_right.html"></th:block>
+        <!-- #END# Right Sidebar -->
+    </section>
+    
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        	<!-- Modify below -->
+            <div class="block-header">
+                <h2>Edytuj strażaka</h2>
+            </div>
+
+		
+            <!-- Actual content -->
+
+            <div class="row clearfix">
+            <form th:object="${firefighter}" th:action="${'/firefighters/edit/' + firefighter.id}" method="post">
+            	<div th:if="${message}" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            		<div th:text="${message}" th:class="${'alert ' + alertClass}"/>
+            	</div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Dane personalne</h2>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{firstName}" type="text" class="form-control">
+                                            <label class="form-label">Imię</label>
+                                            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"  class="alert alert-danger" role="alert">
+                                  				First name error
+                                			</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{secondName}" type="text" class="form-control">
+                                            <label class="form-label">Drugie imię</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{lastName}" type="text" class="form-control">
+                                            <label class="form-label">Nazwisko</label>
+                                            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"  class="alert alert-danger" role="alert">
+                                  				Last name error
+                                			</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                          
+                        	<div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <span class="card-inside-title col-blue-grey">Data urodzenia</span>
+                                    <div class="input-group date" id="bs_datepicker_birth_date">
+                                        <div class="form-line">
+                                            <input th:field="*{birthDate}" type="text" class="form-control" placeholder="Wybierz datę...">
+                                        </div>
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">date_range</i>
+                                        </span>
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="alert alert-danger" role="alert">
+                          				Birthdate error
+                        			</div>
+                                </div>
+                        	</div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{birthPlace}" type="text" class="form-control">
+                                            <label class="form-label">Miejsce urodzenia</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{pesel}" type="text" class="form-control">
+                                            <label class="form-label">PESEL</label>
+                                        </div>
+                                        <div th:if="${#fields.hasErrors('pesel')}" th:errors="*{pesel}" class="alert alert-danger" role="alert">
+	                          				PESEL error
+	                        			</div>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                    	<h3 class="card-inside-title col-blue-grey">Płeć</h3>
+		                                <input th:field="*{gender}" type="radio" value="M" name="gender" id="genderM">
+		                                <label for="genderM">Mężczyzna</label>
+		                                <input th:field="*{gender}" type="radio" value="K" name="gender" id="genderK">
+		                                <label for="genderK">Kobieta</label>
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('gender')}"  th:errors="*{gender}" class="alert alert-danger" role="alert">
+                          				Gender error
+                        			</div>
+                                </div>
+                            </div>                                 
+                        </div>
+                    </div>
+					<div class="card">
+                        <div class="header">
+                            <h2>Dane w OSP</h2>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:value="*{id}" type="text" class="form-control" disabled="disabled" id="firefighter_id">
+                                            <label class="form-label">ID</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+	                        <div class="row clearfix">
+                                <div class="col-sm-12">
+                                	<span class="card-inside-title col-blue-grey">Rodzaj członka</span>
+                                    <select th:field="*{type}" class="form-control show-tick">
+                                        <option value="">-- wybierz --</option>
+                                        <option th:each="firefighter_type : ${firefighter_types}" th:value="${firefighter_type.id}" th:text="${firefighter_type.name}"></option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('type')}" th:errors="*{type}"  class="alert alert-danger" role="alert">
+                          				Firefighter type error
+                        			</div>
+                                </div>
+							</div>
+							<div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <span class="card-inside-title col-blue-grey">Data dołączenia</span>
+                                    <div class="input-group date" id="bs_datepicker_join_date">
+                                        <div class="form-line">
+                                            <input th:field="*{joinDate}" type="text" class="form-control" placeholder="Wybierz datę...">
+                                        </div>
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">date_range</i>
+                                        </span>
+                                    </div>
+                                    <div th:if="${#fields.hasErrors('joinDate')}" th:errors="*{joinDate}"  class="alert alert-danger" role="alert">
+                          				Join date error
+                        			</div>
+                                </div>
+                        	</div>                        
+                        </div>
+                    </div>                    
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Dane kontaktowe</h2>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{addressStreet}" type="text" class="form-control">
+                                            <label class="form-label">Ulica</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{address_1}" type="text" class="form-control">
+                                            <label class="form-label">Nr. domu</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{address_2}" type="text" class="form-control">
+                                            <label class="form-label">Nr. mieszkania</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{addressPostalCode}" type="text" class="form-control">
+                                            <label class="form-label">Kod pocztowy</label>
+                                        </div>
+                                        <div th:if="${#fields.hasErrors('addressPostalCode')}" th:errors="*{addressPostalCode}"  class="alert alert-danger" role="alert">
+                          					Postal code error
+                        				</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{addressCity}" type="text" class="form-control">
+                                            <label class="form-label">Miejscowość</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                            <div class="row clearfix">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{phone}" type="text" class="form-control">
+                                            <label class="form-label">Numer telefonu</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input th:field="*{email}" type="text" class="form-control">
+                                            <label class="form-label">Adres e-mail</label>
+                                        </div>
+                                        <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert alert-danger" role="alert">
+                          					Email error
+                        				</div>
+                                    </div>
+                                </div>
+                            </div>                              
+                        </div>
+                    </div>
+					<div class="card">
+                        <div class="header">
+                            <h2>JOT</h2>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div th:if="${(firefighter.isInJOT == null) || (firefighter.isInJOT == false)}" class="col-sm-12">
+	                                <input name="isInJOT" type="checkbox" id="isJOT" class="chk-col-teal"/>
+	                                <label for="isJOT">Czy jest w JOT?</label>
+                                </div>
+                                
+                                <div th:if="${firefighter.isInJOT == true}" class="col-sm-12">
+                       	            <input name="isInJOT" type="checkbox" id="isJOT" class="chk-col-teal" checked="checked" />
+	                                <label for="isJOT">Czy jest w JOT??</label>
+                                </div>                            
+                            </div>   
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <span class="card-inside-title col-blue-grey">Termin badań lekarskich</span>
+                                    <div class="input-group date" id="bs_datepicker_health_exam">
+                                        <div class="form-line">
+                                            <input th:field="*{healthExamDate}" type="text" class="form-control" placeholder="Wybierz datę...">
+                                        </div>
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">date_range</i>
+                                        </span>
+                                    </div>
+                                </div>
+                        	</div>
+                        </div>
+                    </div>                  
+                </div>   
+                
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="card">
+                        <div class="header">
+                            <h2>Wyszkolenie</h2>
+                        </div>
+						<div class="body">
+							<th:block th:if="${firefighter.trainings != null}">
+								<div th:if="${#lists.size(firefighter.trainings) < 1}" class="row clearfix" id="no-trainings">
+									<div class="alert alert-warning">
+	                                	Ten strażak nie posiada wyszkolenia.
+	                            	</div>
+								</div>
+							</th:block>
+						
+							<th:block th:if="${firefighter.trainings == null}">
+								
+									<div class="alert alert-warning">
+	                                	trainigs jest null
+	                            	</div>
+							
+							</th:block>
+						
+	                        <div th:each="training, i : ${firefighter.trainings}" class="row clearfix" th:id="${'trainingform_' + i.index}">
+	                        
+	                        	<input th:field="*{trainings[__${i.index}__].id}" type="hidden">
+	                        	<input th:field="*{trainings[__${i.index}__].firefighterId}" type="hidden">
+	                        
+	                        	<div class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+	                 	            <select th:field="*{trainings[__${i.index}__].training}" class="form-control show-tick">
+	                                	<option value="">-- wybierz --</option>
+	                                   	<option th:each="training: ${training_types}" th:value="${training.id}" th:text="${training.name}"></option>
+	                                </select>
+                                    <div th:if="${#fields.hasErrors('trainings[__${i.index}__].training')}"  th:errors="*{trainings[__${i.index}__].training}" class="alert alert-danger" role="alert">
+                         					Training type error
+                       				</div>
+                                </div>
+	                        
+	                        
+	                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+	                                <div class="form-group form-float">
+	                                    <div class="form-line">
+	                                        <input th:field="*{trainings[__${i.index}__].certificateNumber}" type="text" class="form-control">
+	                                        <label class="form-label">Numer świadectwa</label>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-6">
+	                                <div class="form-group form-float" th:id="${'bs_datepicker_training_obtain_date_' + i.index}">
+	                                    <div class="form-line">
+	                                        <input th:field="*{trainings[__${i.index}__].obtainDate}"type="text" class="form-control">
+	                                        <label class="form-label">Data uzyskania</label>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+	                                <div class="form-group form-float">
+	                                    <div class="form-line">
+	                                        <input th:field="*{trainings[__${i.index}__].issuedBy}" type="text" class="form-control">
+	                                        <label class="form-label">Wydany przez</label>
+	                                    </div>
+	                                </div>
+	                            </div>  
+	                                   
+	                           	<div class="col-lg-1 col-md-1 col-sm-1 col-xs-6">
+	                                <div class="form-group form-float" th:id="${'bs_datepicker_training_valid_until_' + i.index}">
+	                                    <div class="form-line" >
+	                                        <input th:field="*{trainings[__${i.index}__].validUntil}" type="text" class="form-control">
+	                                        <label class="form-label">Ważne do</label>
+	                                    </div>
+	                                </div>
+	                            </div>   
+
+	                            <div th:if="${(training.isExpiring == null) || (training.isExpiring == false)}" class="col-lg-1 col-md-1 col-sm-1 col-xs-6">
+	                                <input th:name="${'trainings[' + i.index + '].isExpiring'}" type="checkbox" th:id="${'training_isexpiring_' + i.index}" class="filled-in">
+	                                <label th:for="${'training_isexpiring_' + i.index}">Terminowe?</label>
+	                            </div>    
+	                            
+	                            <div th:if="${training.isExpiring == true}" class="col-lg-1 col-md-1 col-sm-1 col-xs-6">
+	                               	<input th:name="${'trainings[' + i.index + '].isExpiring'}" type="checkbox" th:id="${'training_isexpiring_' + i.index}" class="filled-in" checked="checked">
+	                                <label th:for="${'training_isexpiring_' + i.index}">Terminowe?</label>
+	                            </div>  	                            
+
+	                            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-12 js-sweetalert">
+	                                <button th:value="${training.id}" class="btn btn-danger btn-lg m-l-15 waves-effect" type="button" data-type="delete-firefighter-training">Usuń</button>
+	                            </div>
+	                        </div>
+	                        
+	                        
+                            <div>
+                               	<button id="add-training" name="add-training" class="btn btn-success waves-effects" type="button">
+									<i class="material-icons">add</i>
+                                   	<span>Dodaj kolejne</span>
+								</button>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                    	<div class="body">
+	                    	<div class="row clearfix">
+	                        	<button type="submit" class="btn btn-block btn-lg btn-primary">Zapisz zmiany</button>
+	                    	</div>
+                    	</div>
+                    </div>                  
+                </div>
+            </form>
+            </div>
+            <!-- #END# Input -->
+            <!-- #END# Actual content -->
+
+        </div>
+    </section>
+    <!-- #END# Main content -->
+    
+	<!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+	
+	
+	<!-- Page-specific scripts import -->
+	<!-- ############################ -->
+	
+	<!-- Plugins import -->
+    <script th:src="@{/plugins/sweetalert/sweetalert.min.js}"></script>
+    <script th:src="@{/plugins/autosize/autosize.js}"></script>
+    <script th:src="@{/js/datepicker.js}"></script>
+    <script th:src="@{/js/pages/firefighters/firefighter-form-datepicker.js}"></script>
+    <script th:src="@{/plugins/momentjs/moment.js}"></script>
+    <script th:src="@{/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js}"></script>
+    <script th:src="@{/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>      
+   
+   	<!-- Custom Scripts for this page -->
+   	<script th:src="@{/js/pages/firefighters/dialogs_firefighters.js}"></script>
+    <script th:src="@{/js/pages/firefighters/trainings-form.js}"></script>
+    
+    <th:block th:if="${firefighter.trainings != null}">
+    	<script th:text="${'var trainingsamount=' + #lists.size(firefighter.trainings)}"></script>   
+    </th:block>
+    
+    <script th:inline="javascript">
+	    var trainingTypes = [];
+	    var trainingTypeId = [];
+	    var trainingTypeName = [];
+		/*<![CDATA[*/
+		    /*[# th:each="training : ${training_types}"]*/
+		        trainingTypeId.push(/*[[${training.id}]]*/);
+		        trainingTypeName.push(/*[[${training.name}]]*/);
+		    /*[/]*/
+		/*]]>*/
+		 trainingTypes.push(trainingTypeId, trainingTypeName);
+	</script> 
+	
+	<!-- ################################## -->    
+   	<!-- #END# Page-specific scripts import -->   	
+</body>
+</html>

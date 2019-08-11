@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+    <link th:href="@{/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css}" href="../static/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css" rel="stylesheet">
+    <link th:href="@{/plugins/sweetalert/sweetalert.css}" href="../static/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    <title>OSP Sława - Lista strażaków</title>
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+	<th:block th:include="html/preloader.html"></th:block>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <th:block th:include="html/search_bar.html"></th:block>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+	<th:block th:include="html/top_bar.html"></th:block>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+			<th:block th:include="html/user_info.html"></th:block>
+            <!-- #User Info -->
+            <!-- Menu -->
+			<th:block th:include="html/navigation.html"></th:block>
+            <!-- #Menu -->
+            <!-- Footer -->
+			<th:block th:include="html/footer.html"></th:block>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+		<th:block th:include="html/sidebar_right.html"></th:block>
+        <!-- #END# Right Sidebar -->
+    </section>
+    
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        	<!-- Modify below -->
+		
+            <!-- Actual content -->
+            
+			<div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                LISTA STRAŻAKÓW
+                            </h2>
+                        </div>
+                        <div class="body">
+                        	<div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"/>
+                            <div class="table-responsive" style="scrollbar-width: none;">
+                                <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                                    <thead>
+                                        <tr>
+                                        	<th>ID</th>
+                                            <th>Imię</th>
+                                            <th>Nazwisko</th>
+                                            <th>Rodzaj</th>
+                                            <th>Numer telefonu</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                        	<th>ID</th>
+                                            <th>Imię</th>
+                                            <th>Nazwisko</th>
+                                            <th>Rodzaj</th>
+                                            <th>Numer telefonu</th>
+                                            <th></th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <tr th:each="firefighter : ${firefighters}" class="js-sweetalert">
+                                            <td th:text="${firefighter.id}"></td>
+                                            <td th:text="${firefighter.firstName}"></td>
+                                            <td th:text="${firefighter.lastName}"></td>
+                                            <td th:text="${firefighter.type !=null} ? ${firefighter.type.name}"></td>
+                                            <td th:text="${firefighter.phone}"></td>
+                                            <td align="center">
+                                            	<a th:href="${'/firefighters/' + firefighter.id}" class="btn btn-primary waves-effect">Wyświetl</a>
+                                            	<a th:href="${'/firefighters/edit/' + firefighter.id}" class="btn btn-warning waves-effect">Edytuj</a>
+												<button th:value="${firefighter.id}" class="btn btn-danger waves-effect" data-type="delete-firefighter">Usuń</button>	                                
+											</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                	<a href="/firefighters/add" class="btn btn-success waves-effect">
+                                		<i class="material-icons">person_add</i>
+                                    	<span>Dodaj strażaka</span>
+                                	</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- #END# Actual content -->
+
+        </div>
+    </section>
+    <!-- #END# Main content -->
+    
+	<!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+	
+	<!-- Page-specific scripts import -->
+	<!-- ############################ -->
+	
+	<!-- Plugins import -->
+    <script th:src="@{/plugins/sweetalert/sweetalert.min.js}"></script>
+    <script th:src="@{/plugins/jquery-datatable/jquery.dataTables.js}"></script>
+    <script th:src="@{/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
+    <script th:src="@{/js/pages/tables/jquery-datatable.js}"></script>
+
+	<!-- Custom Scripts for this page -->
+    <script th:src="@{/js/pages/firefighters/dialogs_firefighters.js}"></script>
+    
+	<!-- ################################## -->    
+   	<!-- #END# Page-specific scripts import -->
+</body>
+</html>

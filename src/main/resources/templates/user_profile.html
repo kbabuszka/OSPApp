@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+    <title>OSP Sława - Twój profil</title>
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+	<th:block th:include="html/preloader.html"></th:block>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <th:block th:include="html/search_bar.html"></th:block>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+	<th:block th:include="html/top_bar.html"></th:block>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+			<th:block th:include="html/user_info.html"></th:block>
+            <!-- #User Info -->
+            <!-- Menu -->
+			<th:block th:include="html/navigation.html"></th:block>
+            <!-- #Menu -->
+            <!-- Footer -->
+			<th:block th:include="html/footer.html"></th:block>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+		<th:block th:include="html/sidebar_right.html"></th:block>
+        <!-- #END# Right Sidebar -->
+    </section>
+    
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        	<!-- Modify below -->
+		
+            <!-- Actual content -->
+            
+			<div class="row clearfix">
+			    <div class="col-xs-12 col-sm-12">
+                    <div class="card">
+                        <div class="body">
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Ustawienia profilu</a></li>
+                                    <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Zmień hasło</a></li>
+                                </ul>
+                                <br />
+								<div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"/>
+
+                                <div class="tab-content">
+                                                               
+                                    <div th:if="${firefighter != null}" role="tabpanel" class="tab-pane fade active in" id="profile_settings">
+                                    
+                                    	<div class="alert alert-warning">
+		                                	Twoje konto jest przypisane do strażaka w systemie. Nie możesz edytować poniższych danych z poziomu profilu.
+		                            	</div>
+                                        <form th:object="${user}" class="form-horizontal">
+                                            
+                                            <div class="form-group">
+                                                <label for="username" class="col-sm-2 control-label">Nazwa użytkownika (login)</label>
+                                                <div class="col-sm-10">
+                                                    <div class="form-line">
+                                                        <input th:value="${user.username}" disabled="disabled" type="text" class="form-control" id="username" name="username">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="NameSurname" class="col-sm-2 control-label">Nazwa wyświetlana</label>
+                                                <div class="col-sm-10">
+                                                    <div class="form-line">
+                                                        <input th:value="${firefighter.firstName + ' ' + firefighter.lastName}" disabled="disabled" type="text" class="form-control" id="NameSurname" name="NameSurname">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Email" class="col-sm-2 control-label">E-mail</label>
+                                                <div class="col-sm-10">
+                                                    <div class="form-line">
+                                                        <input th:value="${firefighter.email}" disabled="disabled" type="email" class="form-control" id="Email" name="Email">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>                                
+
+                                    <div th:if="${firefighter == null}"  role="tabpanel" class="tab-pane fade active in" id="profile_settings">
+                                        <form th:object="${user}" th:action="${'/profile'}" method="post" class="form-horizontal">
+                                            
+                                            <div class="form-group">
+                                                <label for="username" class="col-sm-2 control-label">Nazwa użytkownika (login)</label>
+                                                <div class="col-sm-10">
+                                                    <div class="form-line">
+                                                    	<input th:field="*{username}" type="hidden">
+                                                        <input th:value="*{username}" disabled="disabled" type="text" class="form-control" id="username" name="username">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="NameSurname" class="col-sm-2 control-label">Nazwa wyświetlana</label>
+                                                <div class="col-sm-10">
+                                                    <div class="form-line">
+                                                        <input th:field="*{displayName}" type="text" class="form-control" id="NameSurname" name="NameSurname">
+                                                    </div>
+                                                    <div th:if="${#fields.hasErrors('displayName')}" th:errors="*{displayName}"  class="alert alert-danger" role="alert">
+				                          				User display name error
+				                        			</div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="Email" class="col-sm-2 control-label">E-mail</label>
+                                                <div class="col-sm-10">
+                                                    <div class="form-line">
+                                                        <input th:field="*{email}" class="form-control" id="Email" name="Email">
+                                                    </div>
+                                                    <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"  class="alert alert-danger" role="alert">
+			                          					User email error
+			                        				</div>
+                                                </div>
+
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <button type="submit" class="btn btn-success">Zapisz</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
+                                        <form th:action="${'/profile/change-password'}" th:object="${passwordForm}" method="post" class="form-horizontal">
+                                            <div class="form-group">
+                                                <label for="old_password" class="col-sm-3 control-label">Obecne hasło</label>
+                                                <div class="col-sm-9">
+                                                    <div class="form-line">
+                                                        <input th:field="*{oldPassword}" type="password" class="form-control" id="old_password" name="old_password" placeholder="Old Password" required>
+                                                    </div>
+                                                    <div th:if="${#fields.hasErrors('oldPassword')}" th:errors="*{oldPassword}"  class="alert alert-danger" role="alert">
+				                          				Old password error
+				                        			</div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="new_password_1" class="col-sm-3 control-label">Nowe hasło</label>
+                                                <div class="col-sm-9">
+                                                    <div class="form-line">
+                                                        <input th:field="*{newPassword1}" type="password" class="form-control" id="new_password_1" name="new_password_1" placeholder="New Password" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="new_password_2" class="col-sm-3 control-label">Powtórz nowe hasło</label>
+                                                <div class="col-sm-9">
+                                                    <div class="form-line">
+                                                        <input th:field="*{newPassword2}" type="password" class="form-control" id="new_password_2" name="new_password_2" placeholder="New Password (Confirm)" required>
+                                                    </div>
+                                                    <div th:if="${#fields.hasErrors('newPassword2')}" th:errors="*{newPassword2}"  class="alert alert-danger" role="alert">
+				                          				New password error
+				                        			</div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-sm-offset-3 col-sm-9">
+                                                    <button type="submit" class="btn btn-success">Zmień hasło</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- #END# Actual content -->
+
+        </div>
+    </section>
+    <!-- #END# Main content -->
+    
+	<!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+	
+	<!-- Page-specific scripts import -->
+	<script th:src="@{/js/admin.js}"></script>
+    <script th:src="@{/js/demo.js}"></script>
+   	<!-- #END# Page-specific scripts import -->
+   	
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+    <title>OSP Sława - Pulpit</title>
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+	<th:block th:include="html/preloader.html"></th:block>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <th:block th:include="html/search_bar.html"></th:block>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+	<th:block th:include="html/top_bar.html"></th:block>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+			<th:block th:include="html/user_info.html"></th:block>
+            <!-- #User Info -->
+            <!-- Menu -->
+			<th:block th:include="html/navigation.html"></th:block>
+            <!-- #Menu -->
+            <!-- Footer -->
+			<th:block th:include="html/footer.html"></th:block>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+		<th:block th:include="html/sidebar_right.html"></th:block>
+        <!-- #END# Right Sidebar -->
+    </section>
+    
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        	<!-- Modify below -->
+            <div class="block-header">
+                <h2>PULPIT</h2>
+            </div>
+
+		
+            <!-- Actual content -->
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-pink hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">playlist_add_check</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">ZDARZEŃ W BAZIE</div>
+                            <div class="number count-to" data-from="0" data-to="2227" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">help</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">STRAŻAKÓW W GOTOWOŚCI</div>
+                            <div class="number count-to" data-from="0" data-to="17" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-light-green hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">forum</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">NOWYCH WIADOMOŚCI</div>
+                            <div class="number count-to" data-from="0" data-to="243" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-orange hover-expand-effect">
+                        <div class="icon">
+                            <i class="material-icons">person</i>
+                        </div>
+                        <div class="content">
+                            <div class="text">STRAŻAKÓW W BAZIE</div>
+                            <div class="number count-to" data-from="0" data-to="125" data-speed="1000" data-fresh-interval="20"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Actual content -->
+
+        </div>
+    </section>
+    <!-- #END# Main content -->
+    
+	<!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+	
+	
+	<!-- Page-specific scripts import -->
+	
+	<!-- Page-specific scripts import -->
+	<script th:src="@{/js/admin.js}"></script>
+    <script th:src="@{/js/demo.js}"></script>
+    <script th:src="@{/js/pages/index.js}"></script>
+    <script th:src="@{/plugins/jquery-countto/jquery.countTo.js}"></script>
+    <script th:src="@{/plugins/raphael/raphael.min.js}"></script>
+    <script th:src="@{/plugins/morrisjs/morris.js}"></script>
+    <script th:src="@{/plugins/chartjs/Chart.bundle.js}"></script>
+    <script th:src="@{/plugins/flot-charts/jquery.flot.js}"></script>
+    <script th:src="@{/plugins/flot-charts/jquery.flot.resize.js}"></script>
+    <script th:src="@{/plugins/flot-charts/jquery.flot.pie.js}"></script>
+    <script th:src="@{/plugins/flot-charts/jquery.flot.categories.js}"></script>
+    <script th:src="@{/plugins/flot-charts/jquery.flot.time.js}"></script>
+    <script th:src="@{/plugins/jquery-sparkline/jquery.sparkline.js}"></script>
+   	<!-- #END# Page-specific scripts import -->
+   	
+</body>
+</html>
