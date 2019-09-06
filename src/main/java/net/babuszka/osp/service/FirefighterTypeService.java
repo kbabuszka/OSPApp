@@ -24,9 +24,9 @@ public class FirefighterTypeService {
 	
 	public FirefighterType getFirefighterType(int id) {
 		
-		LOG.info("Getting the Firefighter type with following ID: " + id);
+		LOG.debug("Getting the Firefighter type with following ID: " + id);
 		try {
-			LOG.info("Found the Firefighter type: " + firefighterTypeRepository.getOne(id).toString());
+			LOG.debug("Found the Firefighter type: " + firefighterTypeRepository.getOne(id).toString());
 			return firefighterTypeRepository.getOne(id);
 		} catch (Exception e) {
 			LOG.error("An error occured during getting firefighter's type details: " + e.getMessage());
@@ -43,8 +43,8 @@ public class FirefighterTypeService {
 	}
 	
 	public void updateFirefighterTypes(List<FirefighterType> editedFirefighterTypes) {
-		LOG.info("There are " + firefighterTypeRepository.count() + " training types in the repository");
-		LOG.info(editedFirefighterTypes.size() + " training types has been sent from the form");
+		LOG.debug("There are " + firefighterTypeRepository.count() + " training types in the repository");
+		LOG.debug(editedFirefighterTypes.size() + " training types has been sent from the form");
 		List<FirefighterType> typesFromRepo = firefighterTypeRepository.findAll();
 		typesFromRepo = editedFirefighterTypes;
 		firefighterTypeRepository.saveAll(typesFromRepo);

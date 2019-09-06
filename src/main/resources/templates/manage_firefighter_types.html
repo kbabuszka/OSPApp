@@ -63,7 +63,7 @@
                         </div>
                         <div class="body">
                         	<div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"/>
-                            <form th:object="${wrapper}" th:action="${'/manage/firefighter-types/edit'}" method="post" class="form-horizontal">
+                            <form th:object="${wrapper}" th:action="@{'/manage/firefighter-types/edit'}" method="post" class="form-horizontal">
                             
                                 <div th:each="type, i : ${wrapper.types}" class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 form-control-label">
@@ -107,7 +107,7 @@
                             </h2>
                         </div>
                         <div class="body">
-                            <form th:object="${firefighter_type}" th:action="${'/manage/firefighter-types'}" method="post" class="form-horizontal">
+                            <form th:object="${firefighter_type}" th:action="@{'/manage/firefighter-types'}" method="post" class="form-horizontal">
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                     	<label for="new_type_name">Nazwa</label>

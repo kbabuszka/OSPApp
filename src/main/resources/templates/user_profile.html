@@ -99,7 +99,7 @@
                                     </div>                                
 
                                     <div th:if="${firefighter == null}"  role="tabpanel" class="tab-pane fade active in" id="profile_settings">
-                                        <form th:object="${user}" th:action="${'/profile'}" method="post" class="form-horizontal">
+                                        <form th:object="${user}" th:action="@{'/profile'}" method="post" class="form-horizontal">
                                             
                                             <div class="form-group">
                                                 <label for="username" class="col-sm-2 control-label">Nazwa użytkownika (login)</label>
@@ -145,7 +145,7 @@
                                     </div>
                                     
                                     <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
-                                        <form th:action="${'/profile/change-password'}" th:object="${passwordForm}" method="post" class="form-horizontal">
+                                        <form th:action="@{'/profile/change-password'}" th:object="${passwordForm}" method="post" class="form-horizontal">
                                             <div class="form-group">
                                                 <label for="old_password" class="col-sm-3 control-label">Obecne hasło</label>
                                                 <div class="col-sm-9">
@@ -201,8 +201,7 @@
 	<!-- #END# Common scripts import -->
 	
 	<!-- Page-specific scripts import -->
-	<script th:src="@{/js/admin.js}"></script>
-    <script th:src="@{/js/demo.js}"></script>
+
    	<!-- #END# Page-specific scripts import -->
    	
 </body>

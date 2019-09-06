@@ -91,8 +91,8 @@
                                             <td th:text="${firefighter.type !=null} ? ${firefighter.type.name}"></td>
                                             <td th:text="${firefighter.phone}"></td>
                                             <td align="center">
-                                            	<a th:href="${'/firefighters/' + firefighter.id}" class="btn btn-primary waves-effect">Wyświetl</a>
-                                            	<a th:href="${'/firefighters/edit/' + firefighter.id}" class="btn btn-warning waves-effect">Edytuj</a>
+                                            	<a th:href="@{'/firefighters/' + ${firefighter.id}}" class="btn btn-primary waves-effect">Wyświetl</a>
+                                            	<a th:href="@{'/firefighters/edit/' + ${firefighter.id}}" class="btn btn-warning waves-effect">Edytuj</a>
 												<button th:value="${firefighter.id}" class="btn btn-danger waves-effect" data-type="delete-firefighter">Usuń</button>	                                
 											</td>
                                         </tr>
@@ -100,7 +100,7 @@
                                 </table>
 
                                 <div>
-                                	<a href="/firefighters/add" class="btn btn-success waves-effect">
+                                	<a th:href="@{/firefighters/add}" class="btn btn-success waves-effect">
                                 		<i class="material-icons">person_add</i>
                                     	<span>Dodaj strażaka</span>
                                 	</a>

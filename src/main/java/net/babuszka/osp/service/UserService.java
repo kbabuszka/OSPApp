@@ -63,7 +63,7 @@ public class UserService {
 			foundUser.setEmail(userToUpdate.getEmail());
 			userRepository.save(foundUser);
 		} catch (Exception e) {
-			LOG.info("An error occured during update of user: " + e.getMessage());
+			LOG.error("An error occured during update of user: " + e.getMessage());
 		}
 		
 	}

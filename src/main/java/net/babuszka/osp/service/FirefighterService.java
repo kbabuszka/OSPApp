@@ -23,9 +23,9 @@ public class FirefighterService {
 	}
 	
 	public Firefighter getFirefighter(Integer id) {
-		LOG.info("Getting the Firefighter with following ID: " + id);
+		LOG.debug("Getting the Firefighter with following ID: " + id);
 		try {
-			LOG.info("Found the Firefighter: " + firefighterRepository.getOne(id).getFirstName() + " " + firefighterRepository.getOne(id).getLastName() + ". This firefighter has " + firefighterRepository.getOne(id).getTrainings().size() + " certificates assigned.");
+			LOG.debug("Found the Firefighter: " + firefighterRepository.getOne(id).getFirstName() + " " + firefighterRepository.getOne(id).getLastName() + ". This firefighter has " + firefighterRepository.getOne(id).getTrainings().size() + " certificates assigned.");
 			return firefighterRepository.getOne(id);
 		} catch (Exception e) {
 			LOG.error("An error occured during getting firefighter's details: " + e.getMessage());
@@ -34,14 +34,14 @@ public class FirefighterService {
 	}
 	
 	public boolean getFirefighter(String pesel, Integer excludedId) {
-		LOG.info("Getting the Firefighter with following pesel: " + pesel);
+		LOG.debug("Getting the Firefighter with following pesel: " + pesel);
 		Firefighter foundFirefighter = firefighterRepository.findByPesel(pesel);
 		if (foundFirefighter != null) {
-			LOG.info("Found the Firefighter: " + foundFirefighter.getFirstName() + " " + foundFirefighter.getLastName());
+			LOG.debug("Found the Firefighter: " + foundFirefighter.getFirstName() + " " + foundFirefighter.getLastName());
 			if (foundFirefighter.getId() != excludedId) {
 				return true;
 			} else {
-				LOG.info("This PESEL belongs to the same firefighter");
+				LOG.debug("This PESEL belongs to the same firefighter");
 				return false;
 			}
 		} else {
@@ -50,9 +50,9 @@ public class FirefighterService {
 	}
 	
 	public List<Firefighter> getAllFirefighters(){
-		LOG.info("There are " + firefighterRepository.count() + " firefighters in the repository");
+		LOG.debug("There are " + firefighterRepository.count() + " firefighters in the repository");
 		for(Firefighter firefighter : firefighterRepository.findAll()) {
-			LOG.info(firefighter.toString());
+			LOG.debug(firefighter.toString());
 		}
 		return firefighterRepository.findAll();
 	}
@@ -68,12 +68,12 @@ public class FirefighterService {
 			foundFirefighter = firefighterToUpdate;
 			firefighterRepository.save(foundFirefighter);
 		} catch (Exception e) {
-			LOG.info("An error occured during update of firefighter: " + e.getMessage());
+			LOG.debug("An error occured during update of firefighter: " + e.getMessage());
 		}
 	}
 	
 	public void deleteFirefighter(Integer id) {
-		LOG.info("ID given: " + id);
+		LOG.debug("ID given: " + id);
 		try {
 			firefighterRepository.deleteById(id);
 		} catch(Exception e) {
@@ -82,9 +82,9 @@ public class FirefighterService {
 	}
 	
 	public List<Firefighter> getJotFirefighters(){
-		LOG.info("There are " + firefighterRepository.count() + " firefighters in the repository");
+		LOG.debug("There are " + firefighterRepository.count() + " firefighters in the repository");
 		for(Firefighter firefighter : firefighterRepository.findJotFirefighters()) {
-			LOG.info(firefighter.toString());
+			LOG.debug(firefighter.toString());
 		}
 		return firefighterRepository.findJotFirefighters();
 	}

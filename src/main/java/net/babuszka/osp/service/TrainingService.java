@@ -25,9 +25,9 @@ public class TrainingService {
 	
 	public Training getTraining(int id) {
 		
-		LOG.info("Getting Training type with following ID: " + id);
+		LOG.debug("Getting Training type with following ID: " + id);
 		try {
-			LOG.info("Found the Training type: " + trainingRepository.getOne(id).toString());
+			LOG.debug("Found the Training type: " + trainingRepository.getOne(id).toString());
 			return trainingRepository.getOne(id);
 		} catch (Exception e) {
 			LOG.error("An error occured during getting training type details: " + e.getMessage());
@@ -48,8 +48,8 @@ public class TrainingService {
 	}
 	
 	public void updateTrainings(List<Training> editedTrainings) {
-		LOG.info("There are " + trainingRepository.count() + " training types in the repository");
-		LOG.info(editedTrainings.size() + " training types has been sent from the form");
+		LOG.debug("There are " + trainingRepository.count() + " training types in the repository");
+		LOG.debug(editedTrainings.size() + " training types has been sent from the form");
 		List<Training> trainingsFromRepo = trainingRepository.findAll();
 		trainingsFromRepo = editedTrainings;
 		trainingRepository.saveAll(trainingsFromRepo);
