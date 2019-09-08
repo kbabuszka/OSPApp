@@ -61,19 +61,15 @@
                         </div>
                         <div class="body">
 	                        <div>
-	                        	<a href="#" class="btn bg-red waves-effect">
+	                        	<button id="export-excel" class="btn bg-green waves-effect">
 	                        		<i class="material-icons">print</i>
-	                            	<span>Wygeneruj w PDF</span>
-	                        	</a>
-	                        	<a href="#" class="btn bg-red waves-effect">
-	                        		<i class="material-icons">print</i>
-	                            	<span>Wygeneruj w PDF (wersja uproszczona)</span>
-	                        	</a>
+	                            	<span>Eksport do Excela</span>
+	                        	</button>
 	                        </div>
                         </div>
   
                         <div class="body table-responsive">
-                            <table class="table table-hover table-bordered">
+                            <table class="table table-hover table-bordered" id="table-jot">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -113,8 +109,11 @@
 	
 	
 	<!-- Page-specific scripts import -->
-	<!-- ############################ -->
-    	
+	<!-- ############################ -->   
+    <script th:src="@{/plugins/table-export/xlsx.core.min.js}"></script>
+    <script th:src="@{/plugins/table-export/FileSaver.min.js}"></script>
+    <script th:src="@{/plugins/table-export/tableexport.min.js}"></script>
+    <script th:src="@{/js/pages/firefighters/jot-table-export.js}"></script>
 	<!-- ################################## -->    
    	<!-- #END# Page-specific scripts import -->
 </body>
