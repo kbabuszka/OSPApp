@@ -1,6 +1,7 @@
 package net.babuszka.osp.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -102,6 +104,25 @@ public class Firefighter {
 
 	@OneToMany(mappedBy = "firefighterId")
 	private List<FirefighterTraining> trainings;
+	
+	@Autowired
+	public Firefighter() {
+		super();
+		this.trainings = new ArrayList<FirefighterTraining>();
+	}
+	
+	public Firefighter(
+			@Size(min = 3, max = 30, message = "{firefighter.firstname.size}") @NotEmpty(message = "{firefighter.firstname.empty}") String firstName,
+			@Size(min = 3, max = 30, message = "{firefighter.lastname.size}") @NotEmpty(message = "{firefighter.lastname.empty}") String lastName,
+			@NotEmpty(message = "{firefighter.gender.empty}") String gender,
+			@NotNull(message = "{firefighter.type}") FirefighterType type) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.type = type;
+		this.trainings = new ArrayList<FirefighterTraining>();
+	}
 	
 	public Integer getId() {
 		return id;
@@ -251,8 +272,13 @@ public class Firefighter {
 		return type;
 	}
 
-	public void setType(FirefighterType type) {
-		this.type = type;
+	public void setType(FirefighterType type) throws IllegalArgumentException {
+		if (type instanceof FirefighterType) {
+			this.type = type;
+		} else {
+			throw new IllegalArgumentException();
+		}
+		
 	}
 	
 	public List<FirefighterTraining> getTrainings() {
@@ -261,6 +287,10 @@ public class Firefighter {
 
 	public void setTrainings(List<FirefighterTraining> trainings) {
 		this.trainings = trainings;
+	}
+	
+	public void addTraining(FirefighterTraining firefighterTraining) {
+		this.trainings.add(firefighterTraining);
 	}
 
 	@Override

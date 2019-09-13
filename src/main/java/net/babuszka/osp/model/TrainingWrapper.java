@@ -2,8 +2,11 @@ package net.babuszka.osp.model;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class TrainingWrapper {
 
+	@Autowired
 	public TrainingWrapper() {
 		super();
 	}

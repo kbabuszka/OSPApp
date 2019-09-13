@@ -11,11 +11,23 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "firefighter_trainings")
 public class FirefighterTraining {
+	
+	@Autowired
+	public FirefighterTraining() {
+		super();
+	}
+
+	public FirefighterTraining(Firefighter firefighterId, Training training) {
+		super();
+		this.firefighterId = firefighterId;
+		this.training = training;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

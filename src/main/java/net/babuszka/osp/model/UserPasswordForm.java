@@ -2,11 +2,13 @@ package net.babuszka.osp.model;
 
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserPasswordForm {
 
+	@Autowired
 	public UserPasswordForm() {
 		super();
 	}

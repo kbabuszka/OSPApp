@@ -13,13 +13,22 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 @Entity
 @Table(name = "training_names")
 public class Training {
 
+	@Autowired
 	public Training() {
 		super();
+	}
+
+	public Training(
+			@Size(min = 3, message = "{training.name.size}") @NotEmpty(message = "{training.name.empty}") String name) {
+		super();
+		this.name = name;
 	}
 
 	@Id

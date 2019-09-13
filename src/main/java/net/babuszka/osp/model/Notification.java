@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import net.babuszka.osp.utils.NotificationType;
@@ -19,6 +20,7 @@ import net.babuszka.osp.utils.NotificationType;
 @Table(name = "notifications")
 public class Notification {
 	
+	@Autowired
 	public Notification() {
 		super();
 	}

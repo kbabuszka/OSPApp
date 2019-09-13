@@ -16,10 +16,13 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 @Entity
 @Table(name = "users")
 public class User {
 	
+	@Autowired
 	public User() {
 		super();
 	}

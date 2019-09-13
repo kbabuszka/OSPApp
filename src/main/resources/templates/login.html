@@ -65,12 +65,12 @@
 	<th:block th:include="html/scripts_import.html"></th:block>
 	<!-- #END# Common scripts import -->
 
-    <!-- Validation Plugin Js -->
+	<!-- Page-specific scripts import -->
+	<!-- ############################ -->
     <script th:src="@{/plugins/jquery-validation/jquery.validate.js}"></script>
-
-    <!-- Custom Js -->
-    <script th:src="@{/js/admin.js}"></script>
     <script th:src="@{/js/pages/sign-in/sign-in.js}"></script>
+    <!-- ################################## -->    
+   	<!-- #END# Page-specific scripts import -->
 </body>
 
 </html>
