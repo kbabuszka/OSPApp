@@ -43,6 +43,14 @@ public class UserService {
 		return user;
 	}
 	
+	public User findUserByFirefighterId(Integer id) {
+		User user = userRepository.findByFirefighterId(id);
+		if(user == null)
+			LOG.info("Brak użytkownika przypisanego do strażaka o ID: " + id);
+			//throw new UserNotFoundException("Brak użytkownika przypisanego do strażaka o ID: " + id);
+		return user;
+	}
+	
 	public User getCurrentlyLoggedUser() {
 		SessionUtils sessionUtils = new SessionUtils();
 		String username = sessionUtils.getLoggedUsername();

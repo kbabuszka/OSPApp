@@ -23,10 +23,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import net.babuszka.osp.model.Firefighter;
 import net.babuszka.osp.model.FirefighterTraining;
 import net.babuszka.osp.model.FirefighterTrainingWrapper;
+import net.babuszka.osp.model.User;
 import net.babuszka.osp.service.FirefighterService;
 import net.babuszka.osp.service.FirefighterTrainingService;
 import net.babuszka.osp.service.FirefighterTypeService;
 import net.babuszka.osp.service.TrainingService;
+import net.babuszka.osp.service.UserService;
 import net.babuszka.osp.utils.FirefighterUtils;
 
 @Controller
@@ -57,6 +59,7 @@ public class FirefighterController {
 	private FirefighterTypeService firefighterTypeService;
 	private FirefighterTrainingService firefighterTrainingService;
 	private TrainingService trainingService;
+	private UserService userService;
 
 	// Allow Spring to set empty values as null instead of empty string.
 	@InitBinder
@@ -84,6 +87,11 @@ public class FirefighterController {
 	public void setTrainingService(TrainingService trainingService) {
 		this.trainingService = trainingService;
 	}
+	
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
 
 	// Display single firefighter's details
 	@RequestMapping(path = "/firefighters/{id}", method = RequestMethod.GET)
@@ -94,6 +102,9 @@ public class FirefighterController {
 			FirefighterTrainingWrapper trainingWrapper = new FirefighterTrainingWrapper();
 			trainingWrapper.setFirefighterTrainings(firefighterService.getFirefighter(id).getTrainings());
 			model.addAttribute("trainings", trainingWrapper);
+			//User user = new User();
+			User user = userService.findUserByFirefighterId(id);
+			model.addAttribute("user", user);
 			return "firefighter_details";
 		} else {
 			return "redirect:/firefighters";

@@ -63,7 +63,17 @@
                             <div class="content-area">
                                 <h3 th:text="${firefighter.firstName + ' ' + firefighter.lastName}"></h3>
                                 <p th:text="${'Członek ' + firefighter.type.name}"></p>
-                                <p>Administrator</p>
+                                <p>
+	                                <span>Role w systemie: </span>
+	                                
+	                                <th:block th:if="${user != null}">
+		                                <span th:each="role, i: ${user.roles}">
+		                                	<th:block th:text="!${i.last} ? ${role.name} + ',' : ${role.name}"></th:block>
+			                            </span>
+		                            </th:block>
+		                            
+		                            <th:span th:if="${user == null}" th:text="brak">
+	                            </p>
                             </div>
                         </div>
                         <div class="profile-footer">
