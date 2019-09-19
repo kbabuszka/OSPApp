@@ -39,12 +39,14 @@ public class SessionUtils {
 			
 			if(!username.equals("anonymousUser")) {
 				User user = userService.findUserByUsername(username);
-				Firefighter firefighter = user.getFirefighter();
-				if(firefighter != null) {
-					String name = firefighter.getFirstName() + " " + firefighter.getLastName();
-					return name;
-				} else {
-					return user.getDisplayName();
+				if (user != null) {
+					Firefighter firefighter = user.getFirefighter();
+					if(firefighter != null) {
+						String name = firefighter.getFirstName() + " " + firefighter.getLastName();
+						return name;
+					} else {
+						return user.getDisplayName();
+					}
 				}
 			}
 		} 
@@ -59,11 +61,13 @@ public class SessionUtils {
 			
 			if(!username.equals("anonymousUser")) {
 				User user = userService.findUserByUsername(username);
-				Firefighter firefighter = user.getFirefighter();
-				if(firefighter != null) {
-					return firefighter.getEmail();
-				} else {
-					return user.getEmail();
+				if (user != null) {
+					Firefighter firefighter = user.getFirefighter();
+					if(firefighter != null) {
+						return firefighter.getEmail();
+					} else {
+						return user.getEmail();
+					}
 				}
 			}
 		}

@@ -20,7 +20,4 @@ public class FirefighterTypeWrapper {
 	public void setTypes(List<FirefighterType> types) {
 		this.types = types;
 	}
-	
-	
-	
 }

@@ -1,14 +1,12 @@
 package net.babuszka.osp.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.babuszka.osp.model.Firefighter;
 import net.babuszka.osp.model.FirefighterTraining;
 import net.babuszka.osp.repository.FirefighterTrainingRepository;
 import net.babuszka.osp.repository.FirefighterTypeRepository;
@@ -57,6 +55,17 @@ public class FirefighterTrainingService {
 		} catch(Exception e) {
 			LOG.debug("An error occured during deletion of firefighter training: " + e.getMessage());
 		} 
+	}
+	
+	public List<FirefighterTraining> getAllFirefighterTrainings(Integer firefighterId){
+		LOG.debug("Getting all trainings of Firefighter with following ID: " + firefighterId);
+		try {
+			LOG.debug("Found following number of trainings for the Firefighter: " + firefighterTrainingRepository.getAllFirefighterTrainings(firefighterId));
+			return firefighterTrainingRepository.getAllFirefighterTrainings(firefighterId);
+		} catch (Exception e) {
+			LOG.error("An error occured during getting firefighter's trainings: " + e.getMessage());
+		}
+		return null;
 	}
 	
 }

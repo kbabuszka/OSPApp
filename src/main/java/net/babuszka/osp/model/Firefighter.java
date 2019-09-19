@@ -110,20 +110,7 @@ public class Firefighter {
 		super();
 		this.trainings = new ArrayList<FirefighterTraining>();
 	}
-	
-	public Firefighter(
-			@Size(min = 3, max = 30, message = "{firefighter.firstname.size}") @NotEmpty(message = "{firefighter.firstname.empty}") String firstName,
-			@Size(min = 3, max = 30, message = "{firefighter.lastname.size}") @NotEmpty(message = "{firefighter.lastname.empty}") String lastName,
-			@NotEmpty(message = "{firefighter.gender.empty}") String gender,
-			@NotNull(message = "{firefighter.type}") FirefighterType type) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.gender = gender;
-		this.type = type;
-		this.trainings = new ArrayList<FirefighterTraining>();
-	}
-	
+		
 	public Integer getId() {
 		return id;
 	}

@@ -24,11 +24,11 @@ public class Notification {
 	public Notification() {
 		super();
 	}
-	
-	public Notification(NotificationType type, String message) {
-		this.text = message;
-		this.notificationType = type;
-		this.date = LocalDateTime.now();
+
+	public Notification(NotificationType notificationType, String text) {
+		super();
+		this.notificationType = notificationType;
+		this.text = text;
 	}
 
 	@Id

@@ -23,12 +23,6 @@ public class FirefighterTraining {
 		super();
 	}
 
-	public FirefighterTraining(Firefighter firefighterId, Training training) {
-		super();
-		this.firefighterId = firefighterId;
-		this.training = training;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

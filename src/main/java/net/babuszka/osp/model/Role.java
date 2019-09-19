@@ -21,17 +21,17 @@ public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
-	Integer idInteger;
+	Integer id;
 
 	@Column(name = "name")
 	private String name;
 
-	public Integer getIdInteger() {
-		return idInteger;
+	public Integer getId() {
+		return id;
 	}
 
-	public void setIdInteger(Integer idInteger) {
-		this.idInteger = idInteger;
+	public void setId(Integer idInteger) {
+		this.id = idInteger;
 	}
 
 	public String getName() {

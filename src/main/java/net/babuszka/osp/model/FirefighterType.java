@@ -22,12 +22,6 @@ public class FirefighterType {
 		super();
 	}
 
-	public FirefighterType(
-			@Size(min = 3, message = "{firefightertype.name.size}") @NotEmpty(message = "{firefightertype.name.empty}") String name) {
-		super();
-		this.name = name;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

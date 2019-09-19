@@ -27,4 +27,5 @@ public class OspApplication extends SpringBootServletInitializer {
 	 protected SpringApplicationBuilder configure(SpringApplicationBuilder app) {
 		return app.sources(OspApplication.class);
 	 }
+	
 }

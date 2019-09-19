@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.babuszka.osp.model.FirefighterType;
 import net.babuszka.osp.model.Training;
 import net.babuszka.osp.repository.TrainingRepository;
 

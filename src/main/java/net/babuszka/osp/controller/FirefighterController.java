@@ -52,6 +52,9 @@ public class FirefighterController {
 	@Value("${firefighter.message.deletetraining.error}")
 	private String messageFirefighterTrainingNotDeleted;
 	
+	@Value("${firefighter.message.deletetraining.notexists}")
+	private String messageFirefighterTrainingNotExists;
+	
 	@Value("${firefighter.message.firefighter.notexist}")
 	private String messageFirefighterNotExist;
 	
@@ -94,7 +97,7 @@ public class FirefighterController {
 	}
 
 	// Display single firefighter's details
-	@RequestMapping(path = "/firefighters/{id}", method = RequestMethod.GET)
+	@RequestMapping(path = "/firefighters/{id:\\d+}", method = RequestMethod.GET)
 	public String getFirefighter(Model model, @PathVariable(value = "id") Integer id) {
 		if(firefighterService.getFirefighter(id) != null) {
 			model.addAttribute("firefighter", firefighterService.getFirefighter(id));
@@ -102,7 +105,6 @@ public class FirefighterController {
 			FirefighterTrainingWrapper trainingWrapper = new FirefighterTrainingWrapper();
 			trainingWrapper.setFirefighterTrainings(firefighterService.getFirefighter(id).getTrainings());
 			model.addAttribute("trainings", trainingWrapper);
-			//User user = new User();
 			User user = userService.findUserByFirefighterId(id);
 			model.addAttribute("user", user);
 			return "firefighter_details";
@@ -220,11 +222,18 @@ public class FirefighterController {
 	// Delete firefighter's training
 	@RequestMapping(path = "/firefighters/edit/{firefighterId}/deletetraining/{id}", method = RequestMethod.GET)
 	public String deleteTraining(@PathVariable(value = "id") Integer id, @PathVariable(value = "firefighterId") Integer firefighterId, RedirectAttributes redirectAttributes) {
-		if(firefighterTrainingService.getFirefighterTraining(id) != null) {
-			redirectAttributes.addFlashAttribute("message", messageFirefighterTrainingDeleted);
-		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-			firefighterTrainingService.deleteFirefighterTraining(id);
-			return "redirect:/firefighters/edit/" + firefighterId;
+		FirefighterTraining training = firefighterTrainingService.getFirefighterTraining(id);
+		if(training != null) {
+			if(training.getFirefighterId().getId().equals(firefighterId)) {
+				redirectAttributes.addFlashAttribute("message", messageFirefighterTrainingDeleted);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+				firefighterTrainingService.deleteFirefighterTraining(id);
+				return "redirect:/firefighters/edit/" + firefighterId;
+			} else {
+				redirectAttributes.addFlashAttribute("message", messageFirefighterTrainingNotExists);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+				return "redirect:/firefighters/edit/" + firefighterId;
+			}
 		} else {
 			redirectAttributes.addFlashAttribute("message", messageFirefighterTrainingNotDeleted);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");

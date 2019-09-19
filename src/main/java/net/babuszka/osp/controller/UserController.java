@@ -4,7 +4,6 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import net.babuszka.osp.model.Firefighter;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.model.UserPasswordForm;
-import net.babuszka.osp.service.FirefighterService;
 import net.babuszka.osp.service.UserService;
 
 @Controller
@@ -27,6 +25,12 @@ public class UserController {
 	
 	@Value("${user.passwordchange.message.error}")
 	private String messagePasswordNotChanged;
+	
+	@Value("${user.profileupdate.message.success}")
+	private String messageProfileUpdated;
+	
+	@Value("${user.profileupdate.message.error}")
+	private String messageProfileNotUpdated;
 	
 	private UserService userService;
 	
@@ -46,20 +50,26 @@ public class UserController {
 	}
 	
 	@RequestMapping(path = "/profile", method = RequestMethod.POST)
-	public String updateProfile(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
+	public String updateProfile(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			int totalErrors = bindingResult.getErrorCount();
 			int passwordErrors = bindingResult.getFieldErrorCount("password");
 			if(totalErrors != passwordErrors) {
+				model.addAttribute("message", messageProfileNotUpdated);
+			    model.addAttribute("alertClass", "alert-danger");
 				model.addAttribute("user", user);
 				model.addAttribute("passwordForm", new UserPasswordForm());
 				return "user_profile";
 			} else {
 				// if there is only password error, update the user
+				redirectAttributes.addFlashAttribute("message", messageProfileUpdated);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 				userService.updateUser(user);
 				return "redirect:/profile";
 			}
 		} else {
+			redirectAttributes.addFlashAttribute("message", messageProfileUpdated);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 			userService.updateUser(user);
 			return "redirect:/profile";
 		}

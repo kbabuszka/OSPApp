@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,7 @@ public class UserService {
 
 	private Logger LOG = LoggerFactory.getLogger(Logger.class);
 	private UserRepository userRepository;
-	private RoleRepository RoleRepository;
+	private RoleRepository roleRepository;
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
@@ -28,7 +27,7 @@ public class UserService {
 	
 	@Autowired
 	public void setRoleRepository(RoleRepository roleRepository) {
-		this.RoleRepository = roleRepository;
+		this.roleRepository = roleRepository;
 	}
 	
 	@Autowired
@@ -46,8 +45,7 @@ public class UserService {
 	public User findUserByFirefighterId(Integer id) {
 		User user = userRepository.findByFirefighterId(id);
 		if(user == null)
-			LOG.info("Brak użytkownika przypisanego do strażaka o ID: " + id);
-			//throw new UserNotFoundException("Brak użytkownika przypisanego do strażaka o ID: " + id);
+			LOG.debug("Brak użytkownika przypisanego do strażaka o ID: " + id);
 		return user;
 	}
 	

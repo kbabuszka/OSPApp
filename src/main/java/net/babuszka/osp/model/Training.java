@@ -25,12 +25,6 @@ public class Training {
 		super();
 	}
 
-	public Training(
-			@Size(min = 3, message = "{training.name.size}") @NotEmpty(message = "{training.name.empty}") String name) {
-		super();
-		this.name = name;
-	}
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
