@@ -43,6 +43,7 @@ public class FirefighterTypeController {
 	// Display page with firefighter types
 	@RequestMapping(path = "/manage/firefighter-types", method = RequestMethod.GET)
 	public String getAllFirefighterTypes(Model model) {
+		model.addAttribute("page_title", "Zarządzaj rodzajami strażaków");
 		FirefighterTypeWrapper wrapper = new FirefighterTypeWrapper();
 		wrapper.setTypes(firefighterTypeService.getAllFirefighterTypes());
 		model.addAttribute("wrapper", wrapper);
@@ -54,6 +55,7 @@ public class FirefighterTypeController {
 	@RequestMapping(path = "/manage/firefighter-types", method = RequestMethod.POST)
 	public String addFirefighterType(@ModelAttribute("firefighter_type") @Valid FirefighterType firefighterType, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("page_title", "Zarządzaj rodzajami strażaków");
 			FirefighterTypeWrapper wrapper = new FirefighterTypeWrapper();
 			wrapper.setTypes(firefighterTypeService.getAllFirefighterTypes());
 			model.addAttribute("wrapper", wrapper);
@@ -80,6 +82,7 @@ public class FirefighterTypeController {
 		}
 		
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("page_title", "Zarządzaj rodzajami strażaków");
 			model.addAttribute("wrapper", wrapper);
 			model.addAttribute("firefighter_type", new FirefighterType());
 			return "manage_firefighter_types";

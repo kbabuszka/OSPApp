@@ -6,13 +6,12 @@
     <link th:href="@{/plugins/bootstrap-select/css/bootstrap-select.css}" rel="stylesheet" />
     <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css}" rel="stylesheet" />
     <link th:href="@{/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" rel="stylesheet" />
-    <title>OSP Sława - Logowanie</title>
 </head>
 
 <body class="login-page">
     <div class="login-box">
         <div class="logo">
-            <a href="javascript:void(0);">OSP <b>Sława</b></a>
+            <a href="javascript:void(0);"><span th:text="${global_department_name_prefix}">OSP</span> <b th:text="${global_department_name}">Name</b></a>
             <small>System zarządzania jednostką OSP</small>
         </div>
         <div class="card">

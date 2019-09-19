@@ -41,6 +41,7 @@ public class UserController {
 	
 	@RequestMapping(path = "/profile", method = RequestMethod.GET)
 	public String displayProfile(Model model) {
+		model.addAttribute("page_title", "Twój profil");
 		User user = userService.getCurrentlyLoggedUser();
 		Firefighter firefighter = user.getFirefighter();
 		model.addAttribute("user", user);
@@ -51,6 +52,7 @@ public class UserController {
 	
 	@RequestMapping(path = "/profile", method = RequestMethod.POST)
 	public String updateProfile(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+		model.addAttribute("page_title", "Twój profil");
 		if(bindingResult.hasErrors()) {
 			int totalErrors = bindingResult.getErrorCount();
 			int passwordErrors = bindingResult.getFieldErrorCount("password");
@@ -78,6 +80,7 @@ public class UserController {
 	
 	@RequestMapping(path = "/profile/change-password", method = RequestMethod.POST)
 	public String changePassword(@ModelAttribute("passwordForm") @Valid UserPasswordForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+		model.addAttribute("page_title", "Twój profil");
 		User user = userService.getCurrentlyLoggedUser();
 		Firefighter firefighter = user.getFirefighter();
 		String oldPassword = form.getOldPassword();

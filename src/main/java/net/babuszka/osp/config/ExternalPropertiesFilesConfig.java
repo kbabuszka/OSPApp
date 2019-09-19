@@ -10,13 +10,14 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @Configuration
 @PropertySource(value = "classpath:config/application.properties", encoding = "UTF-8")
 @PropertySource(value = "classpath:config/ValidationMessages.properties", encoding = "UTF-8")
+@PropertySource(value = "classpath:config/appconfig.properties", encoding = "UTF-8")
 public class ExternalPropertiesFilesConfig {
 
 	// Custom validation messages from external file
 	@Bean
 	   public MessageSource messageSource() {
 	      ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-	      messageSource.setBasename("classpath:config/ValidationMessagese");
+	      messageSource.setBasename("classpath:config/ValidationMessages");
 	      messageSource.setDefaultEncoding("UTF-8");
 	      return messageSource;
 	   }

@@ -99,6 +99,7 @@ public class FirefighterController {
 	// Display single firefighter's details
 	@RequestMapping(path = "/firefighters/{id:\\d+}", method = RequestMethod.GET)
 	public String getFirefighter(Model model, @PathVariable(value = "id") Integer id) {
+		model.addAttribute("page_title", "Szczegóły strażaka");
 		if(firefighterService.getFirefighter(id) != null) {
 			model.addAttribute("firefighter", firefighterService.getFirefighter(id));
 			model.addAttribute("firefighter_types", firefighterTypeService.getAllFirefighterTypes());
@@ -116,6 +117,7 @@ public class FirefighterController {
 	// Display all firefighters
 	@RequestMapping(path = "/firefighters", method = RequestMethod.GET)
 	public String getAllFirefighters(Model model) {
+		model.addAttribute("page_title", "Lista strażaków");
 		model.addAttribute("firefighters", firefighterService.getAllFirefighters());
 		return "firefighters_list";
 	}
@@ -123,6 +125,7 @@ public class FirefighterController {
 	// Display new firefighter form
 	@RequestMapping(path = "/firefighters/add", method = RequestMethod.GET)
 	public String addFirefighter(Model model) {
+		model.addAttribute("page_title", "Dodaj strażaka");
 		model.addAttribute("firefighter", new Firefighter());
 		model.addAttribute("firefighter_types", firefighterTypeService.getAllFirefighterTypes());
 		return "firefighter_add";
@@ -130,8 +133,10 @@ public class FirefighterController {
 	
 	// Submit new firefighter form
 	@RequestMapping(path = "/firefighters/add", method = RequestMethod.POST)
-	public String saveFirefighter(@Valid Firefighter firefighter, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+	public String saveFirefighter(@Valid Firefighter firefighter, BindingResult bindingResult, Model model,
+								RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("page_title", "Dodaj strażaka");
 			model.addAttribute("firefighter_types", firefighterTypeService.getAllFirefighterTypes());
 			return "firefighter_add";
 		} else {
@@ -145,6 +150,7 @@ public class FirefighterController {
 	// Display edit firefighter form
 	@RequestMapping(path = "/firefighters/edit/{id}", method = RequestMethod.GET)
 	public String editFirefighter(Model model, @PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {	
+		model.addAttribute("page_title", "Edytuj strażaka");
 		if(firefighterService.getFirefighter(id) != null) {
 			model.addAttribute("firefighter", firefighterService.getFirefighter(id));
 			model.addAttribute("firefighter_types", firefighterTypeService.getAllFirefighterTypes());	
@@ -159,7 +165,8 @@ public class FirefighterController {
 	
 	// Submit edit firefighter form
 	@RequestMapping(path = "/firefighters/edit/{id}", method = RequestMethod.POST)
-	public String updateFirefighter(@ModelAttribute("firefighter") @Valid Firefighter firefighter, BindingResult bindingResult, @PathVariable(value = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+	public String updateFirefighter(@ModelAttribute("firefighter") @Valid Firefighter firefighter, BindingResult bindingResult, 
+									@PathVariable(value = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
 		
 		if(firefighter.getTrainings() != null) {
 			for(int i=0; i < firefighter.getTrainings().size(); i++) {
@@ -175,6 +182,7 @@ public class FirefighterController {
 		if(bindingResult.hasErrors()) {
 			if(firefighter.getTrainings() == null)
 				firefighter.setTrainings(new ArrayList<FirefighterTraining>());
+			model.addAttribute("page_title", "Edytuj strażaka");
 			model.addAttribute("firefighter", firefighter);
 			model.addAttribute("firefighter_types", firefighterTypeService.getAllFirefighterTypes());
 			model.addAttribute("training_types", trainingService.getAllTrainings());
@@ -221,7 +229,8 @@ public class FirefighterController {
 	
 	// Delete firefighter's training
 	@RequestMapping(path = "/firefighters/edit/{firefighterId}/deletetraining/{id}", method = RequestMethod.GET)
-	public String deleteTraining(@PathVariable(value = "id") Integer id, @PathVariable(value = "firefighterId") Integer firefighterId, RedirectAttributes redirectAttributes) {
+	public String deleteTraining(@PathVariable(value = "id") Integer id, @PathVariable(value = "firefighterId") Integer firefighterId,
+								RedirectAttributes redirectAttributes) {
 		FirefighterTraining training = firefighterTrainingService.getFirefighterTraining(id);
 		if(training != null) {
 			if(training.getFirefighterId().getId().equals(firefighterId)) {
@@ -244,6 +253,7 @@ public class FirefighterController {
 	// Display JOT Matrix
 	@RequestMapping(path = "/firefighters/jot", method = RequestMethod.GET)
 	public String getJotFirefighters(Model model) {
+		model.addAttribute("page_title", "Tabela JOT");
 		List<Firefighter> firefighters = firefighterService.getJotFirefighters();
 		FirefighterUtils utils = new FirefighterUtils();
 		Collections.sort(firefighters, utils.compareByLastName);

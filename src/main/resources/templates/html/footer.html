@@ -1,12 +1,12 @@
             <div class="legal">
-				<div class="copyright">
-                    OSP Application
+				<div class="copyright" th:text="${global_application_name}">
+                    App Name
                 </div>
 			    <div class="copyright">
-                    &copy; 2019 <a href="javascript:void(0);">Kamil Babuszka</a>.
+                    &copy; 2019 <a th:href="${global_application_author_website}" th:text="${global_application_author}">Author</a>.
                 </div>
                 <div class="version">
-                    <b>Version:</b> 0.1.1
+                    <b>Version:</b> <span th:text="${global_application_version}">Version</span>
                 </div>
 				<br />
 				<div class="copyright">

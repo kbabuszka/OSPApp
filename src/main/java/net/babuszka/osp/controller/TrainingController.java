@@ -45,6 +45,7 @@ public class TrainingController {
 	// Display the page with trainings
 	@RequestMapping(path = "/manage/trainings", method = RequestMethod.GET)
 	public String getAllTrainings(Model model) {
+		model.addAttribute("page_title", "Zarządzaj rodzajami szkoleń");
 		TrainingWrapper trainingWrapper = new TrainingWrapper();
 		trainingWrapper.setTrainings(trainingService.getAllTrainings());
 		model.addAttribute("wrapper", trainingWrapper);
@@ -56,6 +57,7 @@ public class TrainingController {
 	@RequestMapping(path = "/manage/trainings", method = RequestMethod.POST)
 	public String saveTraining(@Valid Training training, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("page_title", "Zarządzaj rodzajami szkoleń");
 			TrainingWrapper trainingWrapper = new TrainingWrapper();
 			trainingWrapper.setTrainings(trainingService.getAllTrainings());
 			model.addAttribute("wrapper", trainingWrapper);
@@ -82,6 +84,7 @@ public class TrainingController {
 		}
 		
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("page_title", "Zarządzaj rodzajami szkoleń");
 			model.addAttribute("wrapper", wrapper);
 			model.addAttribute("training", new Training());
 			return "manage_trainings";
