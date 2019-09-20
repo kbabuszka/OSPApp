@@ -15,5 +15,6 @@ public interface FirefighterRepository extends JpaRepository<Firefighter, Intege
 	public Firefighter findByPesel(String pesel);
 	
 	@Query(value = "SELECT * FROM firefighters WHERE in_jot = 1", nativeQuery = true)
-	List<Firefighter> findJotFirefighters();
+	public List<Firefighter> findJotFirefighters();
+	
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.babuszka.osp.model.DeletedFirefighter;
 import net.babuszka.osp.model.Firefighter;
 import net.babuszka.osp.model.FirefighterTraining;
 import net.babuszka.osp.model.FirefighterTrainingWrapper;
@@ -211,7 +212,7 @@ public class FirefighterController {
 				}
 			}
 			firefighterService.deleteFirefighter(id);
-			if(firefighterService.getFirefighter(id) == null) {
+			if(firefighterService.getFirefighter(id) == null && firefighterService.getDeletedFirefighter(id) != null) {
 				redirectAttributes.addFlashAttribute("message", messageFirefighterDeleted);
 			    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 				return "redirect:/firefighters";
@@ -260,6 +261,17 @@ public class FirefighterController {
 		model.addAttribute("firefighters", firefighters);
 		model.addAttribute("training_types", trainingService.getAllTrainings());
 		return "firefighters_jot";
+	}
+	
+	// Display JOT Matrix
+	@RequestMapping(path = "/firefighters/deleted", method = RequestMethod.GET)
+	public String getDeletedFirefighters(Model model) {
+		model.addAttribute("page_title", "Lista usuniętych strażaków");
+		List<DeletedFirefighter> firefighters = firefighterService.getAllDeletedFirefighters();
+//		FirefighterUtils utils = new FirefighterUtils();
+//		Collections.sort(firefighters, utils.compareByLastName);
+		model.addAttribute("firefighters", firefighters);
+		return "firefighters_deleted";
 	}
 
 }

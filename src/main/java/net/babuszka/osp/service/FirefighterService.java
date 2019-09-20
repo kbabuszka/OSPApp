@@ -1,5 +1,7 @@
 package net.babuszka.osp.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -7,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.babuszka.osp.model.DeletedFirefighter;
 import net.babuszka.osp.model.Firefighter;
+import net.babuszka.osp.repository.DeletedFirefighterRepository;
 import net.babuszka.osp.repository.FirefighterRepository;
 
 @Service
@@ -16,12 +20,24 @@ public class FirefighterService {
 	private Logger LOG = LoggerFactory.getLogger(FirefighterService.class);
 
 	private FirefighterRepository firefighterRepository;
+	private DeletedFirefighterRepository deletedFirefighterRepository;
+	private UserService userService;
 
 	@Autowired
 	public void setFirefighterRepository(FirefighterRepository firefighterRepository) {
 		this.firefighterRepository = firefighterRepository;
 	}
 	
+	@Autowired
+	public void setDeletedFirefighterRepository(DeletedFirefighterRepository deletedFirefighterRepository) {
+		this.deletedFirefighterRepository = deletedFirefighterRepository;
+	}
+
+	@Autowired
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
 	public Firefighter getFirefighter(Integer id) {
 		LOG.debug("Getting the Firefighter with following ID: " + id);
 		try {
@@ -74,11 +90,23 @@ public class FirefighterService {
 	
 	public void deleteFirefighter(Integer id) {
 		LOG.debug("ID given: " + id);
-		try {
-			firefighterRepository.deleteById(id);
-		} catch(Exception e) {
-			LOG.info("An error occured during deletion of firefighter: " + e.getMessage());
-		} 
+		Firefighter firefighter = firefighterRepository.getOne(id);
+		if (firefighter != null) {
+			LOG.info("giving id to repository movetodeleted(): " + firefighter.getId());
+			DeletedFirefighter deletedFirefighter = new DeletedFirefighter();
+			deletedFirefighter.setId(firefighter.getId());
+			deletedFirefighter.setFirstName(firefighter.getFirstName());
+			deletedFirefighter.setLastName(firefighter.getLastName());
+			deletedFirefighter.setDeletionDate(LocalDateTime.now());
+			deletedFirefighter.setDeletedByUser(userService.getCurrentlyLoggedUser());
+			LOG.info("giving date to repository movetodeleted(): " + LocalDateTime.now());
+			deletedFirefighterRepository.save(deletedFirefighter);
+			try {
+				firefighterRepository.deleteById(id);
+			} catch(Exception e) {
+				LOG.info("An error occured during deletion of firefighter: " + e.getMessage());
+			} 
+		}
 	}
 	
 	public List<Firefighter> getJotFirefighters(){
@@ -87,6 +115,26 @@ public class FirefighterService {
 			LOG.debug(firefighter.toString());
 		}
 		return firefighterRepository.findJotFirefighters();
+	}
+
+	
+	public DeletedFirefighter getDeletedFirefighter(Integer id) {
+		LOG.debug("Getting deleted Firefighter with following ID: " + id);
+		try {
+			LOG.debug("Found the Firefighter: " + deletedFirefighterRepository.getOne(id).toString());
+			return deletedFirefighterRepository.getOne(id);
+		} catch (Exception e) {
+			LOG.error("An error occured during getting deleted firefighter: " + e.getMessage());
+		}
+		return null;
+	}
+	
+	public List<DeletedFirefighter> getAllDeletedFirefighters(){
+		LOG.debug("There are " + deletedFirefighterRepository.count() + " deleted firefighters in the database");
+		for(DeletedFirefighter firefighter : deletedFirefighterRepository.findAll()) {
+			LOG.debug(firefighter.toString());
+		}
+		return deletedFirefighterRepository.findAll();
 	}
 }
 
