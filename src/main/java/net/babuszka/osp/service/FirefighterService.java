@@ -1,6 +1,5 @@
 package net.babuszka.osp.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class FirefighterService {
 		}
 	}
 	
-	public List<Firefighter> getAllFirefighters(){
+	public List<Firefighter> getAllFirefighters() {
 		LOG.debug("There are " + firefighterRepository.count() + " firefighters in the repository");
 		for(Firefighter firefighter : firefighterRepository.findAll()) {
 			LOG.debug(firefighter.toString());

@@ -40,7 +40,7 @@
                             <li>
                                 <a th:href="@{/firefighters/deleted}">
 									<i class="material-icons">delete</i>
-									<span>Usunięci strażacy</span>
+									<span>Lista usuniętych strażaków</span>
 								</a>
                             </li>
                         </ul>
@@ -82,15 +82,21 @@
                         </a>
 						<ul class="ml-menu">
 							<li>
+								<a th:href="@{/manage/firefighter-types}">
+									<i class="material-icons">contacts</i>
+									<span>Rodzaje strażaków</span>
+								</a>
+							</li>
+							<li>
 								<a th:href="@{/manage/trainings}">
 									<i class="material-icons">school</i>
 									<span>Rodzaje szkoleń</span>
 								</a>
 							</li>
 							<li>
-								<a th:href="@{/manage/firefighter-types}">
-									<i class="material-icons">contacts</i>
-									<span>Rodzaje strażaków</span>
+								<a th:href="@{/manage/users}">
+									<i class="material-icons">supervised_user_circle</i>
+									<span>Użytkownicy</span>
 								</a>
 							</li>
 						</ul>

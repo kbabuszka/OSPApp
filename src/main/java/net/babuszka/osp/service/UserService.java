@@ -1,5 +1,7 @@
 package net.babuszka.osp.service;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,10 @@ public class UserService {
 	@Autowired
 	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
+	}
+	
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
 	}
 	
 	public User findUserByUsername(String username) {
@@ -79,8 +85,6 @@ public class UserService {
 	}
 
 	public void updateUserPassword(User user) {
-		if(user == null)
-			System.out.println("user jest nulem w service");
 		String plainPassword = user.getPassword();
 		String encodedPassword = passwordEncoder.encode(plainPassword);
 		user.setPassword(encodedPassword);

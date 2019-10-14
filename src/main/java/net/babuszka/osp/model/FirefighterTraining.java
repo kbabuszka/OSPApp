@@ -14,6 +14,8 @@ import javax.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "firefighter_trainings")
 public class FirefighterTraining {
@@ -29,10 +31,12 @@ public class FirefighterTraining {
 	private Integer id;
 	
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "firefighter_id", referencedColumnName = "id")
 	private Firefighter firefighterId;
 	
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "training_name", referencedColumnName = "id")
 	private Training training;
 	

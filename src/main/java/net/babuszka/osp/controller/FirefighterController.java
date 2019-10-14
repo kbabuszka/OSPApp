@@ -263,13 +263,11 @@ public class FirefighterController {
 		return "firefighters_jot";
 	}
 	
-	// Display JOT Matrix
+	// Display list of deleted firefighters
 	@RequestMapping(path = "/firefighters/deleted", method = RequestMethod.GET)
 	public String getDeletedFirefighters(Model model) {
 		model.addAttribute("page_title", "Lista usuniętych strażaków");
 		List<DeletedFirefighter> firefighters = firefighterService.getAllDeletedFirefighters();
-//		FirefighterUtils utils = new FirefighterUtils();
-//		Collections.sort(firefighters, utils.compareByLastName);
 		model.addAttribute("firefighters", firefighters);
 		return "firefighters_deleted";
 	}
