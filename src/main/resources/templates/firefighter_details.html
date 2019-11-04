@@ -81,6 +81,12 @@
                                     <span>ID w systemie</span>
                                     <span th:text="${firefighter.id}"></span>
                                 </li>
+                                <th:block th:if="${user != null}">
+	                                <li>
+	                                    <span>Login w systemie</span>
+	                                    <span th:text="${user.username}"></span>
+	                                </li>
+                                </th:block>
                                 <li>
                                     <span>Data dołączenia</span>
                                     <span th:text="${firefighter.joinDate}"></span>

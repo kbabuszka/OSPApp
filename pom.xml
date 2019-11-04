@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>net.babuszka</groupId>
 	<artifactId>osp</artifactId>
-	<version>1.0.1-beta</version>
+	<version>1.0.2</version>
 	<name>osp</name>
 	<description>OSP System</description>
 
