@@ -2,9 +2,12 @@ package net.babuszka.osp.service;
 
 import java.util.List;
 
+import javax.mail.SendFailedException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,17 +15,24 @@ import org.springframework.stereotype.Service;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.repository.RoleRepository;
 import net.babuszka.osp.repository.UserRepository;
+import net.babuszka.osp.utils.EmailUtils;
 import net.babuszka.osp.utils.SessionUtils;
 import net.babuszka.osp.utils.UserUtils;
 
 @Service
 public class UserService {
 
+	@Value("${email.newaccount.created.content}")
+	private String UserAddedEmailContent;
+	@Value("${email.newaccount.created.title}")
+	private String UserAddedEmailTitle;
+	
 	private Logger LOG = LoggerFactory.getLogger(Logger.class);
 	private UserRepository userRepository;
 	private RoleRepository roleRepository;
 	private PasswordEncoder passwordEncoder;
 	private UserUtils userUtils;
+	private EmailUtils emailUtils;
 	
 	@Autowired
 	public void setUserRepository(UserRepository userRepository) {
@@ -44,6 +54,11 @@ public class UserService {
 		this.userUtils = userUtils;
 	}
 
+	@Autowired
+	public void setEmailUtils(EmailUtils emailUtils) {
+		this.emailUtils = emailUtils;
+	}
+
 	public List<User> getAllUsers() {
 		return userRepository.findAll();
 	}
@@ -52,7 +67,6 @@ public class UserService {
 		User user = userRepository.findByUsername(username);
 		if(user == null)
 			LOG.debug("Brak użytkownika o loginie: " + username);
-			//throw new UsernameNotFoundException("Brak użytkownika: " + username);
 		return user;
 	}
 	
@@ -80,6 +94,15 @@ public class UserService {
 	}
 
 	public void saveUser(User user) {
+		userRepository.save(user);
+	}
+	
+	public void addNewUser(User user) {
+		try {
+			emailUtils.sendSimpleMessage(user.getEmail(), UserAddedEmailTitle, UserAddedEmailContent);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		userRepository.save(user);
 	}
 

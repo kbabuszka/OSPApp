@@ -1,5 +1,6 @@
 package net.babuszka.osp.controller;
 
+import javax.mail.SendFailedException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class UserController {
 		} else {
 			String encryptedPassword = userUtils.encodePassword(newUser.getPassword());
 			newUser.setPassword(encryptedPassword);
-			userService.saveUser(newUser);
+			userService.addNewUser(newUser);
 			redirectAttributes.addFlashAttribute("message", messageUserAdded);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 			return "redirect:/manage/users";
