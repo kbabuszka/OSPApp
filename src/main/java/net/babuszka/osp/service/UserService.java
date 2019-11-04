@@ -13,6 +13,7 @@ import net.babuszka.osp.model.User;
 import net.babuszka.osp.repository.RoleRepository;
 import net.babuszka.osp.repository.UserRepository;
 import net.babuszka.osp.utils.SessionUtils;
+import net.babuszka.osp.utils.UserUtils;
 
 @Service
 public class UserService {
@@ -21,6 +22,7 @@ public class UserService {
 	private UserRepository userRepository;
 	private RoleRepository roleRepository;
 	private PasswordEncoder passwordEncoder;
+	private UserUtils userUtils;
 	
 	@Autowired
 	public void setUserRepository(UserRepository userRepository) {
@@ -37,6 +39,11 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 	
+	@Autowired
+	public void setUserUtils(UserUtils userUtils) {
+		this.userUtils = userUtils;
+	}
+
 	public List<User> getAllUsers() {
 		return userRepository.findAll();
 	}
@@ -44,7 +51,8 @@ public class UserService {
 	public User findUserByUsername(String username) {
 		User user = userRepository.findByUsername(username);
 		if(user == null)
-			throw new UsernameNotFoundException("Brak użytkownika: " + username);
+			LOG.debug("Brak użytkownika o loginie: " + username);
+			//throw new UsernameNotFoundException("Brak użytkownika: " + username);
 		return user;
 	}
 	
@@ -52,6 +60,13 @@ public class UserService {
 		User user = userRepository.findByFirefighterId(id);
 		if(user == null)
 			LOG.debug("Brak użytkownika przypisanego do strażaka o ID: " + id);
+		return user;
+	}
+	
+	public User findUserByEmail(String email) {
+		User user = userRepository.findByEmail(email);
+		if(user == null)
+			LOG.debug("Brak użytkownika z adresem email: " + email);
 		return user;
 	}
 	
@@ -86,7 +101,7 @@ public class UserService {
 
 	public void updateUserPassword(User user) {
 		String plainPassword = user.getPassword();
-		String encodedPassword = passwordEncoder.encode(plainPassword);
+		String encodedPassword = userUtils.encodePassword(plainPassword);
 		user.setPassword(encodedPassword);
 		userRepository.save(user);
 	}

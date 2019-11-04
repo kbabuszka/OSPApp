@@ -13,10 +13,12 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
@@ -43,10 +45,11 @@ public class User {
 	
 	@Column(name = "email")
 	@Email(message = "{user.email}")
+	@NotEmpty(message = "{user.email.empty}")
 	private String email;
 	
 	@Column(name = "password")
-	@NotEmpty
+	@NotEmpty(message = "{user.password.empty}")
 	private String password;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
