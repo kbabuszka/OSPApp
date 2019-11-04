@@ -81,10 +81,10 @@
                                     <span>ID w systemie</span>
                                     <span th:text="${firefighter.id}"></span>
                                 </li>
-                                <th:block th:if="${user != null}">
+                                <th:block th:if="${firefighter.user != null}">
 	                                <li>
 	                                    <span>Login w systemie</span>
-	                                    <span th:text="${user.username}"></span>
+	                                    <span th:text="${firefighter.user.username}"></span>
 	                                </li>
                                 </th:block>
                                 <li>

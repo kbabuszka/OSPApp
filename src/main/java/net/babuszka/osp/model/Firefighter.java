@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -104,6 +105,10 @@ public class Firefighter {
 
 	@OneToMany(mappedBy = "firefighterId")
 	private List<FirefighterTraining> trainings;
+	
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private User user;
 	
 	@Autowired
 	public Firefighter() {
@@ -278,6 +283,14 @@ public class Firefighter {
 	
 	public void addTraining(FirefighterTraining firefighterTraining) {
 		this.trainings.add(firefighterTraining);
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

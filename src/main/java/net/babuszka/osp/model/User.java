@@ -53,6 +53,9 @@ public class User {
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
 	
+	@Column(name = "active")
+	private boolean status;
+	
 	@OneToOne
 	@JoinColumn(name = "firefighter_id", referencedColumnName = "id")
 	private Firefighter firefighter;
@@ -103,6 +106,14 @@ public class User {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 
 	public Firefighter getFirefighter() {

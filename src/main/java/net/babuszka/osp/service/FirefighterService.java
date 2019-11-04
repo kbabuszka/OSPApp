@@ -115,6 +115,14 @@ public class FirefighterService {
 		}
 		return firefighterRepository.findJotFirefighters();
 	}
+	
+	public List<Firefighter> getFirefightersWithNoAccount(){
+		LOG.debug("There are " + firefighterRepository.count() + " firefighters in the repository");
+		for(Firefighter firefighter : firefighterRepository.findFirefightersWithNoAccount()) {
+			LOG.debug(firefighter.toString());
+		}
+		return firefighterRepository.findFirefightersWithNoAccount();
+	}
 
 	
 	public DeletedFirefighter getDeletedFirefighter(Integer id) {

@@ -107,8 +107,6 @@ public class FirefighterController {
 			FirefighterTrainingWrapper trainingWrapper = new FirefighterTrainingWrapper();
 			trainingWrapper.setFirefighterTrainings(firefighterService.getFirefighter(id).getTrainings());
 			model.addAttribute("trainings", trainingWrapper);
-			User user = userService.findUserByFirefighterId(id);
-			model.addAttribute("user", user);
 			return "firefighter_details";
 		} else {
 			return "redirect:/firefighters";

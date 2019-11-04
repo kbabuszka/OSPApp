@@ -16,5 +16,8 @@ public interface FirefighterRepository extends JpaRepository<Firefighter, Intege
 	
 	@Query(value = "SELECT * FROM firefighters WHERE in_jot = 1", nativeQuery = true)
 	public List<Firefighter> findJotFirefighters();
+
+	@Query(value = "SELECT * FROM firefighters WHERE user_id IS NULL", nativeQuery = true)
+	public List<Firefighter> findFirefightersWithNoAccount();
 	
 }
