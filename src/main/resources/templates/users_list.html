@@ -101,7 +101,7 @@
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input th:field="*{user.email}" id="new_user_email" type="text" placeholder="Wpisz adres e-mail" class="form-control">
+                                                <input th:field="*{user.email}" id="new_user_email" type="email" placeholder="Wpisz adres e-mail" class="form-control">
                                             </div>
                                             <div th:if="${#fields.hasErrors('user.email')}" th:errors="*{user.email}" class="alert alert-danger" role="alert">
                                   				User email error

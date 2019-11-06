@@ -2,8 +2,6 @@ package net.babuszka.osp.service;
 
 import java.util.List;
 
-import javax.mail.SendFailedException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,28 +9,29 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.repository.RoleRepository;
 import net.babuszka.osp.repository.UserRepository;
-import net.babuszka.osp.utils.EmailUtils;
 import net.babuszka.osp.utils.SessionUtils;
 import net.babuszka.osp.utils.UserUtils;
 
 @Service
 public class UserService {
 
-	@Value("${email.newaccount.created.content}")
-	private String UserAddedEmailContent;
 	@Value("${email.newaccount.created.title}")
 	private String UserAddedEmailTitle;
+	
+	@Value("${app.config.url}")
+	private String globalApplicationUrl;
 	
 	private Logger LOG = LoggerFactory.getLogger(Logger.class);
 	private UserRepository userRepository;
 	private RoleRepository roleRepository;
 	private PasswordEncoder passwordEncoder;
 	private UserUtils userUtils;
-	private EmailUtils emailUtils;
+	private MailService mailService;
 	
 	@Autowired
 	public void setUserRepository(UserRepository userRepository) {
@@ -55,8 +54,8 @@ public class UserService {
 	}
 
 	@Autowired
-	public void setEmailUtils(EmailUtils emailUtils) {
-		this.emailUtils = emailUtils;
+	public void setEmailUtils(MailService emailUtils) {
+		this.mailService = emailUtils;
 	}
 
 	public List<User> getAllUsers() {
@@ -73,14 +72,14 @@ public class UserService {
 	public User findUserByFirefighterId(Integer id) {
 		User user = userRepository.findByFirefighterId(id);
 		if(user == null)
-			LOG.debug("Brak użytkownika przypisanego do strażaka o ID: " + id);
+			LOG.debug("No user with following ID: " + id);
 		return user;
 	}
 	
 	public User findUserByEmail(String email) {
 		User user = userRepository.findByEmail(email);
 		if(user == null)
-			LOG.debug("Brak użytkownika z adresem email: " + email);
+			LOG.debug("No user with following email: " + email);
 		return user;
 	}
 	
@@ -89,7 +88,7 @@ public class UserService {
 		String username = sessionUtils.getLoggedUsername();
 		User user = userRepository.findByUsername(username);
 		if(user == null)
-			throw new UsernameNotFoundException("Brak użytkownika");
+			throw new UsernameNotFoundException("No user found");
 		return user;
 	}
 
@@ -99,7 +98,11 @@ public class UserService {
 	
 	public void addNewUser(User user) {
 		try {
-			emailUtils.sendSimpleMessage(user.getEmail(), UserAddedEmailTitle, UserAddedEmailContent);
+			Context context = new Context();
+			context.setVariable("displayName", user.getDisplayName());
+			context.setVariable("username", user.getUsername());
+			context.setVariable("global_application_url", globalApplicationUrl);
+			mailService.sendHtmlMessage(user.getEmail(), UserAddedEmailTitle, "accountCreated", context);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

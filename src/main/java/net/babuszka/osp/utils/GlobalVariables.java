@@ -16,6 +16,9 @@ public class GlobalVariables {
 	@Value("${app.config.department.name.full}")
 	private String departmentFullName;
 	
+	@Value("${app.config.url}")
+	private String applicationUrl;
+	
 	@Value("${spring.application.name}")
 	private String applicationName;
 	
@@ -50,6 +53,11 @@ public class GlobalVariables {
 	@ModelAttribute("global_department_full_name")
 	public String getFullDepartmentName() {
 		return departmentFullName;
+	}
+	
+	@ModelAttribute("global_application_url")
+	public String getAppUrl() {
+		return applicationUrl;
 	}
 	
 	@ModelAttribute("global_application_name")
