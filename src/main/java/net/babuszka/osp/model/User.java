@@ -28,6 +28,7 @@ public class User {
 	@Autowired
 	public User() {
 		super();
+		this.status=false;
 	}
 
 	@Id

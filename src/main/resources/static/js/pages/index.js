@@ -46,7 +46,7 @@ function initRealTimeChart() {
 
         var timeout;
         if (realtime === 'on') {
-            timeout = setTimeout(updateRealTime, 320);
+            timeout = setTimeout(updateRealTime, 2000);
         } else {
             clearTimeout(timeout);
         }
