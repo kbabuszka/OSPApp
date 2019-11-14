@@ -6,38 +6,44 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import javassist.expr.NewArray;
+import net.babuszka.osp.event.OnUserCreationEvent;
 import net.babuszka.osp.model.User;
+import net.babuszka.osp.model.UserVerificationToken;
 import net.babuszka.osp.repository.RoleRepository;
 import net.babuszka.osp.repository.UserRepository;
+import net.babuszka.osp.repository.UserVerificationTokenRepository;
 import net.babuszka.osp.utils.SessionUtils;
 import net.babuszka.osp.utils.UserUtils;
 
 @Service
 public class UserService {
 
-	@Value("${email.newaccount.created.title}")
-	private String UserAddedEmailTitle;
-	
-	@Value("${app.config.url}")
-	private String globalApplicationUrl;
-	
 	private Logger LOG = LoggerFactory.getLogger(Logger.class);
 	private UserRepository userRepository;
+	private UserVerificationTokenRepository tokenRepository;
 	private RoleRepository roleRepository;
 	private PasswordEncoder passwordEncoder;
 	private UserUtils userUtils;
-	private MailService mailService;
+	
+	private ApplicationEventPublisher eventPublisher;
 	
 	@Autowired
 	public void setUserRepository(UserRepository userRepository) {
 		this.userRepository = userRepository;
 	}
 	
+	@Autowired
+	public void setTokenRepository(UserVerificationTokenRepository tokenRepository) {
+		this.tokenRepository = tokenRepository;
+	}
+
 	@Autowired
 	public void setRoleRepository(RoleRepository roleRepository) {
 		this.roleRepository = roleRepository;
@@ -52,10 +58,10 @@ public class UserService {
 	public void setUserUtils(UserUtils userUtils) {
 		this.userUtils = userUtils;
 	}
-
+	
 	@Autowired
-	public void setEmailUtils(MailService emailUtils) {
-		this.mailService = emailUtils;
+	public void setEventPublisher(ApplicationEventPublisher eventPublisher) {
+		this.eventPublisher = eventPublisher;
 	}
 
 	public List<User> getAllUsers() {
@@ -97,16 +103,14 @@ public class UserService {
 	}
 	
 	public void addNewUser(User user) {
-		try {
-			Context context = new Context();
-			context.setVariable("displayName", user.getDisplayName());
-			context.setVariable("username", user.getUsername());
-			context.setVariable("global_application_url", globalApplicationUrl);
-			mailService.sendHtmlMessage(user.getEmail(), UserAddedEmailTitle, "accountCreated", context);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		userRepository.save(user);
+		if(user.getId() != null) {
+			try {
+				eventPublisher.publishEvent(new OnUserCreationEvent(user));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void updateUser(User userToUpdate) {
@@ -130,6 +134,11 @@ public class UserService {
 		String encodedPassword = userUtils.encodePassword(plainPassword);
 		user.setPassword(encodedPassword);
 		userRepository.save(user);
+	}
+
+	public void createUserVerificationToken(User user, String token) {
+		UserVerificationToken newToken = new UserVerificationToken(user, token);
+		tokenRepository.save(newToken);
 	}
 
 }

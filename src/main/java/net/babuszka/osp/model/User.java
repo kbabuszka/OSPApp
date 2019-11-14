@@ -2,6 +2,7 @@ package net.babuszka.osp.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,7 +29,7 @@ public class User {
 	@Autowired
 	public User() {
 		super();
-		this.status=false;
+		this.status = false;
 	}
 
 	@Id
@@ -127,6 +128,7 @@ public class User {
 	public void setFirefighter(Firefighter firefighter) {
 		this.firefighter = firefighter;
 	}
+	
 
 	@Override
 	public String toString() {
