@@ -43,9 +43,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.csrf().disable()
 			.authorizeRequests()
+				.antMatchers("/manage/**").hasAuthority("Administrator")
 				.antMatchers("/css/**", "/js/**", "/images/**", "/plugins/**").permitAll()
 				.antMatchers("/activate-account/**").permitAll()
 				.anyRequest().authenticated()
+				.and()
+			.exceptionHandling().accessDeniedPage("/error/403")
 				.and()
 			.formLogin()
 				.loginPage("/login").permitAll()
@@ -56,7 +59,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logout()
 				.permitAll()
 				.logoutUrl("/logout")
-				.deleteCookies("JSESSIONID");
+				.deleteCookies("JSESSIONID")
+				.and()
+			.rememberMe().key("logowanie").tokenValiditySeconds(86400);
 	}
 	
 	@Bean

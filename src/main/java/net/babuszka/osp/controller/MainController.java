@@ -36,7 +36,7 @@ public class MainController {
 	
 	@GetMapping(path = "/activate-account/{token}")
 	public String activateAccount(Model model, @PathVariable(name = "token") String token) {
-		model.addAttribute("page_title", "Potwierdz adres e-mail");
+		model.addAttribute("page_title", "Potwierdź adres e-mail");
 		model.addAttribute("activated", userService.verifyUserEmail(token));
 		return "activate_account";
 	}
