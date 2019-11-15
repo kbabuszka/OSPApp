@@ -21,6 +21,11 @@ public class UserVerificationToken {
 	private static final Long EXPIRATION_TIME = (long) 24;
 	
 	@Autowired
+	public UserVerificationToken() {
+		super();
+	}
+
+	@Autowired
 	public UserVerificationToken(User user, String token) {
 		super();
 		this.user = user;

@@ -1,11 +1,13 @@
 package net.babuszka.osp.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.elasticsearch.jest.JestAutoConfiguration;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -139,6 +141,23 @@ public class UserService {
 	public void createUserVerificationToken(User user, String token) {
 		UserVerificationToken newToken = new UserVerificationToken(user, token);
 		tokenRepository.save(newToken);
+	}
+	
+	public boolean verifyUserEmail(String token) {
+		UserVerificationToken userToken = tokenRepository.findByToken(token);
+		User userToVerify;
+		LocalDateTime tokenExpiration;
+		if(userToken !=null) {
+			userToVerify = userToken.getUser();
+			tokenExpiration = userToken.getExpirationDate();
+			if((userToVerify !=null) && ( LocalDateTime.now().isBefore(tokenExpiration))) {
+				userToVerify.setStatus(true);
+				userRepository.save(userToVerify);
+				tokenRepository.deleteById(userToken.getId());
+				return userToVerify.getStatus();
+			}
+		}
+		return false;
 	}
 
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+    <link th:href="@{/plugins/bootstrap-select/css/bootstrap-select.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" rel="stylesheet" />
+</head>
+
+<body class="login-page">
+    <div class="login-box">
+        <div class="logo">
+            <a href="javascript:void(0);"><span th:text="${global_department_name_prefix}">OSP</span> <b th:text="${global_department_name}">Name</b></a>
+            <small>System zarządzania jednostką OSP</small>
+        </div>
+        <div class="card">
+        <div class="body">
+            <div th:if="${activated == true}" class="body">
+                <div class="alert alert-success">
+                    <strong>Dziękujemy!</strong><br />
+                    Twój adres e-mail został zweryfikowany
+                </div>
+            	<div class="msg">Jeśli masz nadane uprawnienia, możesz się zalogować do systemu.</div>
+            </div>
+            
+            <div th:if="${activated == false}" class="body">
+            	<div class="alert alert-danger">
+                    <strong>Błąd!</strong><br />
+                    Twój adres e-mail nie mógł być zweryfikowany
+                </div>
+            	<div class="msg">
+            		Najbardziej prawdopodobne przyczyny:<br /><br />
+	            	<ul style="text-align: left;">
+	                    <li>Nieprawidłowy link aktywacyjny</li>
+	                    <li>Twoje konto zostało już wcześniej aktywowane</li>
+	                    <li>Link aktywacyjny wygasł.</li>
+	                </ul>
+	                Skontaktuj się z administratorem systemu.
+            	</div>
+            </div>
+			<a th:href="@{/login}" class="btn btn-block btn-lg bg-pink waves-effect">Przejdź do strony logowania</a>
+        </div>
+        </div>
+    </div>
+    
+    <!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+
+	<!-- Page-specific scripts import -->
+	<!-- ############################ -->
+    <script th:src="@{/plugins/jquery-validation/jquery.validate.js}"></script>
+    <script th:src="@{/js/pages/sign-in/sign-in.js}"></script>
+    <!-- ################################## -->    
+   	<!-- #END# Page-specific scripts import -->
+</body>
+
+</html>
