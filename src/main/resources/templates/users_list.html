@@ -189,6 +189,7 @@
                                             <th>E-mail</th>
                                             <th>Przypisany do strażaka</th>
                                             <th>Status</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -200,6 +201,7 @@
                                             <th>E-mail</th>
                                             <th>Przypisany do strażaka</th>
                                             <th>Status</th>
+                                            <th></th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -217,6 +219,23 @@
                                             <td>
                                             	<span th:if="${(user.status == false) || (user.status == null)}" class="label label-danger">Nieaktywny</span>
                                     			<span th:if="${user.status == true}" class="label label-success">Aktywny</span>
+                                            </td>
+                                            <td>
+                                            	<a th:href="@{'/manage/users/edit/' + ${user.id}}" class="btn bg-green waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edytuj konto użytkownika">
+				                                    <i class="material-icons">settings</i>
+	                                			</a>
+	                                			
+	                                			<a th:href="@{'/manage/users/resend-link/' + ${user.id}}" th:if="${(user.status == false) || (user.status == null)}" class="btn bg-orange waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wyślij ponownie link aktywacyjny">
+				                                    <i class="material-icons">email</i>
+	                                			</a>
+	                                			
+	                                            <a th:href="@{'/manage/users/deactivate/' + ${user.id}}"th:if="${user.status == true}" class="btn bg-red waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Deaktywuj konto">
+				                                    <i class="material-icons">lock</i>
+	                                			</a>
+				                                
+				                                <a th:href="@{'/manage/users/delete/' + ${user.id}}"type="button" class="btn bg-black waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń użytkownika">
+				                                    <i class="material-icons">delete</i>
+				                                </a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -248,7 +267,7 @@
     <script th:src="@{/js/jquery-datatable.js}"></script>
 
 	<!-- Custom Scripts for this page -->
-    <script th:src="@{/js/pages/firefighters/dialogs_firefighters.js}"></script>
+    <script th:src="@{/js/pages/manage_users/tooltips.js}"></script>
     
 	<!-- ################################## -->    
    	<!-- #END# Page-specific scripts import -->
