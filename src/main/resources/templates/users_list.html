@@ -156,8 +156,20 @@
                                 			</div>
                                         </div>
                                     </div>
-                                </div>                             
-
+                                </div>       
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                    	<label for="new_user_firefighter">Role</label>
+                               	 	</div>
+                               	 	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+		                                <div class="demo-checkbox" style="margin-top: 6px;">
+		                                	<th:block th:each="role : ${roles}">
+			                                	<input type="checkbox" th:id="${'role_'+role.id}" class="filled-in chk-col-red">
+				                                <label th:for="${'role_'+role.id}" th:text="${role.name}" data-toggle="tooltip" data-placement="top" th:data-original-title="${role.description}"></label>
+		                                	</th:block>
+			                            </div>  
+		                            </div>                    
+								</div>
                                 <div class="row clearfix">
                                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
                                         <button type="submit" class="btn btn-success m-t-15 waves-effect">Dodaj użytkownika</button>

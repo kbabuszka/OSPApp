@@ -17,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import net.babuszka.osp.model.NewUserForm;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.service.FirefighterService;
+import net.babuszka.osp.service.RoleService;
 import net.babuszka.osp.service.UserService;
 import net.babuszka.osp.utils.UserUtils;
 
@@ -31,6 +32,7 @@ public class UserController {
 		
 	private UserService userService;
 	private FirefighterService firefighterService;
+	private RoleService roleService;
 	private UserUtils userUtils;
 	
 	@Autowired
@@ -44,6 +46,11 @@ public class UserController {
 	}
 	
 	@Autowired
+	public void setRoleService(RoleService roleService) {
+		this.roleService = roleService;
+	}
+
+	@Autowired
 	public void setUserUtils(UserUtils userUtils) {
 		this.userUtils = userUtils;
 	}
@@ -56,6 +63,7 @@ public class UserController {
 		model.addAttribute("user", new User());
 		model.addAttribute("user_form", new NewUserForm());
 		model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
+		model.addAttribute("roles", roleService.getAllRoles());
 		return "users_list";
 	}
 	
