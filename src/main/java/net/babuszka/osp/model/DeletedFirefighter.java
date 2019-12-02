@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
@@ -33,9 +32,8 @@ public class DeletedFirefighter {
 	@DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
 	private LocalDateTime deletionDate;
 	
-	@ManyToOne
-	@JoinColumn(name = "deleted_by", referencedColumnName = "id")
-	private User deletedByUser;
+	@Column(name = "deleted_by")
+	private String deletedByUser;
 
 	@Autowired
 	public DeletedFirefighter() {
@@ -74,11 +72,11 @@ public class DeletedFirefighter {
 		this.deletionDate = deletionDate;
 	}
 
-	public User getDeletedByUser() {
+	public String getDeletedByUser() {
 		return deletedByUser;
 	}
 
-	public void setDeletedByUser(User deletedByUser) {
+	public void setDeletedByUser(String deletedByUser) {
 		this.deletedByUser = deletedByUser;
 	}
 	

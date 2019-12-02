@@ -164,7 +164,7 @@
                                	 	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
 		                                <div class="demo-checkbox" style="margin-top: 6px;">
 		                                	<th:block th:each="role : ${roles}">
-			                                	<input type="checkbox" th:id="${'role_'+role.id}" class="filled-in chk-col-red">
+			                                	<input th:value="${role.id}" th:id="${'role_'+role.id}" type="checkbox" class="filled-in chk-col-red">
 				                                <label th:for="${'role_'+role.id}" th:text="${role.name}" data-toggle="tooltip" data-placement="top" th:data-original-title="${role.description}"></label>
 		                                	</th:block>
 			                            </div>  
@@ -245,14 +245,13 @@
 				                                    <i class="material-icons">lock</i>
 	                                			</a>
 				                                
-				                                <a th:href="@{'/manage/users/delete/' + ${user.id}}"type="button" class="btn bg-black waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń użytkownika">
+				                                <button th:value="${user.id}" type="button" data-type="delete-user" class="btn bg-black waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń użytkownika">
 				                                    <i class="material-icons">delete</i>
-				                                </a>
+				                                </button>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-
                             </div>
                         </div>
                     </div>
@@ -280,6 +279,7 @@
 
 	<!-- Custom Scripts for this page -->
     <script th:src="@{/js/pages/manage_users/tooltips.js}"></script>
+    <script th:src="@{/js/pages/manage_users/dialogs_users.js}"></script>
     
 	<!-- ################################## -->    
    	<!-- #END# Page-specific scripts import -->

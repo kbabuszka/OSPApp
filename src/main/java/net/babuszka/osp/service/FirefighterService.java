@@ -97,7 +97,7 @@ public class FirefighterService {
 			deletedFirefighter.setFirstName(firefighter.getFirstName());
 			deletedFirefighter.setLastName(firefighter.getLastName());
 			deletedFirefighter.setDeletionDate(LocalDateTime.now());
-			deletedFirefighter.setDeletedByUser(userService.getCurrentlyLoggedUser());
+			deletedFirefighter.setDeletedByUser(userService.getCurrentlyLoggedUser().toString());
 			LOG.info("giving date to repository movetodeleted(): " + LocalDateTime.now());
 			deletedFirefighterRepository.save(deletedFirefighter);
 			try {

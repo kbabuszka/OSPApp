@@ -2,9 +2,10 @@ package net.babuszka.osp.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,12 +15,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
@@ -29,7 +28,7 @@ public class User {
 	@Autowired
 	public User() {
 		super();
-		this.status = false;
+		this.status = UserStatus.INACTIVE;
 	}
 
 	@Id
@@ -57,9 +56,11 @@ public class User {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles;
+		
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "status")
+	private  UserStatus status;
 	
-	@Column(name = "active")
-	private boolean status;
 	
 	@OneToOne
 	@JoinColumn(name = "firefighter_id", referencedColumnName = "id")
@@ -113,11 +114,11 @@ public class User {
 		this.roles = roles;
 	}
 
-	public boolean getStatus() {
+	public UserStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(boolean status) {
+	public void setStatus(UserStatus status) {
 		this.status = status;
 	}
 
@@ -132,8 +133,7 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", displayName=" + displayName + ", email=" + email
-				+ ", password=" + password + ", roles=" + roles + ", firefighter=" + firefighter + "]";
+		return displayName + " (" + username + ")";
 	}
 	
 }

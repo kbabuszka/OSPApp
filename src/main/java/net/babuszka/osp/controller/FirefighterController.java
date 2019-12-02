@@ -199,7 +199,7 @@ public class FirefighterController {
 		
 	}
 
-	// Delete a firefighter
+	// Delete firefighter
 	@RequestMapping(path = "/firefighters/delete/{id}", method = RequestMethod.GET)
 	public String delete(@PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {
 		Firefighter firefighter = firefighterService.getFirefighter(id);

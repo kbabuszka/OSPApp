@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	private String usersQuery = "SELECT username, password, active FROM users WHERE username=?";
+	private String usersQuery = "SELECT username, password, status FROM users WHERE username=?";
 	private String authoritiesQuery = "SELECT u.username, r.name FROM users u INNER JOIN user_roles ur ON(u.id=ur.user_id) INNER JOIN roles r ON(ur.role_id=r.id) WHERE u.username=?";
 	
 	@Override

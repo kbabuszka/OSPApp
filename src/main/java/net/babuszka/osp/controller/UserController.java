@@ -1,6 +1,5 @@
 package net.babuszka.osp.controller;
 
-import javax.mail.SendFailedException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +7,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import net.babuszka.osp.model.NewUserForm;
@@ -29,6 +28,21 @@ public class UserController {
 	
 	@Value("${user.add.message.error}")
 	private String messageUserNotAdded;
+	
+	@Value("${user.edit.message.success}")
+	private String messageUserEdited;
+	
+	@Value("${user.edit.message.error}")
+	private String messageUserNotEdited;
+	
+	@Value("${user.delete.message.success}")
+	private String messageUserDeleted;
+	
+	@Value("${user.delete.message.error}")
+	private String messageUserNotDeleted;	
+	
+	@Value("${user.message.user.notexist}")
+	private String messageUserNotExist;
 		
 	private UserService userService;
 	private FirefighterService firefighterService;
@@ -56,7 +70,7 @@ public class UserController {
 	}
 
 	// Display all users
-	@RequestMapping(path = "/manage/users", method = RequestMethod.GET)
+	@GetMapping(path = "/manage/users")
 	public String getAllUsers(Model model) {
 		model.addAttribute("page_title", "Zarządzaj użytkownikami");
 		model.addAttribute("users", userService.getAllUsers());
@@ -94,5 +108,42 @@ public class UserController {
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 			return "redirect:/manage/users";
 		} 
+	}
+	
+	@GetMapping(path = "/manage/users/edit/{id}")
+	public String editUser(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		model.addAttribute("page_title", "Edytuj użytkownika");
+		if(userService.getUser(id) != null) {
+			model.addAttribute("user", userService.getUser(id));
+			model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
+			model.addAttribute("roles", roleService.getAllRoles());
+			return "users_edit";
+		} else {
+			redirectAttributes.addFlashAttribute("message", messageUserNotExist);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+			return "redirect:/manage/users";
+		}
+	}
+	
+	// Delete user
+	@GetMapping(path = "/manage/users/delete/{id}")
+	public String deleteUser(Model model, @PathVariable (name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		User user = userService.getUser(id);
+		if (user != null) {
+			userService.deleteUser(id);
+			if(userService.getUser(id) == null) {
+				redirectAttributes.addFlashAttribute("message", messageUserDeleted);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+				return "redirect:/manage/users";
+			} else {
+				redirectAttributes.addFlashAttribute("message", messageUserNotDeleted);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+				return "redirect:/manage/users";
+			}
+		} else {
+			redirectAttributes.addFlashAttribute("message", messageUserNotExist);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+			return "redirect:/manage/users";
+		}
 	}
 }

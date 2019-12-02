@@ -89,7 +89,7 @@
                                             <td th:text="${firefighter.firstName}"></td>
                                             <td th:text="${firefighter.lastName}"></td>
                                             <td th:text="${#temporals.format(firefighter.deletionDate, 'dd.MM.yyyy HH:mm:ss')}"></td>
-                                            <td th:text="${firefighter.deletedByUser.displayName + ' (' + firefighter.deletedByUser.username + ')'}"></td>
+                                            <td th:text="${firefighter.deletedByUser}"></td>
                                         </tr>
                                     </tbody>
                                 </table>

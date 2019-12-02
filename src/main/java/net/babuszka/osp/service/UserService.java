@@ -2,23 +2,22 @@ package net.babuszka.osp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.elasticsearch.jest.JestAutoConfiguration;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.context.Context;
 
-import javassist.expr.NewArray;
 import net.babuszka.osp.event.OnUserCreationEvent;
 import net.babuszka.osp.model.User;
+import net.babuszka.osp.model.UserStatus;
 import net.babuszka.osp.model.UserVerificationToken;
-import net.babuszka.osp.repository.RoleRepository;
 import net.babuszka.osp.repository.UserRepository;
 import net.babuszka.osp.repository.UserVerificationTokenRepository;
 import net.babuszka.osp.utils.SessionUtils;
@@ -30,7 +29,6 @@ public class UserService {
 	private Logger LOG = LoggerFactory.getLogger(Logger.class);
 	private UserRepository userRepository;
 	private UserVerificationTokenRepository tokenRepository;
-	private RoleRepository roleRepository;
 	private PasswordEncoder passwordEncoder;
 	private UserUtils userUtils;
 	
@@ -44,11 +42,6 @@ public class UserService {
 	@Autowired
 	public void setTokenRepository(UserVerificationTokenRepository tokenRepository) {
 		this.tokenRepository = tokenRepository;
-	}
-
-	@Autowired
-	public void setRoleRepository(RoleRepository roleRepository) {
-		this.roleRepository = roleRepository;
 	}
 	
 	@Autowired
@@ -143,7 +136,7 @@ public class UserService {
 		tokenRepository.save(newToken);
 	}
 	
-	public boolean verifyUserEmail(String token) {
+	public UserStatus verifyUserEmail(String token) {
 		UserVerificationToken userToken = tokenRepository.findByToken(token);
 		User userToVerify;
 		LocalDateTime tokenExpiration;
@@ -151,13 +144,37 @@ public class UserService {
 			userToVerify = userToken.getUser();
 			tokenExpiration = userToken.getExpirationDate();
 			if((userToVerify !=null) && ( LocalDateTime.now().isBefore(tokenExpiration))) {
-				userToVerify.setStatus(true);
+				userToVerify.setStatus(UserStatus.ACTIVE);
 				userRepository.save(userToVerify);
 				tokenRepository.deleteById(userToken.getId());
 				return userToVerify.getStatus();
 			}
 		}
-		return false;
+		return UserStatus.INACTIVE;
+	}
+
+	public User getUser(Integer id) {
+		LOG.debug("Getting User with following ID: " + id);
+		try {
+			LOG.debug("Found User: " + userRepository.getOne(id).getUsername());
+			return userRepository.getOne(id);
+		} catch (Exception e) {
+			LOG.error("An error occured during getting user's details: " + e.getMessage());
+		}
+		return null;
+	}
+
+	@Transactional
+	public void deleteUser(Integer id) {
+		LOG.debug("Deleting User with following ID: " + id);
+		User userToDelete = userRepository.getOne(id);
+		if (userToDelete != null) {
+			userToDelete.setRoles(null);
+			userToDelete.setFirefighter(null);
+			userRepository.save(userToDelete);
+			tokenRepository.deleteByUserId(id);
+			userRepository.delete(userToDelete);	
+		}
 	}
 
 }
