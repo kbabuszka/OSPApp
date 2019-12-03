@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import net.babuszka.osp.model.NewUserForm;
 import net.babuszka.osp.model.User;
+import net.babuszka.osp.model.UserStatus;
 import net.babuszka.osp.service.FirefighterService;
 import net.babuszka.osp.service.RoleService;
 import net.babuszka.osp.service.UserService;
@@ -41,11 +42,20 @@ public class UserController {
 	@Value("${user.delete.message.error}")
 	private String messageUserNotDeleted;	
 	
+	@Value("${user.activationlink.user.active}")
+	private String messageUserIsActive;
+	
 	@Value("${user.message.user.notexist}")
 	private String messageUserNotExist;
 	
 	@Value("${user.activationlink.resent}")
 	private String messageLinkResent;
+	
+	@Value("${user.deactivate.success}")
+	private String messageUserDeactivated;
+	
+	@Value("${user.deactivate.error}")
+	private String messageUserNotDeactivated;
 		
 	private UserService userService;
 	private FirefighterService firefighterService;
@@ -113,15 +123,6 @@ public class UserController {
 		} 
 	}
 	
-	//Resend activation link
-	@GetMapping(path = "/manage/users/resend-link/{id}")
-	public String resendActivationLink(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
-		userService.resendActivationLink(id);
-		redirectAttributes.addFlashAttribute("message", messageLinkResent);
-	    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-		return "redirect:/manage/users";
-	}
-	
 	//Display edit form
 	@GetMapping(path = "/manage/users/edit/{id}")
 	public String editUser(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
@@ -136,6 +137,40 @@ public class UserController {
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			return "redirect:/manage/users";
 		}
+	}
+	
+	//Resend activation link
+	@GetMapping(path = "/manage/users/resend-link/{id}")
+	public String resendActivationLink(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		User user = userService.getUser(id);
+		if(user != null) {
+			if(user.getStatus() == UserStatus.INACTIVE) {
+				userService.resendActivationLink(id);
+				redirectAttributes.addFlashAttribute("message", messageLinkResent);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+			} else {
+				redirectAttributes.addFlashAttribute("message", messageUserIsActive);
+			    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+			}
+		} else {
+			redirectAttributes.addFlashAttribute("message", messageUserNotExist);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+		}
+		return "redirect:/manage/users";
+	}
+	
+	// Deactivate user
+	@GetMapping(path = "/manage/users/deactivate/{id}")
+	public String deactivateUser(@PathVariable (name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		if(userService.deactivateUser(id)) {
+			redirectAttributes.addFlashAttribute("message", messageUserDeactivated);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		} else {
+			redirectAttributes.addFlashAttribute("message", messageUserNotDeactivated);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+		}
+		return "redirect:/manage/users";
+
 	}
 	
 	// Delete user

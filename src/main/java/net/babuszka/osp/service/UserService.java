@@ -64,6 +64,18 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
+
+	public User getUser(Integer id) {
+		LOG.debug("Getting User with following ID: " + id);
+		try {
+			LOG.debug("Found User: " + userRepository.getOne(id).getUsername());
+			return userRepository.getOne(id);
+		} catch (Exception e) {
+			LOG.error("An error occured during getting user's details: " + e.getMessage());
+		}
+		return null;
+	}
+	
 	public User findUserByUsername(String username) {
 		User user = userRepository.findByUsername(username);
 		if(user == null)
@@ -82,15 +94,6 @@ public class UserService {
 		User user = userRepository.findByEmail(email);
 		if(user == null)
 			LOG.debug("No user with following email: " + email);
-		return user;
-	}
-	
-	public User getCurrentlyLoggedUser() {
-		SessionUtils sessionUtils = new SessionUtils();
-		String username = sessionUtils.getLoggedUsername();
-		User user = userRepository.findByUsername(username);
-		if(user == null)
-			throw new UsernameNotFoundException("No user found");
 		return user;
 	}
 
@@ -119,6 +122,15 @@ public class UserService {
 			LOG.error("An error occured during update of user: " + e.getMessage());
 		}
 		
+	}
+	
+	public User getCurrentlyLoggedUser() {
+		SessionUtils sessionUtils = new SessionUtils();
+		String username = sessionUtils.getLoggedUsername();
+		User user = userRepository.findByUsername(username);
+		if(user == null)
+			throw new UsernameNotFoundException("No user found");
+		return user;
 	}
 	
 	public Boolean checkIfPasswordMatch(User user, String password) {		
@@ -154,11 +166,10 @@ public class UserService {
 		return UserStatus.INACTIVE;
 	}
 	
-
 	public void resendActivationLink(Integer id) {
 		LOG.debug("Resending activation link for user: " + id);
 		User user = userRepository.getOne(id);
-		if(user != null) {
+		if(user != null && user.getStatus() == UserStatus.INACTIVE) {
 			try {
 				eventPublisher.publishEvent(new OnResendActivationLinkEvent(user));
 			} catch (Exception e) {
@@ -167,17 +178,19 @@ public class UserService {
 		}
 	}
 
-	public User getUser(Integer id) {
-		LOG.debug("Getting User with following ID: " + id);
-		try {
-			LOG.debug("Found User: " + userRepository.getOne(id).getUsername());
-			return userRepository.getOne(id);
-		} catch (Exception e) {
-			LOG.error("An error occured during getting user's details: " + e.getMessage());
+	public boolean deactivateUser(Integer id) {
+		LOG.debug("Deactivating User with following ID: " + id);
+		User userToDeactivate = userRepository.getOne(id);
+		if(userToDeactivate != null 
+				&& userToDeactivate.getStatus() != UserStatus.INACTIVE) {
+			userToDeactivate.setStatus(UserStatus.INACTIVE);
+			userRepository.save(userToDeactivate);
+			return true;
+		} else {
+			return false;
 		}
-		return null;
 	}
-
+	
 	@Transactional
 	public void deleteUser(Integer id) {
 		LOG.debug("Deleting User with following ID: " + id);

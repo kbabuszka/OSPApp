@@ -16,7 +16,7 @@
         </div>
         <div class="card">
         <div class="body">
-            <div th:if="${activated == true}" class="body">
+            <div th:if="${activated == T(net.babuszka.osp.model.UserStatus).ACTIVE}" class="body">
                 <div class="alert alert-success">
                     <strong>Dziękujemy!</strong><br />
                     Twój adres e-mail został zweryfikowany
@@ -24,7 +24,7 @@
             	<div class="msg">Jeśli masz nadane uprawnienia, możesz się zalogować do systemu.</div>
             </div>
             
-            <div th:if="${activated == false}" class="body">
+            <div th:if="${activated == T(net.babuszka.osp.model.UserStatus).INACTIVE || activated == null}" class="body">
             	<div class="alert alert-danger">
                     <strong>Błąd!</strong><br />
                     Twój adres e-mail nie mógł być zweryfikowany
