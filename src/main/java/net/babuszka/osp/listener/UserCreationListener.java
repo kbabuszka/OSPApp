@@ -17,7 +17,7 @@ import net.babuszka.osp.service.UserService;
 public class UserCreationListener implements ApplicationListener<OnUserCreationEvent> {
 	
 	@Value("${email.newaccount.created.title}")
-	private String UserAddedEmailTitle;
+	private String userAddedEmailTitle;
 	
 	@Value("${app.config.url}")
 	private String globalApplicationUrl;
@@ -50,7 +50,7 @@ public class UserCreationListener implements ApplicationListener<OnUserCreationE
 			context.setVariable("username", user.getUsername());
 			context.setVariable("global_application_url", globalApplicationUrl);
 			context.setVariable("token", token);
-			mailService.sendHtmlMessage(user.getEmail(), UserAddedEmailTitle, "accountCreated", context);
+			mailService.sendHtmlMessage(user.getEmail(), userAddedEmailTitle, "accountCreated", context);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}        

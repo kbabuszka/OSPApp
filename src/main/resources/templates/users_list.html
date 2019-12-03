@@ -229,19 +229,19 @@
                                             <td th:text="${user.email}"></td>
                                             <td th:text="${user.firefighter != null} ? ${user.firefighter.firstName + ' ' + user.firefighter.lastName} : ''"></td>
                                             <td>
-                                            	<span th:if="${(user.status == false) || (user.status == null)}" class="label label-danger">Nieaktywny</span>
-                                    			<span th:if="${user.status == true}" class="label label-success">Aktywny</span>
+                                            	<span th:if="${user.status == T(net.babuszka.osp.model.UserStatus).INACTIVE || (user.status == null)}" class="label label-danger">Nieaktywny</span>
+                                    			<span th:if="${user.status == T(net.babuszka.osp.model.UserStatus).ACTIVE}" class="label label-success">Aktywny</span>
                                             </td>
                                             <td>
                                             	<a th:href="@{'/manage/users/edit/' + ${user.id}}" class="btn bg-green waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edytuj konto użytkownika">
 				                                    <i class="material-icons">settings</i>
 	                                			</a>
 	                                			
-	                                			<a th:href="@{'/manage/users/resend-link/' + ${user.id}}" th:if="${(user.status == false) || (user.status == null)}" class="btn bg-orange waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wyślij ponownie link aktywacyjny">
+	                                			<a th:href="@{'/manage/users/resend-link/' + ${user.id}}" th:if="${(user.status == T(net.babuszka.osp.model.UserStatus).INACTIVE) || (user.status == null)}" class="btn bg-orange waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wyślij ponownie link aktywacyjny">
 				                                    <i class="material-icons">email</i>
 	                                			</a>
 	                                			
-	                                            <a th:href="@{'/manage/users/deactivate/' + ${user.id}}"th:if="${user.status == true}" class="btn bg-red waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Deaktywuj konto">
+	                                            <a th:href="@{'/manage/users/deactivate/' + ${user.id}}"th:if="${user.status == T(net.babuszka.osp.model.UserStatus).ACTIVE}" class="btn bg-red waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Deaktywuj konto">
 				                                    <i class="material-icons">lock</i>
 	                                			</a>
 				                                

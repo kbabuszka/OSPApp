@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import net.babuszka.osp.event.OnResendActivationLinkEvent;
 import net.babuszka.osp.event.OnUserCreationEvent;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.model.UserStatus;
@@ -152,6 +153,19 @@ public class UserService {
 		}
 		return UserStatus.INACTIVE;
 	}
+	
+
+	public void resendActivationLink(Integer id) {
+		LOG.debug("Resending activation link for user: " + id);
+		User user = userRepository.getOne(id);
+		if(user != null) {
+			try {
+				eventPublisher.publishEvent(new OnResendActivationLinkEvent(user));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public User getUser(Integer id) {
 		LOG.debug("Getting User with following ID: " + id);
@@ -172,9 +186,15 @@ public class UserService {
 			userToDelete.setRoles(null);
 			userToDelete.setFirefighter(null);
 			userRepository.save(userToDelete);
-			tokenRepository.deleteByUserId(id);
+			deleteUserVerificationToken(id);
 			userRepository.delete(userToDelete);	
 		}
 	}
+	
+	@Transactional
+	public void deleteUserVerificationToken(Integer userId) {
+		tokenRepository.deleteByUserId(userId);
+	}
+
 
 }

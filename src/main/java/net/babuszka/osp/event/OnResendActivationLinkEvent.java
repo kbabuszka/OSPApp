@@ -4,11 +4,11 @@ import org.springframework.context.ApplicationEvent;
 
 import net.babuszka.osp.model.User;
 
-public class OnUserCreationEvent extends ApplicationEvent {
-	
+public class OnResendActivationLinkEvent extends ApplicationEvent {
+
 	private User user;
 
-	public OnUserCreationEvent(User user) {
+	public OnResendActivationLinkEvent(User user) {
 		super(user);
 		this.user = user;
 	}

@@ -43,6 +43,9 @@ public class UserController {
 	
 	@Value("${user.message.user.notexist}")
 	private String messageUserNotExist;
+	
+	@Value("${user.activationlink.resent}")
+	private String messageLinkResent;
 		
 	private UserService userService;
 	private FirefighterService firefighterService;
@@ -110,6 +113,16 @@ public class UserController {
 		} 
 	}
 	
+	//Resend activation link
+	@GetMapping(path = "/manage/users/resend-link/{id}")
+	public String resendActivationLink(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		userService.resendActivationLink(id);
+		redirectAttributes.addFlashAttribute("message", messageLinkResent);
+	    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/manage/users";
+	}
+	
+	//Display edit form
 	@GetMapping(path = "/manage/users/edit/{id}")
 	public String editUser(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
 		model.addAttribute("page_title", "Edytuj użytkownika");
