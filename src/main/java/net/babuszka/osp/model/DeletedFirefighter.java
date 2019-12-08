@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
@@ -82,7 +81,7 @@ public class DeletedFirefighter {
 	
 	@Override
 	public String toString() {
-		return "Firefighter [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
+		return "Deleted Firefighter [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + "]";
 	}
 
 }

@@ -16,7 +16,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import net.babuszka.osp.model.NewUserForm;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.model.UserStatus;
+<<<<<<< HEAD
 import net.babuszka.osp.repository.UserRepository;
+=======
+>>>>>>> temp
 import net.babuszka.osp.service.FirefighterService;
 import net.babuszka.osp.service.RoleService;
 import net.babuszka.osp.service.UserService;
