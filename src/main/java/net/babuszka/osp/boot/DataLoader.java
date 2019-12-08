@@ -1,47 +1,51 @@
 package net.babuszka.osp.boot;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-
+import net.babuszka.osp.model.Role;
 import net.babuszka.osp.repository.FirefighterRepository;
+import net.babuszka.osp.repository.RoleRepository;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
-	private FirefighterRepository firefighterRepository;
+	private RoleRepository roleRepository;
 	
 	@Autowired
-	public void firefighterRepository(FirefighterRepository firefighterRepository) {
-		this.firefighterRepository = firefighterRepository;
+	public void setRoleRepository(RoleRepository roleRepository) {
+		this.roleRepository = roleRepository;
 	}
-	
+
+
+
 	@Override
 	public void run(String... args) throws Exception {
-		/*
-		Firefighter firefighter1 = new Firefighter();
-		firefighter1.setId(16);
-		firefighter1.setFirstName("Kamil");
-		firefighter1.setLastName("Babuszka");
-		firefighter1.setIsInJOT(false);
-		firefighterRepository.save(firefighter1);
 		
+		Role user = new Role();
+		user.setId(1);
+		user.setName("User");
+		user.setDescription("Uprawnienia do logowania w aplikacji");
+		roleRepository.save(user);
 		
-		LocalDate birthDate = LocalDate.now();
-		Firefighter firefighter2 = new Firefighter();
-		firefighter2.setFirstName("Marcin");
-		firefighter2.setLastName("Kajda");
-		firefighter2.setBirthDate(birthDate);
-		firefighterRepository.save(firefighter2);
+		Role mobileUser = new Role();
+		mobileUser.setId(2);
+		mobileUser.setName("Mobile User");
+		mobileUser.setDescription("Uprawnienia do logowania w aplikacji mobilnej");
+		roleRepository.save(mobileUser);
 		
-		/*
-		Firefighter firefighter3 = new Firefighter();
-		firefighter3.setFirstName("Łukasz");
-		firefighter3.setLastName("Dudziak");
-		firefighterRepository.save(firefighter3);
-		*/
+		Role operator = new Role();
+		operator.setId(3);
+		operator.setName("Operator");
+		operator.setDescription("Dostęp do obsługi zdarzeń");
+		roleRepository.save(operator);
+		
+		Role administrator = new Role();
+		administrator.setId(4);
+		administrator.setName("Administrator");
+		administrator.setDescription("Pełny dostęp do każdego modułu w aplikacji");
+		roleRepository.save(administrator);
+		
 	}
 }
