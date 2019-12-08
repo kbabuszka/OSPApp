@@ -56,11 +56,11 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Dodaj nowego użytkownika
+                                Edytuj użytkownika
                             </h2>
                         </div>
                         <div class="body">
-                            <form th:object="${userForm}" th:action="@{'/manage/users/add'}" method="post" class="form-horizontal">
+                            <form th:object="${userForm}" th:action="@{'/manage/users/edit/' + ${userForm.id}}" method="post" class="form-horizontal">
                                 <div th:if="${message}" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 				            		<div th:text="${message}" th:class="${'alert ' + alertClass}"/>
 				            	</div>
@@ -172,7 +172,7 @@
 								</div>
                                 <div class="row clearfix">
                                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                                        <button type="submit" class="btn btn-success m-t-15 waves-effect">Dodaj użytkownika</button>
+                                        <button type="submit" class="btn btn-success m-t-15 waves-effect">Zapisz zmiany</button>
                                     </div>
                                 </div>
                             </form>
@@ -180,84 +180,7 @@
                     </div>
                 </div>
             </div>
-            
-			<div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>
-                                LISTA UŻYTKOWNIKÓW
-                            </h2>
-                        </div>
-                        <div class="body">
-                            <div class="table-responsive" style="scrollbar-width: none;">
-                                <table class="table table-bordered table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                        	<th>ID</th>
-                                            <th>Login</th>
-                                            <th>Role</th>
-                                            <th>Nazwa wyświetlana</th>
-                                            <th>E-mail</th>
-                                            <th>Przypisany do strażaka</th>
-                                            <th>Status</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                        	<th>ID</th>
-                                            <th>Login</th>
-                                            <th>Role</th>
-                                            <th>Nazwa wyświetlana</th>
-                                            <th>E-mail</th>
-                                            <th>Przypisany do strażaka</th>
-                                            <th>Status</th>
-                                            <th></th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr th:each="user : ${users}" class="js-sweetalert">
-                                            <td th:text="${user.id}"></td>
-                                            <td th:text="${user.username}"></td>
-                                            <td>
-                                            	<th:block th:each="role, i: ${user.roles}">
-                                            		<th:block th:text="!${i.last} ? ${role.name} + ',' : ${role.name}"></th:block>
-                                            	</th:block>
-                                            </td>
-                                            <td th:text="${user.displayName}"></td>
-                                            <td th:text="${user.email}"></td>
-                                            <td th:text="${user.firefighter != null} ? ${user.firefighter.firstName + ' ' + user.firefighter.lastName} : ''"></td>
-                                            <td>
-                                            	<span th:if="${user.status == T(net.babuszka.osp.model.UserStatus).INACTIVE || (user.status == null)}" class="label label-danger">Nieaktywny</span>
-                                    			<span th:if="${user.status == T(net.babuszka.osp.model.UserStatus).ACTIVE}" class="label label-success">Aktywny</span>
-                                            </td>
-                                            <td>
-                                            	<a th:href="@{'/manage/users/edit/' + ${user.id}}" class="btn bg-green waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edytuj konto użytkownika">
-				                                    <i class="material-icons">settings</i>
-	                                			</a>
-	                                			
-	                                			<a th:href="@{'/manage/users/resend-link/' + ${user.id}}" th:if="${(user.status == T(net.babuszka.osp.model.UserStatus).INACTIVE) || (user.status == null)}" class="btn bg-orange waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Wyślij ponownie link aktywacyjny">
-				                                    <i class="material-icons">email</i>
-	                                			</a>
-	                                			
-	                                            <a th:href="@{'/manage/users/deactivate/' + ${user.id}}"th:if="${user.status == T(net.babuszka.osp.model.UserStatus).ACTIVE}" class="btn bg-red waves-effect" data-toggle="tooltip" data-placement="top" title="" data-original-title="Deaktywuj konto">
-				                                    <i class="material-icons">lock</i>
-	                                			</a>
-				                                
-				                                <button th:value="${user.id}" type="button" data-type="delete-user" class="btn bg-black waves-effect waves-light" data-toggle="tooltip" data-placement="top" title="" data-original-title="Usuń użytkownika">
-				                                    <i class="material-icons">delete</i>
-				                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+           
             <!-- #END# Actual content -->
 
         </div>
@@ -279,7 +202,6 @@
 
 	<!-- Custom Scripts for this page -->
     <script th:src="@{/js/pages/manage_users/tooltips.js}"></script>
-    <script th:src="@{/js/pages/manage_users/dialogs_users.js}"></script>
     
 	<!-- ################################## -->    
    	<!-- #END# Page-specific scripts import -->
