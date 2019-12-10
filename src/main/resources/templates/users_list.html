@@ -222,7 +222,7 @@
                                             <td th:text="${user.username}"></td>
                                             <td>
                                             	<th:block th:each="role, i: ${user.roles}">
-                                            		<th:block th:text="!${i.last} ? ${role.name} + ',' : ${role.name}"></th:block>
+                                            		<th:block th:text="!${i.last} ? ${role.role.name} + ',' : ${role.role.name}"></th:block>
                                             	</th:block>
                                             </td>
                                             <td th:text="${user.displayName}"></td>

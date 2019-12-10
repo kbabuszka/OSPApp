@@ -16,9 +16,11 @@ import org.springframework.stereotype.Service;
 
 import net.babuszka.osp.event.OnResendActivationLinkEvent;
 import net.babuszka.osp.event.OnUserCreationEvent;
+import net.babuszka.osp.model.Firefighter;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.model.UserStatus;
 import net.babuszka.osp.model.UserVerificationToken;
+import net.babuszka.osp.repository.FirefighterRepository;
 import net.babuszka.osp.repository.UserRepository;
 import net.babuszka.osp.repository.UserVerificationTokenRepository;
 import net.babuszka.osp.utils.SessionUtils;
@@ -30,6 +32,7 @@ public class UserService {
 	private Logger LOG = LoggerFactory.getLogger(Logger.class);
 	private UserRepository userRepository;
 	private UserVerificationTokenRepository tokenRepository;
+	private FirefighterRepository firefighterRepository;
 	private PasswordEncoder passwordEncoder;
 	private UserUtils userUtils;
 	
@@ -45,6 +48,11 @@ public class UserService {
 		this.tokenRepository = tokenRepository;
 	}
 	
+	@Autowired
+	public void setFirefighterRepository(FirefighterRepository firefighterRepository) {
+		this.firefighterRepository = firefighterRepository;
+	}
+
 	@Autowired
 	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
@@ -108,6 +116,12 @@ public class UserService {
 				eventPublisher.publishEvent(new OnUserCreationEvent(user));
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+			
+			Firefighter firefighter = user.getFirefighter();
+			if(firefighter != null) {
+				firefighter.setUser(user);
+				firefighterRepository.save(firefighter);
 			}
 		}
 	}
@@ -195,13 +209,23 @@ public class UserService {
 	public void deleteUser(Integer id) {
 		LOG.debug("Deleting User with following ID: " + id);
 		User userToDelete = userRepository.getOne(id);
-		if (userToDelete != null) {
-			userToDelete.setRoles(null);
-			userToDelete.setFirefighter(null);
-			userRepository.save(userToDelete);
-			deleteUserVerificationToken(id);
-			userRepository.delete(userToDelete);	
+		if (userToDelete == null) {
+			System.out.println("user to delte jest nullem");
+
+
 		}
+		
+		Firefighter firefighter = userToDelete.getFirefighter();
+		if(firefighter != null) {
+			firefighter.setUser(null);
+			firefighterRepository.save(firefighter);
+		}
+		userToDelete.setRoles(null);
+		userToDelete.setFirefighter(null);
+		userRepository.save(userToDelete);
+		deleteUserVerificationToken(id);
+		userRepository.delete(userToDelete);	
+		
 	}
 	
 	@Transactional

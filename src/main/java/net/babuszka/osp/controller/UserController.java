@@ -1,5 +1,7 @@
 package net.babuszka.osp.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.babuszka.osp.model.Firefighter;
+import net.babuszka.osp.model.Role;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.model.UserForm;
+import net.babuszka.osp.model.UserRole;
 import net.babuszka.osp.model.UserStatus;
 import net.babuszka.osp.service.FirefighterService;
 import net.babuszka.osp.service.RoleService;
@@ -98,6 +103,12 @@ public class UserController {
 	public String addNewUser(@ModelAttribute("userForm") @Valid UserForm userForm, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		model.addAttribute("page_title", "Zarządzaj użytkownikami");
 		
+//		for (UserRole role : userForm.getRoles()) {
+//			role.toString();
+//			
+//		}
+		
+		
 		if(userForm.getEmail().isEmpty())
 			bindingResult.rejectValue("email", "user.email.empty");
 		if(userForm.getPassword().isEmpty())
@@ -122,6 +133,8 @@ public class UserController {
 			newUser.setEmail(userForm.getEmail());
 			String encryptedPassword = userUtils.encodePassword(userForm.getPassword());
 			newUser.setPassword(encryptedPassword);
+			newUser.setFirefighter(userForm.getFirefighter());
+			newUser.setRoles(userForm.getRoles());
 			userService.addNewUser(newUser);
 			redirectAttributes.addFlashAttribute("message", messageUserAdded);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
@@ -140,8 +153,11 @@ public class UserController {
 		}
 		model.addAttribute("page_title", "Edytuj użytkownika");
 		model.addAttribute("userForm", new UserForm(user));
-		model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
-		model.addAttribute("roles", roleService.getAllRoles());
+		List<Firefighter> firefighters = firefighterService.getFirefightersWithNoAccount();
+		if(user.getFirefighter() != null)
+			firefighters.add(user.getFirefighter());
+		model.addAttribute("firefighters", firefighters);
+		model.addAttribute("roles_list", roleService.getAllRoles());
 		return "user_edit";
 	}
 	
@@ -182,17 +198,23 @@ public class UserController {
 			model.addAttribute("roles", roleService.getAllRoles());
 			return "user_edit";
 		} 
-		
-		if(!user.getEmail().equals(userForm.getEmail())) {
-			userService.deactivateUser(id);
-			userService.resendActivationLink(id);
-		}	
+		String oldEmail = user.getEmail();
 		user.setUsername(userForm.getUsername());
 		user.setDisplayName(userForm.getDisplayName());
 		user.setEmail(userForm.getEmail());
 		String encryptedPassword = userUtils.encodePassword(userForm.getPassword());					
 		user.setPassword(encryptedPassword);
-		userService.saveUser(user);
+		try {
+			userService.saveUser(user);
+		} catch (Exception e) {
+			model.addAttribute("message", messageUserNotEdited);
+		    model.addAttribute("alertClass", "alert-danger");
+			return "user_edit";
+		}
+		if(!oldEmail.equals(userForm.getEmail())) {
+			userService.deactivateUser(id);
+			userService.resendActivationLink(id);
+		}	
 		redirectAttributes.addFlashAttribute("message", messageUserEdited);
 	    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 		return "redirect:/manage/users";	

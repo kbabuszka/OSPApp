@@ -1,21 +1,7 @@
 package net.babuszka.osp.model;
 
+import java.util.List;
 import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
 import org.springframework.stereotype.Component;
 
@@ -29,7 +15,7 @@ public class UserForm {
 	private String password;
 	private String confirmPassword;
 	private Firefighter firefighter;
-	private Set<Role> roles;
+	private List<UserRole> roles;
 	
 	public UserForm() {
 		super();
@@ -101,11 +87,11 @@ public class UserForm {
 		this.firefighter = firefighter;
 	}
 	
-	public Set<Role> getRoles() {
+	public List<UserRole> getRoles() {
 		return roles;
 	}
 	
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(List<UserRole> roles) {
 		this.roles = roles;
 	}
 
