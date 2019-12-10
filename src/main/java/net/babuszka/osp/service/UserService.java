@@ -174,6 +174,11 @@ public class UserService {
 		userRoleRepository.save(role);
 	}
 	
+	@Transactional
+	public void deleteUserRoles(Integer userId) {
+		userRoleRepository.deleteByUserId(userId);
+	}
+	
 	public UserStatus verifyUserEmail(String token) {
 		UserVerificationToken userToken = tokenRepository.findByToken(token);
 		User userToVerify;
@@ -237,6 +242,5 @@ public class UserService {
 	public void deleteUserVerificationToken(Integer userId) {
 		tokenRepository.deleteByUserId(userId);
 	}
-
 
 }

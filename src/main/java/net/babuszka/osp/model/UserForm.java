@@ -28,7 +28,7 @@ public class UserForm {
 		this.displayName = user.getDisplayName();
 		this.email = user.getEmail();
 		this.firefighter = user.getFirefighter();
-		this.userRoles = user.getRoles();
+		this.userRoles = user.getUserRoles();
 	}
 
 	public Integer getId() {

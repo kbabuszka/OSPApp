@@ -100,14 +100,16 @@ public class UserController {
 		model.addAttribute("userForm", new UserForm());
 		model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
 		model.addAttribute("roles", roleService.getAllRoles());
-		model.addAttribute("userRoles", roleService.getAllRoles());
 		return "users_list";
 	}
 	
 	//Submit new user form
 	@PostMapping(path = "/manage/users/add")
-	public String addNewUser(@ModelAttribute("userForm") @Valid UserForm userForm, BindingResult bindingResult,
-			Model model, RedirectAttributes redirectAttributes, @RequestParam(value = "newUserRoles", required = false) ArrayList<Integer> roles) {
+	public String addNewUser(@ModelAttribute("userForm") @Valid UserForm userForm,
+			BindingResult bindingResult,
+			Model model, RedirectAttributes redirectAttributes,
+			@RequestParam(value = "newUserRoles", required = false) ArrayList<Integer> roles) {
+		
 		model.addAttribute("page_title", "Zarządzaj użytkownikami");
 		
 		if(userForm.getEmail().isEmpty())
@@ -176,8 +178,12 @@ public class UserController {
 	
 	//Submit edit form
 	@PostMapping(path = "/manage/users/edit/{id}")
-	public String saveUser(@ModelAttribute("userForm") @Valid UserForm userForm, @PathVariable(name = "id") Integer id, 
-			Model model, RedirectAttributes redirectAttributes, BindingResult bindingResult) {
+	public String saveUser(@ModelAttribute("userForm") @Valid UserForm userForm,
+			@PathVariable(name = "id") Integer id, 
+			Model model,
+			RedirectAttributes redirectAttributes,
+			@RequestParam(value = "newUserRoles", required = false) ArrayList<Integer> roles,
+			BindingResult bindingResult) {
 		
 		model.addAttribute("page_title", "Edytuj użytkownika");
 		User user = userService.getUser(userForm.getId());
@@ -186,33 +192,7 @@ public class UserController {
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			return "redirect:/manage/users";		
 		}
-		
-		
-		if(userForm.getUserRoles() != null) {
-			for (UserRole role : userForm.getUserRoles()) {
-				if(role.getRole() != null) {
-					System.out.println(role.getRole().toString());
-				} else {
-					System.out.println("rola to null");
-				}
-				
-				if(role.getUser() != null) {
-					System.out.println(role.getUser().toString());
-				} else {
-					System.out.println("user to null");
-				}
-			}
-		} else {
-			System.out.println("user role to null");
-		}
-		
-		
-		
-		
-		
-		
-		
-		
+
 		if(userForm.getEmail().isEmpty())
 			bindingResult.rejectValue("email", "user.email.empty");
 		
@@ -235,14 +215,17 @@ public class UserController {
 			model.addAttribute("userForm", userForm);
 			model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
 			model.addAttribute("roles", roleService.getAllRoles());
+			model.addAttribute("newUserRoles", roles);
 			return "user_edit";
 		} 
+		
 		String oldEmail = user.getEmail();
 		user.setUsername(userForm.getUsername());
 		user.setDisplayName(userForm.getDisplayName());
 		user.setEmail(userForm.getEmail());
 		String encryptedPassword = userUtils.encodePassword(userForm.getPassword());					
 		user.setPassword(encryptedPassword);
+		user.setFirefighter(userForm.getFirefighter());
 		try {
 			userService.saveUser(user);
 		} catch (Exception e) {
@@ -254,6 +237,20 @@ public class UserController {
 			userService.deactivateUser(id);
 			userService.resendActivationLink(id);
 		}	
+		
+		userService.deleteUserRoles(id);		
+		if(roles != null && roles.size() > 0) {
+			List<Role> roleTypes = roles.stream()
+					.map(i -> roleService.getOne(i))
+					.collect(Collectors.toList());		
+			for (Role role : roleTypes) {
+				UserRole userRole = new UserRole();
+				userRole.setRole(role);
+				userRole.setUser(user);
+				userService.saveUserRole(userRole);
+			}
+		}
+		
 		redirectAttributes.addFlashAttribute("message", messageUserEdited);
 	    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 		return "redirect:/manage/users";	
