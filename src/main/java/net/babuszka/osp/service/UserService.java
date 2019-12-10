@@ -18,10 +18,12 @@ import net.babuszka.osp.event.OnResendActivationLinkEvent;
 import net.babuszka.osp.event.OnUserCreationEvent;
 import net.babuszka.osp.model.Firefighter;
 import net.babuszka.osp.model.User;
+import net.babuszka.osp.model.UserRole;
 import net.babuszka.osp.model.UserStatus;
 import net.babuszka.osp.model.UserVerificationToken;
 import net.babuszka.osp.repository.FirefighterRepository;
 import net.babuszka.osp.repository.UserRepository;
+import net.babuszka.osp.repository.UserRoleRepository;
 import net.babuszka.osp.repository.UserVerificationTokenRepository;
 import net.babuszka.osp.utils.SessionUtils;
 import net.babuszka.osp.utils.UserUtils;
@@ -32,6 +34,7 @@ public class UserService {
 	private Logger LOG = LoggerFactory.getLogger(Logger.class);
 	private UserRepository userRepository;
 	private UserVerificationTokenRepository tokenRepository;
+	private UserRoleRepository userRoleRepository;
 	private FirefighterRepository firefighterRepository;
 	private PasswordEncoder passwordEncoder;
 	private UserUtils userUtils;
@@ -48,6 +51,11 @@ public class UserService {
 		this.tokenRepository = tokenRepository;
 	}
 	
+	@Autowired
+	public void setUserRoleRepository(UserRoleRepository userRoleRepository) {
+		this.userRoleRepository = userRoleRepository;
+	}
+
 	@Autowired
 	public void setFirefighterRepository(FirefighterRepository firefighterRepository) {
 		this.firefighterRepository = firefighterRepository;
@@ -72,7 +80,6 @@ public class UserService {
 		return userRepository.findAll();
 	}
 	
-
 	public User getUser(Integer id) {
 		LOG.debug("Getting User with following ID: " + id);
 		try {
@@ -163,6 +170,10 @@ public class UserService {
 		tokenRepository.save(newToken);
 	}
 	
+	public void saveUserRole(UserRole role) {
+		userRoleRepository.save(role);
+	}
+	
 	public UserStatus verifyUserEmail(String token) {
 		UserVerificationToken userToken = tokenRepository.findByToken(token);
 		User userToVerify;
@@ -208,19 +219,13 @@ public class UserService {
 	@Transactional
 	public void deleteUser(Integer id) {
 		LOG.debug("Deleting User with following ID: " + id);
-		User userToDelete = userRepository.getOne(id);
-		if (userToDelete == null) {
-			System.out.println("user to delte jest nullem");
-
-
-		}
-		
+		User userToDelete = userRepository.getOne(id);		
 		Firefighter firefighter = userToDelete.getFirefighter();
 		if(firefighter != null) {
 			firefighter.setUser(null);
 			firefighterRepository.save(firefighter);
 		}
-		userToDelete.setRoles(null);
+		userToDelete.setUserRoles(null);
 		userToDelete.setFirefighter(null);
 		userRepository.save(userToDelete);
 		deleteUserVerificationToken(id);

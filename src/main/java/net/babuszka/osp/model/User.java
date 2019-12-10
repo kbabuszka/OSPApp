@@ -56,12 +56,11 @@ public class User {
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<UserRole> roles;
+	private List<UserRole> userRoles;
 		
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "status")
 	private  UserStatus status;
-	
 	
 	@OneToOne
 	@JoinColumn(name = "firefighter_id", referencedColumnName = "id")
@@ -107,12 +106,12 @@ public class User {
 		this.password = password;
 	}
 
-	public List<UserRole> getRoles() {
-		return roles;
+	public List<UserRole> getUserRoles() {
+		return userRoles;
 	}
 
-	public void setRoles(List<UserRole> roles) {
-		this.roles = roles;
+	public void setUserRoles(List<UserRole> roles) {
+		this.userRoles = roles;
 	}
 
 	public UserStatus getStatus() {
@@ -131,7 +130,6 @@ public class User {
 		this.firefighter = firefighter;
 	}
 	
-
 	@Override
 	public String toString() {
 		return displayName + " (" + username + ")";

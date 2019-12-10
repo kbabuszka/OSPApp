@@ -163,10 +163,21 @@
                                	 	</div>
                                	 	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
 		                                <div class="demo-checkbox" style="margin-top: 6px;">
-		                                	<th:block th:each="role : ${roles}">
-			                                	<input th:value="${role.id}" th:id="${'role_'+role.id}" type="checkbox" class="filled-in chk-col-red">
-				                                <label th:for="${'role_'+role.id}" th:text="${role.name}" data-toggle="tooltip" data-placement="top" th:data-original-title="${role.description}"></label>
+		                                <!-- 
+		                                	<th:block th:each="role, i : ${roles}">
+		                                	
+		                                	    <input th:field="*{userRoles[__${i.index}__]}" th:value="${role.id}" type="checkbox"  class="filled-in chk-col-red" />
+		                                	    <label th:for="${'role_'+role.id}" th:text="${role.name}" data-toggle="tooltip" data-placement="top" th:data-original-title="${role.description}"></label>
 		                                	</th:block>
+		                                	
+		                                	
+		                                -->
+		                                 
+		                                	<th:block th:each="role, i : ${roles}">
+			                                	<input th:value="${role.id}" th:id="${'role_'+role.id}" name="newUserRoles" type="checkbox" class="filled-in chk-col-red">
+				                                <label th:for="${'role_'+role.id}" th:text="${role.name}"th:data-original-title="${role.description}"  data-toggle="tooltip" data-placement="top" ></label>
+		                                	</th:block>
+		                                
 			                            </div>  
 		                            </div>                    
 								</div>
@@ -221,7 +232,7 @@
                                             <td th:text="${user.id}"></td>
                                             <td th:text="${user.username}"></td>
                                             <td>
-                                            	<th:block th:each="role, i: ${user.roles}">
+                                            	<th:block th:each="role, i: ${user.userRoles}">
                                             		<th:block th:text="!${i.last} ? ${role.role.name} + ',' : ${role.role.name}"></th:block>
                                             	</th:block>
                                             </td>

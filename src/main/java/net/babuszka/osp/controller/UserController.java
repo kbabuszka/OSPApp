@@ -1,7 +1,11 @@
 package net.babuszka.osp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
+import javax.persistence.Id;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import net.babuszka.osp.model.Firefighter;
@@ -95,19 +100,15 @@ public class UserController {
 		model.addAttribute("userForm", new UserForm());
 		model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
 		model.addAttribute("roles", roleService.getAllRoles());
+		model.addAttribute("userRoles", roleService.getAllRoles());
 		return "users_list";
 	}
 	
 	//Submit new user form
 	@PostMapping(path = "/manage/users/add")
-	public String addNewUser(@ModelAttribute("userForm") @Valid UserForm userForm, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+	public String addNewUser(@ModelAttribute("userForm") @Valid UserForm userForm, BindingResult bindingResult,
+			Model model, RedirectAttributes redirectAttributes, @RequestParam(value = "newUserRoles", required = false) ArrayList<Integer> roles) {
 		model.addAttribute("page_title", "Zarządzaj użytkownikami");
-		
-//		for (UserRole role : userForm.getRoles()) {
-//			role.toString();
-//			
-//		}
-		
 		
 		if(userForm.getEmail().isEmpty())
 			bindingResult.rejectValue("email", "user.email.empty");
@@ -119,12 +120,14 @@ public class UserController {
 			bindingResult.rejectValue("email", "user.email.duplicate");
 		if(userService.findUserByUsername(userForm.getUsername()) != null)
 			bindingResult.rejectValue("username", "user.username.duplicate");
-		
+
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("message", messageUserNotAdded);
 		    model.addAttribute("alertClass", "alert-danger");
 		    model.addAttribute("users", userService.getAllUsers());
 		    model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
+		    model.addAttribute("roles", roleService.getAllRoles());
+		    model.addAttribute("newUserRoles", roles);
 		    return "users_list";
 		} else {
 			User newUser = new User();
@@ -134,8 +137,18 @@ public class UserController {
 			String encryptedPassword = userUtils.encodePassword(userForm.getPassword());
 			newUser.setPassword(encryptedPassword);
 			newUser.setFirefighter(userForm.getFirefighter());
-			newUser.setRoles(userForm.getRoles());
 			userService.addNewUser(newUser);
+			if(roles != null && roles.size() > 0) {
+				List<Role> roleTypes = roles.stream()
+						.map(id -> roleService.getOne(id))
+						.collect(Collectors.toList());		
+				for (Role role : roleTypes) {
+					UserRole userRole = new UserRole();
+					userRole.setRole(role);
+					userRole.setUser(newUser);
+					userService.saveUserRole(userRole);
+				}
+			}
 			redirectAttributes.addFlashAttribute("message", messageUserAdded);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 			return "redirect:/manage/users";
@@ -157,7 +170,7 @@ public class UserController {
 		if(user.getFirefighter() != null)
 			firefighters.add(user.getFirefighter());
 		model.addAttribute("firefighters", firefighters);
-		model.addAttribute("roles_list", roleService.getAllRoles());
+		model.addAttribute("roles", roleService.getAllRoles());
 		return "user_edit";
 	}
 	
@@ -173,6 +186,32 @@ public class UserController {
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			return "redirect:/manage/users";		
 		}
+		
+		
+		if(userForm.getUserRoles() != null) {
+			for (UserRole role : userForm.getUserRoles()) {
+				if(role.getRole() != null) {
+					System.out.println(role.getRole().toString());
+				} else {
+					System.out.println("rola to null");
+				}
+				
+				if(role.getUser() != null) {
+					System.out.println(role.getUser().toString());
+				} else {
+					System.out.println("user to null");
+				}
+			}
+		} else {
+			System.out.println("user role to null");
+		}
+		
+		
+		
+		
+		
+		
+		
 		
 		if(userForm.getEmail().isEmpty())
 			bindingResult.rejectValue("email", "user.email.empty");

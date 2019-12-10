@@ -18,9 +18,11 @@ public class RoleService {
 		this.roleRepository = roleRepository;
 	}
 	
-	
 	public List<Role> getAllRoles() {
 		return roleRepository.findAll();
 	}
 	
+	public Role getOne(Integer id) {
+		return roleRepository.getOne(id);
+	}
 }

@@ -67,7 +67,7 @@
 	                                
 	                                <th:block th:if="${firefighter.user != null}">
 		                                <span th:each="role, i: ${firefighter.user.roles}">
-		                                	<th:block th:text="!${i.last} ? ${role.name} + ',' : ${role.name}"></th:block>
+		                                	<th:block th:text="!${i.last} ? ${role.role.name} + ',' : ${role.role.name}"></th:block>
 			                            </span>
 		                            </th:block>
 		                            

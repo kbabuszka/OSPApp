@@ -15,7 +15,7 @@ public class UserForm {
 	private String password;
 	private String confirmPassword;
 	private Firefighter firefighter;
-	private List<UserRole> roles;
+	private List<UserRole> userRoles;
 	
 	public UserForm() {
 		super();
@@ -28,7 +28,7 @@ public class UserForm {
 		this.displayName = user.getDisplayName();
 		this.email = user.getEmail();
 		this.firefighter = user.getFirefighter();
-		this.roles = user.getRoles();
+		this.userRoles = user.getRoles();
 	}
 
 	public Integer getId() {
@@ -87,12 +87,12 @@ public class UserForm {
 		this.firefighter = firefighter;
 	}
 	
-	public List<UserRole> getRoles() {
-		return roles;
+	public List<UserRole> getUserRoles() {
+		return userRoles;
 	}
 	
-	public void setRoles(List<UserRole> roles) {
-		this.roles = roles;
+	public void setUserRoles(List<UserRole> roles) {
+		this.userRoles = roles;
 	}
 
 }
