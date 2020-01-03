@@ -100,7 +100,7 @@ public class UserController {
 		model.addAttribute("userForm", new UserForm());
 		model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
 		model.addAttribute("roles", roleService.getAllRoles());
-		return "users_list";
+		return "manage_users_list";
 	}
 	
 	//Submit new user form
@@ -130,7 +130,7 @@ public class UserController {
 		    model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
 		    model.addAttribute("roles", roleService.getAllRoles());
 		    model.addAttribute("newUserRoles", roles);
-		    return "users_list";
+		    return "manage_users_list";
 		} else {
 			User newUser = new User();
 			newUser.setUsername(userForm.getUsername());
@@ -173,7 +173,7 @@ public class UserController {
 			firefighters.add(user.getFirefighter());
 		model.addAttribute("firefighters", firefighters);
 		model.addAttribute("roles", roleService.getAllRoles());
-		return "user_edit";
+		return "manage_user_edit";
 	}
 	
 	//Submit edit form
@@ -216,7 +216,7 @@ public class UserController {
 			model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
 			model.addAttribute("roles", roleService.getAllRoles());
 			model.addAttribute("newUserRoles", roles);
-			return "user_edit";
+			return "manage_user_edit";
 		} 
 		
 		String oldEmail = user.getEmail();
@@ -231,7 +231,7 @@ public class UserController {
 		} catch (Exception e) {
 			model.addAttribute("message", messageUserNotEdited);
 		    model.addAttribute("alertClass", "alert-danger");
-			return "user_edit";
+			return "manage_user_edit";
 		}
 		if(!oldEmail.equals(userForm.getEmail())) {
 			userService.deactivateUser(id);
