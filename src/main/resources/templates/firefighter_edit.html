@@ -6,7 +6,7 @@
     <link th:href="@{/plugins/bootstrap-select/css/bootstrap-select.css}" rel="stylesheet" />
     <link th:href="@{/plugins/bootstrap-datepicker/css/bootstrap-datepicker.css}" rel="stylesheet" />
     <link th:href="@{/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" rel="stylesheet" />
-    <link th:href="@{/plugins/sweetalert/sweetalert.css}" href="../static/plugins/sweetalert/sweetalert.css" rel="stylesheet" />e>
+    <link th:href="@{/plugins/sweetalert/sweetalert.css}" href="../static/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
 </head>
 
 <body class="theme-red">
@@ -59,7 +59,7 @@
             <div class="row clearfix">
             <form th:object="${firefighter}" th:action="@{'/firefighters/edit/' + ${firefighter.id}}" method="post">
             	<div th:if="${message}" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            		<div th:text="${message}" th:class="${'alert ' + alertClass}"/>
+            		<div th:text="${message}" th:class="${'alert ' + alertClass}"></div>
             	</div>
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                     <div class="card">

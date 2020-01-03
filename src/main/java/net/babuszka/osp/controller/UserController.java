@@ -167,7 +167,7 @@ public class UserController {
 			return "redirect:/manage/users";
 		}
 		model.addAttribute("page_title", "Edytuj użytkownika");
-		model.addAttribute("userForm", new UserForm(user));
+		model.addAttribute("userForm", new UserForm(user, roleService.getAllRoles()));
 		List<Firefighter> firefighters = firefighterService.getFirefightersWithNoAccount();
 		if(user.getFirefighter() != null)
 			firefighters.add(user.getFirefighter());

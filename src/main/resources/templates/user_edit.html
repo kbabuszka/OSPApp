@@ -62,7 +62,7 @@
                         <div class="body">
                             <form th:object="${userForm}" th:action="@{'/manage/users/edit/' + ${userForm.id}}" method="post" class="form-horizontal">
                                 <div th:if="${message}" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				            		<div th:text="${message}" th:class="${'alert ' + alertClass}"/>
+				            		<div th:text="${message}" th:class="${'alert ' + alertClass}"></div>
 				            	</div>
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
@@ -162,13 +162,21 @@
                                     	<label for="new_user_firefighter">Role</label>
                                	 	</div>
                                	 	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-		                                <div class="demo-checkbox" style="margin-top: 6px;">
-		                                	<th:block th:each="role, i : ${roles}">
-			                                	<input th:value="${role.id}" th:id="${'role_'+role.id}" name="newUserRoles" type="checkbox" class="filled-in chk-col-red">
-				                                <label th:for="${'role_'+role.id}" th:text="${role.name}"th:data-original-title="${role.description}"  data-toggle="tooltip" data-placement="top" ></label>
-		                                	</th:block>
-			                            </div>  
-		                            </div>                    
+			                            <div class="demo-checkbox" style="margin-top: 6px;">
+		                                	<th:block th:each="roleCheckbox, i : ${userForm.roleCheckboxes}">
+		                                		<input th:value="${roleCheckbox.role.id}" th:id="${'role_'+roleCheckbox.role.id}" th:checked="${roleCheckbox.checked}" name="newUserRoles" type="checkbox" class="filled-in chk-col-red">
+		                                		<label th:for="${'role_'+roleCheckbox.role.id}" th:text="${roleCheckbox.role.name}"th:data-original-title="${roleCheckbox.role.description}" data-toggle="tooltip" data-placement="top" ></label>
+		                                	</th:block>   
+			                            </div> 
+		                            </div>    
+		                            
+		                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+			                            <div class="demo-checkbox" style="margin-top: 6px;">
+		                                	<th:block th:each="roleCheckbox, i : ${userForm.roleCheckboxes}">
+		                                		<div th:text="${'id: ' + roleCheckbox.role.id + 'name: ' + roleCheckbox.role.name + ' checked: ' + roleCheckbox.checked}"></div>
+		                                	</th:block>   
+			                            </div> 
+		                            </div>                 
 								</div>
                                 <div class="row clearfix">
                                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">

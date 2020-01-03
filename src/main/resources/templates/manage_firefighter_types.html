@@ -61,7 +61,7 @@
                             </h2>
                         </div>
                         <div class="body">
-                        	<div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"/>
+                        	<div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
                             <form th:object="${wrapper}" th:action="@{'/manage/firefighter-types/edit'}" method="post" class="form-horizontal">
                             
                                 <div th:each="type, i : ${wrapper.types}" class="row clearfix">
