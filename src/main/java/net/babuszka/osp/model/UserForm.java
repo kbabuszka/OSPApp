@@ -1,13 +1,41 @@
 package net.babuszka.osp.model;
 
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserForm {
 
+	private class RoleCheckbox {
+		
+		public RoleCheckbox(Role role, Boolean checked) {
+			this.role = role;
+			this.checked = checked;
+		}
+		
+		private Role role;
+		private Boolean checked;
+		
+		public Role getRole() {
+			return role;
+		}
+		
+		public void setRole(Role role) {
+			this.role = role;
+		}
+		
+		public Boolean getChecked() {
+			return checked;
+		}
+		
+		public void setChecked(Boolean checked) {
+			this.checked = checked;
+		}
+		
+	}
+	
 	private Integer id;
 	private String username;
 	private String displayName;
@@ -16,6 +44,8 @@ public class UserForm {
 	private String confirmPassword;
 	private Firefighter firefighter;
 	private List<UserRole> userRoles;
+	private List<Role> roles;
+	private List<RoleCheckbox> roleCheckboxes;
 	
 	public UserForm() {
 		super();
@@ -29,6 +59,21 @@ public class UserForm {
 		this.email = user.getEmail();
 		this.firefighter = user.getFirefighter();
 		this.userRoles = user.getUserRoles();
+	}
+	
+	public UserForm(User user, List<Role> roles) {
+		super();
+		this.id = user.getId();
+		this.username = user.getUsername();
+		this.displayName = user.getDisplayName();
+		this.email = user.getEmail();
+		this.firefighter = user.getFirefighter();
+		this.userRoles = user.getUserRoles();
+		
+		this.roleCheckboxes = roles.stream()
+		    .map(role -> new RoleCheckbox(role, user.getUserRoles().stream()
+		    		.anyMatch(userRole -> userRole.getRole().equals(role))))
+		    .collect(Collectors.toList());
 	}
 
 	public Integer getId() {
@@ -93,6 +138,22 @@ public class UserForm {
 	
 	public void setUserRoles(List<UserRole> roles) {
 		this.userRoles = roles;
+	}
+
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public List<RoleCheckbox> getRoleCheckboxes() {
+		return roleCheckboxes;
+	}
+
+	public void setRoleCheckboxes(List<RoleCheckbox> roleCheckboxes) {
+		this.roleCheckboxes = roleCheckboxes;
 	}
 
 }
