@@ -119,8 +119,9 @@ public class FirefighterService {
 	public List<Firefighter> getFirefightersWithNoAccount(){
 		LOG.debug("There are " + firefighterRepository.count() + " firefighters in the repository");
 		for(Firefighter firefighter : firefighterRepository.findFirefightersWithNoAccount()) {
-			LOG.debug(firefighter.toString());
+			LOG.debug("Firefighter without user assigned: " + firefighter.toString());
 		}
+		LOG.debug("There are " + firefighterRepository.findFirefightersWithNoAccount().size() + " firefighters without account in the repository");
 		return firefighterRepository.findFirefightersWithNoAccount();
 	}
 

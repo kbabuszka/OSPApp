@@ -2,10 +2,8 @@ package net.babuszka.osp.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import javax.persistence.Id;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -187,6 +185,7 @@ public class UserController {
 		
 		model.addAttribute("page_title", "Edytuj użytkownika");
 		User user = userService.getUser(userForm.getId());
+		
 		if(user == null) {
 			redirectAttributes.addFlashAttribute("message", messageUserNotExist);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
@@ -219,12 +218,15 @@ public class UserController {
 			return "manage_user_edit";
 		} 
 		
+		
+		
 		String oldEmail = user.getEmail();
 		user.setUsername(userForm.getUsername());
 		user.setDisplayName(userForm.getDisplayName());
 		user.setEmail(userForm.getEmail());
 		String encryptedPassword = userUtils.encodePassword(userForm.getPassword());					
 		user.setPassword(encryptedPassword);
+		Firefighter usersFirefighter = user.getFirefighter();
 		user.setFirefighter(userForm.getFirefighter());
 		try {
 			userService.saveUser(user);
@@ -237,6 +239,12 @@ public class UserController {
 			userService.deactivateUser(id);
 			userService.resendActivationLink(id);
 		}	
+		
+		if((usersFirefighter != null) 
+				&& (userForm.getFirefighter() == null)) {
+			usersFirefighter.setUser(null);
+			firefighterService.saveFirefighter(usersFirefighter);
+		} 
 		
 		userService.deleteUserRoles(id);		
 		if(roles != null && roles.size() > 0) {
@@ -280,6 +288,13 @@ public class UserController {
 	// Deactivate user
 	@GetMapping(path = "/manage/users/deactivate/{id}")
 	public String deactivateUser(@PathVariable (name = "id") Integer id, RedirectAttributes redirectAttributes) {
+		User user = userService.getUser(id);
+		if(user == null) {
+			redirectAttributes.addFlashAttribute("message", messageUserNotExist);
+		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
+		    return "redirect:/manage/users";
+		}
+		
 		if(userService.deactivateUser(id)) {
 			redirectAttributes.addFlashAttribute("message", messageUserDeactivated);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");

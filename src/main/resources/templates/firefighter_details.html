@@ -66,7 +66,7 @@
 	                                <span>Role w systemie: </span>
 	                                
 	                                <th:block th:if="${firefighter.user != null}">
-		                                <span th:each="role, i: ${firefighter.user.roles}">
+		                                <span th:each="role, i: ${firefighter.user.userRoles}">
 		                                	<th:block th:text="!${i.last} ? ${role.role.name} + ',' : ${role.role.name}"></th:block>
 			                            </span>
 		                            </th:block>
