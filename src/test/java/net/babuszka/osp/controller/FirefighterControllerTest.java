@@ -72,7 +72,7 @@ public class FirefighterControllerTest {
 		mockMvc.perform(get("/firefighters/{id}", FIREFIGHTER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("firefighter"))
-			.andExpect(model().attribute("firefighter", hasProperty("id", is(1000))))
+			.andExpect(model().attribute("firefighter", hasProperty("id", is(FIREFIGHTER_ID))))
 			.andExpect(model().attribute("firefighter", hasProperty("firstName", is("User"))))
 			.andExpect(model().attribute("firefighter", hasProperty("secondName", is("User-2nd"))))
 			.andExpect(model().attribute("firefighter", hasProperty("lastName", is("Testowy"))))
@@ -175,7 +175,7 @@ public class FirefighterControllerTest {
 		mockMvc.perform(get("/firefighters/edit/{id}", FIREFIGHTER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("firefighter"))
-			.andExpect(model().attribute("firefighter", hasProperty("id", is(1000))))
+			.andExpect(model().attribute("firefighter", hasProperty("id", is(FIREFIGHTER_ID))))
 			.andExpect(model().attribute("firefighter", hasProperty("firstName", is("User"))))
 			.andExpect(model().attribute("firefighter", hasProperty("secondName", is("User-2nd"))))
 			.andExpect(model().attribute("firefighter", hasProperty("lastName", is("Testowy"))))
@@ -287,7 +287,7 @@ public class FirefighterControllerTest {
 	@WithMockUser(username = "junit")
 	public void testSubmitEditFirefighterFormWithErrors() throws Exception {
 		String newName = new RandomString().make(8);
-		mockMvc.perform(post("/firefighters/edit/1001")
+		mockMvc.perform(post("/firefighters/edit/{id}", FIREFIGHTER_ID)
 			.param("firstName", newName)
 			.param("lastName", "")
 		)
@@ -295,16 +295,16 @@ public class FirefighterControllerTest {
 			.andExpect(model().hasErrors())
 			.andExpect(view().name("firefighter_edit"));		
 	
-		mockMvc.perform(get("/firefighters/1001"))
+		mockMvc.perform(get("/firefighters/{id}", FIREFIGHTER_ID))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("firefighter"))
-			.andExpect(model().attribute("firefighter", hasProperty("id", is(1001)))
+			.andExpect(model().attribute("firefighter", hasProperty("id", is(FIREFIGHTER_ID)))
 		);
 	}
 	
 	@Test 
 	@WithMockUser("junit")
-	public void testFirefighterEditFormRedirection() throws Exception {
+	public void testEditFirefighterThatNotExist() throws Exception {
 		mockMvc.perform(get("/firefighters/edit/{id}", NOT_EXISTING_FIREFIGHTER_ID))
 	        .andExpect(status().is3xxRedirection())
 	        .andExpect(view().name("redirect:/firefighters"));
@@ -335,12 +335,22 @@ public class FirefighterControllerTest {
 	
 	@Test 
 	@WithMockUser("junit")
-	public void testSubmitDeleteFirefighterThatNotExists() throws Exception {
+	public void testDeleteFirefighterThatNotExists() throws Exception {
 		int numberOfFirefighters = firefighterService.getAllFirefighters().size();
-		mockMvc.perform(get("/firefighters/delete/0"))
+
+		mockMvc.perform(get("/firefighters/delete/{id}", NOT_EXISTING_FIREFIGHTER_ID))
 	        .andExpect(status().is3xxRedirection())
-	        .andExpect(view().name("redirect:/firefighters"))
-	        .andExpect(flash().attribute("alertClass", "alert-danger"));
+	        .andExpect(flash().attribute("alertClass", "alert-danger"))
+	        .andExpect(view().name("redirect:/firefighters"));
+		
+		mockMvc.perform(get("/firefighters/delete/{id}", -1))
+	        .andExpect(status().is3xxRedirection())
+	        .andExpect(flash().attribute("alertClass", "alert-danger"))
+	        .andExpect(view().name("redirect:/firefighters"));
+		
+		mockMvc.perform(get("/firefighters/delete/{id}", "a"))
+	        .andExpect(status().is4xxClientError());
+		
 		assertEquals(numberOfFirefighters, firefighterService.getAllFirefighters().size());
 	}
 	

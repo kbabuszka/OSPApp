@@ -31,7 +31,7 @@ import net.bytebuddy.utility.RandomString;
 @SpringBootTest(properties = "spring.profiles.active=test")
 @WebAppConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class TrainingControllerTest {
 
 	@Autowired
@@ -39,8 +39,6 @@ public class TrainingControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-	
-	
 	
 	@Test
 	public void contextLoads() {

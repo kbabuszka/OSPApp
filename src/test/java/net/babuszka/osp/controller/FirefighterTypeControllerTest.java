@@ -32,7 +32,7 @@ import net.bytebuddy.utility.RandomString;
 @SpringBootTest(properties = "spring.profiles.active=test")
 @WebAppConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 public class FirefighterTypeControllerTest {
 
 		@Autowired
