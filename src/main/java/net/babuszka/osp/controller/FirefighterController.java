@@ -146,7 +146,7 @@ public class FirefighterController {
 	}
 
 	// Display edit firefighter form
-	@GetMapping(path = "/firefighters/edit/{id}")
+	@GetMapping(path = "/firefighters/edit/{id:\\d+}")
 	public String editFirefighter(Model model, @PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {	
 		model.addAttribute("page_title", "Edytuj strażaka");
 		if(firefighterService.getFirefighter(id) != null) {
@@ -162,7 +162,7 @@ public class FirefighterController {
 	}
 	
 	// Submit edit firefighter form
-	@PostMapping(path = "/firefighters/edit/{id}")
+	@PostMapping(path = "/firefighters/edit/{id:\\d+}")
 	public String updateFirefighter(@ModelAttribute("firefighter") @Valid Firefighter firefighter, BindingResult bindingResult, 
 									@PathVariable(value = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
 		
@@ -199,7 +199,7 @@ public class FirefighterController {
 	}
 
 	// Delete firefighter
-	@GetMapping(path = "/firefighters/delete/{id}")
+	@GetMapping(path = "/firefighters/delete/{id:\\d+}")
 	public String delete(@PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {
 		Firefighter firefighter = firefighterService.getFirefighter(id);
 		if(firefighter != null) {
@@ -226,7 +226,7 @@ public class FirefighterController {
 	}
 	
 	// Delete firefighter's training
-	@GetMapping(path = "/firefighters/edit/{firefighterId}/deletetraining/{id}")
+	@GetMapping(path = "/firefighters/edit/{firefighterId:\\d+}/deletetraining/{id:\\d+}")
 	public String deleteTraining(@PathVariable(value = "id") Integer id, @PathVariable(value = "firefighterId") Integer firefighterId,
 								RedirectAttributes redirectAttributes) {
 		FirefighterTraining training = firefighterTrainingService.getFirefighterTraining(id);

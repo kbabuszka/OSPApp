@@ -156,7 +156,7 @@ public class UserController {
 	}
 	
 	//Display edit form
-	@GetMapping(path = "/manage/users/edit/{id}")
+	@GetMapping(path = "/manage/users/edit/{id:\\d+}")
 	public String editUser(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {	
 		User user = userService.getUser(id);
 		if(user == null) {
@@ -175,7 +175,7 @@ public class UserController {
 	}
 	
 	//Submit edit form
-	@PostMapping(path = "/manage/users/edit/{id}")
+	@PostMapping(path = "/manage/users/edit/{id:\\d+}")
 	public String saveUser(@ModelAttribute("userForm") @Valid UserForm userForm,
 			@PathVariable(name = "id") Integer id, 
 			Model model,
@@ -265,7 +265,7 @@ public class UserController {
 	}
 	
 	//Resend activation link
-	@GetMapping(path = "/manage/users/resend-link/{id}")
+	@GetMapping(path = "/manage/users/resend-link/{id:\\d+}")
 	public String resendActivationLink(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {
 		User user = userService.getUser(id);
 		if(user == null) {
@@ -286,7 +286,7 @@ public class UserController {
 	}
 	
 	// Deactivate user
-	@GetMapping(path = "/manage/users/deactivate/{id}")
+	@GetMapping(path = "/manage/users/deactivate/{id:\\d+}")
 	public String deactivateUser(@PathVariable (name = "id") Integer id, RedirectAttributes redirectAttributes) {
 		User user = userService.getUser(id);
 		if(user == null) {
@@ -306,7 +306,7 @@ public class UserController {
 	}
 	
 	// Delete user
-	@GetMapping(path = "/manage/users/delete/{id}")
+	@GetMapping(path = "/manage/users/delete/{id:\\d+}")
 	public String deleteUser(Model model, @PathVariable (name = "id") Integer id, RedirectAttributes redirectAttributes) {
 		User user = userService.getUser(id);
 		if (user == null) {

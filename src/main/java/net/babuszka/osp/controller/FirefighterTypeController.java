@@ -96,7 +96,7 @@ public class FirefighterTypeController {
 	}
 	
 	//Delete firefighter type
-	@GetMapping(path = "/manage/firefighter-types/delete/{id}")
+	@GetMapping(path = "/manage/firefighter-types/delete/{id:\\d+}")
 	public String deleteFirefighterType(@PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {
 		if(firefighterTypeService.getFirefighterType(id) != null) {
 			firefighterTypeService.deleteFirefighterType(id);

@@ -98,7 +98,7 @@ public class TrainingController {
 	}	
 	
 	//Delete training
-	@GetMapping(path = "/manage/trainings/delete/{id}")
+	@GetMapping(path = "/manage/trainings/delete/{id:\\d+}")
 	public String deleteTraining(@PathVariable(value="id") Integer id, RedirectAttributes redirectAttributes) {
 		Training training = trainingService.getTraining(id);
 		if(training != null) {
