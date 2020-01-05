@@ -10,5 +10,5 @@ import net.babuszka.osp.model.Notification;
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
 
 	@Query(value = "UPDATE notifications SET is_read = 1 WHERE id = :id", nativeQuery = true)
-	public void markAsRead(Integer id);
+	void markAsRead(Integer id);
 }

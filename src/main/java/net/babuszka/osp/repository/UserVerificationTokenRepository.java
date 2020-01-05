@@ -16,6 +16,6 @@ public interface UserVerificationTokenRepository extends JpaRepository<UserVerif
 	void deleteByUserId(Integer id);
 	
 	@Query(value = "SELECT * FROM user_verification_tokens t WHERE t.user_id = ?1", nativeQuery = true)
-	public UserVerificationToken getByUserId(Integer id);
+	UserVerificationToken getByUserId(Integer id);
 
 }

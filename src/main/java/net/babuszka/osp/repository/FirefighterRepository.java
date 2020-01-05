@@ -12,12 +12,12 @@ import net.babuszka.osp.model.Firefighter;
 public interface FirefighterRepository extends JpaRepository<Firefighter, Integer> {
 
 	@Query(value = "SELECT * FROM firefighters WHERE pesel = ?1", nativeQuery = true)
-	public Firefighter findByPesel(String pesel);
+	Firefighter findByPesel(String pesel);
 	
 	@Query(value = "SELECT * FROM firefighters WHERE in_jot = 1", nativeQuery = true)
-	public List<Firefighter> findJotFirefighters();
+	List<Firefighter> findJotFirefighters();
 
 	@Query(value = "SELECT * FROM firefighters WHERE user_id IS NULL", nativeQuery = true)
-	public List<Firefighter> findFirefightersWithNoAccount();
+	List<Firefighter> findFirefightersWithNoAccount();
 	
 }
