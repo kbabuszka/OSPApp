@@ -140,7 +140,7 @@ public class UserController {
 			userService.addNewUser(newUser);
 			if(roles != null && roles.size() > 0) {
 				List<Role> roleTypes = roles.stream()
-						.map(id -> roleService.getOne(id))
+						.map(id -> roleService.getRole(id))
 						.collect(Collectors.toList());		
 				for (Role role : roleTypes) {
 					UserRole userRole = new UserRole();
@@ -247,7 +247,7 @@ public class UserController {
 		userService.deleteUserRoles(id);		
 		if(roles != null && roles.size() > 0) {
 			List<Role> roleTypes = roles.stream()
-					.map(i -> roleService.getOne(i))
+					.map(i -> roleService.getRole(i))
 					.collect(Collectors.toList());		
 			for (Role role : roleTypes) {
 				UserRole userRole = new UserRole();

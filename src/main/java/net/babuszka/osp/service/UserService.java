@@ -2,7 +2,6 @@ package net.babuszka.osp.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -153,10 +152,6 @@ public class UserService {
 			throw new UsernameNotFoundException("No user found");
 		return user;
 	}
-	
-	public Boolean checkIfPasswordMatch(User user, String password) {		
-		return (passwordEncoder.matches(password, user.getPassword())) ? true : false;
-	}
 
 	public void updateUserPassword(User user) {
 		String plainPassword = user.getPassword();
@@ -243,4 +238,7 @@ public class UserService {
 		tokenRepository.deleteByUserId(userId);
 	}
 
+	public Boolean checkIfPasswordMatch(User user, String password) {		
+		return (passwordEncoder.matches(password, user.getPassword())) ? true : false;
+	}
 }

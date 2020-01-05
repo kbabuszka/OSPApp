@@ -28,7 +28,6 @@ import net.babuszka.osp.service.FirefighterService;
 import net.babuszka.osp.service.FirefighterTrainingService;
 import net.babuszka.osp.service.FirefighterTypeService;
 import net.babuszka.osp.service.TrainingService;
-import net.babuszka.osp.service.UserService;
 import net.babuszka.osp.utils.FirefighterUtils;
 
 @Controller

@@ -1,11 +1,9 @@
 package net.babuszka.osp.controller;
 
-import static org.assertj.core.api.Assertions.byLessThan;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -15,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,10 +26,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
-import net.babuszka.osp.model.Firefighter;
-import net.babuszka.osp.model.Role;
 import net.babuszka.osp.model.User;
-import net.babuszka.osp.model.UserRole;
 import net.babuszka.osp.model.UserStatus;
 import net.babuszka.osp.model.UserVerificationToken;
 import net.babuszka.osp.repository.UserRepository;

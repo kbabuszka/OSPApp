@@ -5,7 +5,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import net.babuszka.osp.model.Role;
-import net.babuszka.osp.repository.FirefighterRepository;
 import net.babuszka.osp.repository.RoleRepository;
 
 @Component

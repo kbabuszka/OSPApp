@@ -18,18 +18,19 @@ public class UserForm {
 		private Role role;
 		private Boolean checked;
 		
+		@SuppressWarnings("unused")
 		public Role getRole() {
 			return role;
 		}
-		
+		@SuppressWarnings("unused")
 		public void setRole(Role role) {
 			this.role = role;
 		}
-		
+		@SuppressWarnings("unused")
 		public Boolean getChecked() {
 			return checked;
 		}
-		
+		@SuppressWarnings("unused")
 		public void setChecked(Boolean checked) {
 			this.checked = checked;
 		}

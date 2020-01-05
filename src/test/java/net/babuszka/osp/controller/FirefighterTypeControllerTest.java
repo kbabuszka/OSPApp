@@ -24,7 +24,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import net.babuszka.osp.model.FirefighterType;
-import net.babuszka.osp.model.Training;
 import net.babuszka.osp.service.FirefighterTypeService;
 import net.bytebuddy.utility.RandomString;
 

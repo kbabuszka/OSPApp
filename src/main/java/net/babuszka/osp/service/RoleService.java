@@ -22,7 +22,7 @@ public class RoleService {
 		return roleRepository.findAll();
 	}
 	
-	public Role getOne(Integer id) {
+	public Role getRole(Integer id) {
 		return roleRepository.getOne(id);
 	}
 }
