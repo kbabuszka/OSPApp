@@ -62,7 +62,6 @@ public class FirefighterController {
 	private FirefighterTypeService firefighterTypeService;
 	private FirefighterTrainingService firefighterTrainingService;
 	private TrainingService trainingService;
-	private UserService userService;
 
 	// Allow Spring to set empty values as null instead of empty string.
 	@InitBinder
@@ -90,15 +89,10 @@ public class FirefighterController {
 	public void setTrainingService(TrainingService trainingService) {
 		this.trainingService = trainingService;
 	}
-	
-	@Autowired
-	public void setUserService(UserService userService) {
-		this.userService = userService;
-	}
 
 	// Display single firefighter's details
 	@GetMapping(path = "/firefighters/{id:\\d+}")
-	public String getFirefighter(Model model, @PathVariable(value = "id") Integer id) {
+	public String initSingleFirefighterView(Model model, @PathVariable(value = "id") Integer id) {
 		model.addAttribute("page_title", "Szczegóły strażaka");
 		if(firefighterService.getFirefighter(id) != null) {
 			model.addAttribute("firefighter", firefighterService.getFirefighter(id));
@@ -114,7 +108,7 @@ public class FirefighterController {
 
 	// Display all firefighters
 	@GetMapping(path = "/firefighters")
-	public String getAllFirefighters(Model model) {
+	public String initAllFirefightersList(Model model) {
 		model.addAttribute("page_title", "Lista strażaków");
 		model.addAttribute("firefighters", firefighterService.getAllFirefighters());
 		return "firefighters_list";
@@ -122,7 +116,7 @@ public class FirefighterController {
 
 	// Display new firefighter form
 	@GetMapping(path = "/firefighters/add")
-	public String addFirefighter(Model model) {
+	public String initAddFirefighterForm(Model model) {
 		model.addAttribute("page_title", "Dodaj strażaka");
 		model.addAttribute("firefighter", new Firefighter());
 		model.addAttribute("firefighter_types", firefighterTypeService.getAllFirefighterTypes());
@@ -131,7 +125,7 @@ public class FirefighterController {
 	
 	// Submit new firefighter form
 	@PostMapping(path = "/firefighters/add")
-	public String saveFirefighter(@Valid Firefighter firefighter, BindingResult bindingResult, Model model,
+	public String processAddFirefighterForm(@Valid Firefighter firefighter, BindingResult bindingResult, Model model,
 								RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("page_title", "Dodaj strażaka");
@@ -147,7 +141,7 @@ public class FirefighterController {
 
 	// Display edit firefighter form
 	@GetMapping(path = "/firefighters/edit/{id:\\d+}")
-	public String editFirefighter(Model model, @PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {	
+	public String initEditFirefighterForm(Model model, @PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {	
 		model.addAttribute("page_title", "Edytuj strażaka");
 		if(firefighterService.getFirefighter(id) != null) {
 			model.addAttribute("firefighter", firefighterService.getFirefighter(id));
@@ -163,7 +157,7 @@ public class FirefighterController {
 	
 	// Submit edit firefighter form
 	@PostMapping(path = "/firefighters/edit/{id:\\d+}")
-	public String updateFirefighter(@ModelAttribute("firefighter") @Valid Firefighter firefighter, BindingResult bindingResult, 
+	public String processEditFirefighterForm(@ModelAttribute("firefighter") @Valid Firefighter firefighter, BindingResult bindingResult, 
 									@PathVariable(value = "id") Integer id, Model model, RedirectAttributes redirectAttributes) {
 		
 		if(firefighter.getTrainings() != null) {
@@ -200,7 +194,7 @@ public class FirefighterController {
 
 	// Delete firefighter
 	@GetMapping(path = "/firefighters/delete/{id:\\d+}")
-	public String delete(@PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {
+	public String deleteFirefighter(@PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {
 		Firefighter firefighter = firefighterService.getFirefighter(id);
 		if(firefighter != null) {
 			if(firefighter.getTrainings() != null) {
@@ -250,7 +244,7 @@ public class FirefighterController {
 	
 	// Display JOT Matrix
 	@GetMapping(path = "/firefighters/jot")
-	public String getJotFirefighters(Model model) {
+	public String initJotFirefightersList(Model model) {
 		model.addAttribute("page_title", "Tabela JOT");
 		List<Firefighter> firefighters = firefighterService.getJotFirefighters();
 		FirefighterUtils utils = new FirefighterUtils();
@@ -262,7 +256,7 @@ public class FirefighterController {
 	
 	// Display list of deleted firefighters
 	@GetMapping(path = "/firefighters/deleted")
-	public String getDeletedFirefighters(Model model) {
+	public String initDeletedFirefightersList(Model model) {
 		model.addAttribute("page_title", "Lista usuniętych strażaków");
 		List<DeletedFirefighter> firefighters = firefighterService.getAllDeletedFirefighters();
 		model.addAttribute("firefighters", firefighters);

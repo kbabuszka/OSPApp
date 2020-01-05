@@ -19,19 +19,19 @@ public class MainController {
 
 	
 	@GetMapping(path = "/")
-	public String dashboard(Model model) {
+	public String initDashboardView(Model model) {
 		model.addAttribute("page_title", "Pulpit");
 		return "index";
 	}
 	
 	@GetMapping(path = "/login")
-	public String login(Model model) {
+	public String initLoginForm(Model model) {
 		model.addAttribute("page_title", "Logowanie");
 		return "login";
 	}
 	
 	@GetMapping(path = "/activate-account/{token}")
-	public String activateAccount(Model model, @PathVariable(name = "token") String token) {
+	public String initActivateAccountView(Model model, @PathVariable(name = "token") String token) {
 		model.addAttribute("page_title", "Potwierdź adres e-mail");
 		model.addAttribute("activated", userService.verifyUserEmail(token));
 		return "activate_account";

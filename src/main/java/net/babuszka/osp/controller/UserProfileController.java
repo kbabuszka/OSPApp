@@ -40,7 +40,7 @@ public class UserProfileController {
 	}
 	
 	@GetMapping(path = "/profile")
-	public String displayProfile(Model model) {
+	public String initEditProfileForm(Model model) {
 		model.addAttribute("page_title", "Twój profil");
 		User user = userService.getCurrentlyLoggedUser();
 		Firefighter firefighter = user.getFirefighter();
@@ -51,7 +51,7 @@ public class UserProfileController {
 	}
 	
 	@PostMapping(path = "/profile")
-	public String updateProfile(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+	public String processEditProfileForm(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		model.addAttribute("page_title", "Twój profil");
 		if(bindingResult.hasErrors()) {
 			int totalErrors = bindingResult.getErrorCount();
@@ -79,7 +79,7 @@ public class UserProfileController {
 	}
 	
 	@PostMapping(path = "/profile/change-password")
-	public String changePassword(@ModelAttribute("passwordForm") @Valid UserPasswordForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+	public String processPasswordChangeForm(@ModelAttribute("passwordForm") @Valid UserPasswordForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		model.addAttribute("page_title", "Twój profil");
 		User user = userService.getCurrentlyLoggedUser();
 		Firefighter firefighter = user.getFirefighter();

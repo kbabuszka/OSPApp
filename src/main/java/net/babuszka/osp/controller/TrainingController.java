@@ -44,7 +44,7 @@ public class TrainingController {
 	
 	// Display the page with trainings
 	@GetMapping(path = "/manage/trainings")
-	public String getAllTrainings(Model model) {
+	public String initAllTrainingsView(Model model) {
 		model.addAttribute("page_title", "Zarządzaj rodzajami szkoleń");
 		TrainingWrapper trainingWrapper = new TrainingWrapper();
 		trainingWrapper.setTrainings(trainingService.getAllTrainings());
@@ -55,7 +55,7 @@ public class TrainingController {
 	
 	// Submit new training form
 	@PostMapping(path = "/manage/trainings")
-	public String saveTraining(@Valid Training training, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+	public String processAddTrainingForm(@Valid Training training, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("page_title", "Zarządzaj rodzajami szkoleń");
 			TrainingWrapper trainingWrapper = new TrainingWrapper();
@@ -72,7 +72,7 @@ public class TrainingController {
 	
 	// Submit edit trainings form
 	@PostMapping(path = "/manage/trainings/edit")
-	public String updateTrainings(@ModelAttribute("wrapper") @Valid TrainingWrapper wrapper, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+	public String processUpdateTrainingsForm(@ModelAttribute("wrapper") @Valid TrainingWrapper wrapper, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		
 		for(int i=0; i < wrapper.getTrainings().size(); i++) {
 			if(wrapper.getTrainings().get(i).getName().length() < 3) {

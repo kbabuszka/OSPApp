@@ -92,7 +92,7 @@ public class UserController {
 
 	// Display all users
 	@GetMapping(path = "/manage/users")
-	public String getAllUsers(Model model) {
+	public String initAllUsersList(Model model) {
 		model.addAttribute("page_title", "Zarządzaj użytkownikami");
 		model.addAttribute("users", userService.getAllUsers());
 		model.addAttribute("userForm", new UserForm());
@@ -103,7 +103,7 @@ public class UserController {
 	
 	//Submit new user form
 	@PostMapping(path = "/manage/users/add")
-	public String addNewUser(@ModelAttribute("userForm") @Valid UserForm userForm,
+	public String processAddUserForm(@ModelAttribute("userForm") @Valid UserForm userForm,
 			BindingResult bindingResult,
 			Model model, RedirectAttributes redirectAttributes,
 			@RequestParam(value = "newUserRoles", required = false) ArrayList<Integer> roles) {
@@ -157,7 +157,7 @@ public class UserController {
 	
 	//Display edit form
 	@GetMapping(path = "/manage/users/edit/{id:\\d+}")
-	public String editUser(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {	
+	public String initEditUserForm(Model model, @PathVariable(name = "id") Integer id, RedirectAttributes redirectAttributes) {	
 		User user = userService.getUser(id);
 		if(user == null) {
 			redirectAttributes.addFlashAttribute("message", messageUserNotExist);
@@ -176,7 +176,7 @@ public class UserController {
 	
 	//Submit edit form
 	@PostMapping(path = "/manage/users/edit/{id:\\d+}")
-	public String saveUser(@ModelAttribute("userForm") @Valid UserForm userForm,
+	public String processEditUserForm(@ModelAttribute("userForm") @Valid UserForm userForm,
 			@PathVariable(name = "id") Integer id, 
 			Model model,
 			RedirectAttributes redirectAttributes,
@@ -217,8 +217,6 @@ public class UserController {
 			model.addAttribute("newUserRoles", roles);
 			return "manage_user_edit";
 		} 
-		
-		
 		
 		String oldEmail = user.getEmail();
 		user.setUsername(userForm.getUsername());
