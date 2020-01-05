@@ -10,12 +10,12 @@ public interface UserVerificationTokenRepository extends JpaRepository<UserVerif
 
 	@Query(value = "SELECT * FROM user_verification_tokens WHERE token = ?1", nativeQuery = true)
 	UserVerificationToken findByToken(String token);
-
+	
+	@Query(value = "SELECT * FROM user_verification_tokens t WHERE t.user_id = ?1", nativeQuery = true)
+	UserVerificationToken findTokenByUserId(Integer id);
+	
 	@Modifying
 	@Query(value = "DELETE FROM user_verification_tokens t WHERE t.user_id = ?1", nativeQuery = true)
 	void deleteByUserId(Integer id);
-	
-	@Query(value = "SELECT * FROM user_verification_tokens t WHERE t.user_id = ?1", nativeQuery = true)
-	UserVerificationToken getByUserId(Integer id);
 
 }

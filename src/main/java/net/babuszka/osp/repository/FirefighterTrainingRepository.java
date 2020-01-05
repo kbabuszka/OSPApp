@@ -12,6 +12,6 @@ import net.babuszka.osp.model.FirefighterTraining;
 public interface FirefighterTrainingRepository extends JpaRepository<FirefighterTraining, Integer> {
 
 	@Query(value = "SELECT * FROM firefighter_trainings WHERE firefighter_id = ?1", nativeQuery = true)
-	List<FirefighterTraining> getAllFirefighterTrainings(Integer firefighterId);
+	List<FirefighterTraining> findFirefighterTrainingsAllFirefighterTrainings(Integer firefighterId);
 
 }

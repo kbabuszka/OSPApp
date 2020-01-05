@@ -60,8 +60,8 @@ public class FirefighterTrainingService {
 	public List<FirefighterTraining> getAllFirefighterTrainings(Integer firefighterId){
 		LOG.debug("Getting all trainings of Firefighter with following ID: " + firefighterId);
 		try {
-			LOG.debug("Found following number of trainings for the Firefighter: " + firefighterTrainingRepository.getAllFirefighterTrainings(firefighterId));
-			return firefighterTrainingRepository.getAllFirefighterTrainings(firefighterId);
+			LOG.debug("Found following number of trainings for the Firefighter: " + firefighterTrainingRepository.findFirefighterTrainingsAllFirefighterTrainings(firefighterId));
+			return firefighterTrainingRepository.findFirefighterTrainingsAllFirefighterTrainings(firefighterId);
 		} catch (Exception e) {
 			LOG.error("An error occured during getting firefighter's trainings: " + e.getMessage());
 		}

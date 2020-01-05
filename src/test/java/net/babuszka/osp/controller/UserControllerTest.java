@@ -271,7 +271,7 @@ public class UserControllerTest {
 		ArrayList<User> users = (ArrayList<User>) userService.getAllUsers();
 		User user = (User) users.get(users.size()-1);
 		Integer userId = user.getId();
-		UserVerificationToken token = tokenRepository.getByUserId(userId);
+		UserVerificationToken token = tokenRepository.findTokenByUserId(userId);
 		
 		//Activate account with expired token
 		LocalDateTime expirationDate = LocalDateTime.now().minusHours(48);
@@ -293,7 +293,7 @@ public class UserControllerTest {
 			.andExpect(view().name("activate_account"));	
 		users = (ArrayList<User>) userService.getAllUsers();
 		user = (User) users.get(users.size()-1);
-		token = tokenRepository.getByUserId(userId);
+		token = tokenRepository.findTokenByUserId(userId);
 		assertEquals(user.getStatus(), UserStatus.ACTIVE);
 		assertEquals(token, null);
 		
@@ -302,7 +302,7 @@ public class UserControllerTest {
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/manage/users"))
 			.andExpect(flash().attribute("alertClass", "alert-danger"));
-		token = tokenRepository.getByUserId(userId);
+		token = tokenRepository.findTokenByUserId(userId);
 		assertEquals(user.getStatus(), UserStatus.ACTIVE);
 		assertEquals(token, null);
 		
@@ -329,7 +329,7 @@ public class UserControllerTest {
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/manage/users"))
 			.andExpect(flash().attribute("alertClass", "alert-success"));
-		token = tokenRepository.getByUserId(userId);
+		token = tokenRepository.findTokenByUserId(userId);
 		assertEquals(user.getStatus(), UserStatus.INACTIVE);
 		assertNotEquals(token, null);
 		
