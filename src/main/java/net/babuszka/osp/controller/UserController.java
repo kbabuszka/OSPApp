@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -136,7 +137,10 @@ public class UserController {
 			newUser.setEmail(userForm.getEmail());
 			String encryptedPassword = userUtils.encodePassword(userForm.getPassword());
 			newUser.setPassword(encryptedPassword);
-			newUser.setFirefighter(userForm.getFirefighter());
+			Firefighter firefighter = userForm.getFirefighter();
+			newUser.setFirefighter(firefighter);
+			firefighter.setUser(newUser);
+			firefighterService.saveFirefighter(firefighter);
 			userService.addNewUser(newUser);
 			if(roles != null && roles.size() > 0) {
 				List<Role> roleTypes = roles.stream()
@@ -149,6 +153,8 @@ public class UserController {
 					userService.saveUserRole(userRole);
 				}
 			}
+			
+			
 			redirectAttributes.addFlashAttribute("message", messageUserAdded);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 			return "redirect:/manage/users";
@@ -225,7 +231,9 @@ public class UserController {
 		String encryptedPassword = userUtils.encodePassword(userForm.getPassword());					
 		user.setPassword(encryptedPassword);
 		Firefighter usersFirefighter = user.getFirefighter();
-		user.setFirefighter(userForm.getFirefighter());
+		Firefighter firefighter = userForm.getFirefighter();
+		user.setFirefighter(firefighter);
+
 		try {
 			userService.saveUser(user);
 		} catch (Exception e) {
@@ -238,8 +246,17 @@ public class UserController {
 			userService.resendActivationLink(id);
 		}	
 		
+		if (firefighter != null) {
+			if(usersFirefighter != null) {
+					usersFirefighter.setUser(null);
+				firefighterService.saveFirefighter(usersFirefighter);
+			}
+			firefighter.setUser(user);
+			firefighterService.saveFirefighter(firefighter);
+		}
+		
 		if((usersFirefighter != null) 
-				&& (userForm.getFirefighter() == null)) {
+				&& (firefighter == null)) {
 			usersFirefighter.setUser(null);
 			firefighterService.saveFirefighter(usersFirefighter);
 		} 
@@ -312,12 +329,9 @@ public class UserController {
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			return "redirect:/manage/users";
 		}
-		
-		
+	
 		userService.deleteUser(id);
-		
-		
-		
+
 		if(userService.getUser(id) == null) {
 			redirectAttributes.addFlashAttribute("message", messageUserDeleted);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
