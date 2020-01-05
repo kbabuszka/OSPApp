@@ -310,8 +310,7 @@ public class FirefighterControllerTest {
 	        .andExpect(view().name("redirect:/firefighters"));
 		
 		mockMvc.perform(get("/firefighters/edit/{id}", -1))
-	        .andExpect(status().is3xxRedirection())
-	        .andExpect(view().name("redirect:/firefighters"));
+			.andExpect(status().is4xxClientError());
 		
 		mockMvc.perform(get("/firefighters/edit/{id}", "a"))
 	        .andExpect(status().is4xxClientError());
@@ -344,9 +343,7 @@ public class FirefighterControllerTest {
 	        .andExpect(view().name("redirect:/firefighters"));
 		
 		mockMvc.perform(get("/firefighters/delete/{id}", -1))
-	        .andExpect(status().is3xxRedirection())
-	        .andExpect(flash().attribute("alertClass", "alert-danger"))
-	        .andExpect(view().name("redirect:/firefighters"));
+			.andExpect(status().is4xxClientError());
 		
 		mockMvc.perform(get("/firefighters/delete/{id}", "a"))
 	        .andExpect(status().is4xxClientError());

@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -258,9 +259,7 @@ public class UserControllerTest {
 	        .andExpect(view().name("redirect:/manage/users"));
 		
 		mockMvc.perform(get("/manage/users/edit/{id}", -1))
-	        .andExpect(status().is3xxRedirection())
-	        .andExpect(flash().attribute("alertClass", "alert-danger"))
-	        .andExpect(view().name("redirect:/manage/users"));
+			.andExpect(status().is4xxClientError());
 		
 		mockMvc.perform(get("/manage/users/edit/{id}", "a"))
 	        .andExpect(status().is4xxClientError());
@@ -274,12 +273,35 @@ public class UserControllerTest {
 		Integer userId = user.getId();
 		UserVerificationToken token = tokenRepository.getByUserId(userId);
 		
+		//Activate account with expired token
+		LocalDateTime expirationDate = LocalDateTime.now().minusHours(48);
+		token.setExpirationDate(expirationDate);
+		tokenRepository.save(token);
+		mockMvc.perform(get("/activate-account/{token}", token.getToken()))
+		.andExpect(status().is2xxSuccessful())
+		.andExpect(view().name("activate_account"));
+		users = (ArrayList<User>) userService.getAllUsers();
+		user = (User) users.get(users.size()-1);
+		assertEquals(user.getStatus(), UserStatus.INACTIVE);
+		
 		// Activate account
+		expirationDate = LocalDateTime.now().plusHours(48);
+		token.setExpirationDate(expirationDate);
+		tokenRepository.save(token);
 		mockMvc.perform(get("/activate-account/{token}", token.getToken()))
 			.andExpect(status().is2xxSuccessful())
 			.andExpect(view().name("activate_account"));	
 		users = (ArrayList<User>) userService.getAllUsers();
 		user = (User) users.get(users.size()-1);
+		token = tokenRepository.getByUserId(userId);
+		assertEquals(user.getStatus(), UserStatus.ACTIVE);
+		assertEquals(token, null);
+		
+		// Resend activation link for active user by admin
+		mockMvc.perform(get("/manage/users/resend-link/{id}", userId))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/manage/users"))
+			.andExpect(flash().attribute("alertClass", "alert-danger"));
 		token = tokenRepository.getByUserId(userId);
 		assertEquals(user.getStatus(), UserStatus.ACTIVE);
 		assertEquals(token, null);
@@ -291,7 +313,15 @@ public class UserControllerTest {
 			.andExpect(flash().attribute("alertClass", "alert-success"));
 		users = (ArrayList<User>) userService.getAllUsers();
 		user = (User) users.get(users.size()-1);
-		token = tokenRepository.getByUserId(userId);
+		assertEquals(user.getStatus(), UserStatus.INACTIVE);
+		
+		//Try to deactivate deactivated account by admin
+		mockMvc.perform(get("/manage/users/deactivate/{id}", userId))
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/manage/users"))
+			.andExpect(flash().attribute("alertClass", "alert-danger"));
+		users = (ArrayList<User>) userService.getAllUsers();
+		user = (User) users.get(users.size()-1);
 		assertEquals(user.getStatus(), UserStatus.INACTIVE);
 		
 		// Resend activation link by admin
@@ -302,6 +332,8 @@ public class UserControllerTest {
 		token = tokenRepository.getByUserId(userId);
 		assertEquals(user.getStatus(), UserStatus.INACTIVE);
 		assertNotEquals(token, null);
+		
+		
 	}
 	
 	@Test 
@@ -313,9 +345,7 @@ public class UserControllerTest {
 	        .andExpect(view().name("redirect:/manage/users"));
 		
 		mockMvc.perform(get("/manage/users/resend-link/{id}", -1))
-	        .andExpect(status().is3xxRedirection())
-	        .andExpect(flash().attribute("alertClass", "alert-danger"))
-	        .andExpect(view().name("redirect:/manage/users"));
+			.andExpect(status().is4xxClientError());
 		
 		mockMvc.perform(get("/manage/users/resend-link/{id}", "a"))
 	        .andExpect(status().is4xxClientError());
@@ -330,9 +360,7 @@ public class UserControllerTest {
 	        .andExpect(view().name("redirect:/manage/users"));
 		
 		mockMvc.perform(get("/manage/users/deactivate/{id}", -1))
-	        .andExpect(status().is3xxRedirection())
-	        .andExpect(flash().attribute("alertClass", "alert-danger"))
-	        .andExpect(view().name("redirect:/manage/users"));
+			.andExpect(status().is4xxClientError());
 		
 		mockMvc.perform(get("/manage/users/deactivate/{id}", "a"))
 	        .andExpect(status().is4xxClientError());
@@ -364,9 +392,7 @@ public class UserControllerTest {
 	        .andExpect(flash().attribute("alertClass", "alert-danger"));
 		
 		mockMvc.perform(get("/manage/users/delete/{id}", -1))
-	        .andExpect(status().is3xxRedirection())
-	        .andExpect(flash().attribute("alertClass", "alert-danger"))
-	        .andExpect(view().name("redirect:/manage/users"));
+			.andExpect(status().is4xxClientError());
 	
 		mockMvc.perform(get("/manage/users/delete/{id}", "a"))
 	        .andExpect(status().is4xxClientError());
