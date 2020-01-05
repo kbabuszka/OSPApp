@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import net.babuszka.osp.model.FirefighterType;
@@ -41,7 +41,7 @@ public class FirefighterTypeController {
 	}
 	
 	// Display page with firefighter types
-	@RequestMapping(path = "/manage/firefighter-types", method = RequestMethod.GET)
+	@GetMapping(path = "/manage/firefighter-types")
 	public String getAllFirefighterTypes(Model model) {
 		model.addAttribute("page_title", "Zarządzaj rodzajami strażaków");
 		FirefighterTypeWrapper wrapper = new FirefighterTypeWrapper();
@@ -52,7 +52,7 @@ public class FirefighterTypeController {
 	}
 	
 	// Submit new firefighter type form
-	@RequestMapping(path = "/manage/firefighter-types", method = RequestMethod.POST)
+	@PostMapping(path = "/manage/firefighter-types")
 	public String addFirefighterType(@ModelAttribute("firefighter_type") @Valid FirefighterType firefighterType, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("page_title", "Zarządzaj rodzajami strażaków");
@@ -69,7 +69,7 @@ public class FirefighterTypeController {
 	}
 	
 	//Submit edit form of firefighter types
-	@RequestMapping(path = "/manage/firefighter-types/edit")
+	@PostMapping(path = "/manage/firefighter-types/edit")
 	public String updateFirefighterTypes(@ModelAttribute("wrapper") @Valid FirefighterTypeWrapper wrapper, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		
 		for(int i=0; i < wrapper.getTypes().size(); i++) {
@@ -96,7 +96,7 @@ public class FirefighterTypeController {
 	}
 	
 	//Delete firefighter type
-	@RequestMapping(path = "/manage/firefighter-types/delete/{id}", method = RequestMethod.GET)
+	@GetMapping(path = "/manage/firefighter-types/delete/{id}")
 	public String deleteFirefighterType(@PathVariable(value = "id") Integer id, RedirectAttributes redirectAttributes) {
 		if(firefighterTypeService.getFirefighterType(id) != null) {
 			firefighterTypeService.deleteFirefighterType(id);

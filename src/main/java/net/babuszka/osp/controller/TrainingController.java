@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import net.babuszka.osp.model.Training;
@@ -43,7 +43,7 @@ public class TrainingController {
 	}
 	
 	// Display the page with trainings
-	@RequestMapping(path = "/manage/trainings", method = RequestMethod.GET)
+	@GetMapping(path = "/manage/trainings")
 	public String getAllTrainings(Model model) {
 		model.addAttribute("page_title", "Zarządzaj rodzajami szkoleń");
 		TrainingWrapper trainingWrapper = new TrainingWrapper();
@@ -54,7 +54,7 @@ public class TrainingController {
 	}
 	
 	// Submit new training form
-	@RequestMapping(path = "/manage/trainings", method = RequestMethod.POST)
+	@PostMapping(path = "/manage/trainings")
 	public String saveTraining(@Valid Training training, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("page_title", "Zarządzaj rodzajami szkoleń");
@@ -71,7 +71,7 @@ public class TrainingController {
 	}
 	
 	// Submit edit trainings form
-	@RequestMapping(path = "/manage/trainings/edit", method = RequestMethod.POST)
+	@PostMapping(path = "/manage/trainings/edit")
 	public String updateTrainings(@ModelAttribute("wrapper") @Valid TrainingWrapper wrapper, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		
 		for(int i=0; i < wrapper.getTrainings().size(); i++) {
@@ -98,7 +98,7 @@ public class TrainingController {
 	}	
 	
 	//Delete training
-	@RequestMapping(path = "/manage/trainings/delete/{id}", method = RequestMethod.GET)
+	@GetMapping(path = "/manage/trainings/delete/{id}")
 	public String deleteTraining(@PathVariable(value="id") Integer id, RedirectAttributes redirectAttributes) {
 		Training training = trainingService.getTraining(id);
 		if(training != null) {

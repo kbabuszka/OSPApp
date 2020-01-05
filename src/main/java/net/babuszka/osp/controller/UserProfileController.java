@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import net.babuszka.osp.model.Firefighter;
@@ -39,7 +39,7 @@ public class UserProfileController {
 		this.userService = userService;
 	}
 	
-	@RequestMapping(path = "/profile", method = RequestMethod.GET)
+	@GetMapping(path = "/profile")
 	public String displayProfile(Model model) {
 		model.addAttribute("page_title", "Twój profil");
 		User user = userService.getCurrentlyLoggedUser();
@@ -50,7 +50,7 @@ public class UserProfileController {
 		return "user_profile";
 	}
 	
-	@RequestMapping(path = "/profile", method = RequestMethod.POST)
+	@PostMapping(path = "/profile")
 	public String updateProfile(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		model.addAttribute("page_title", "Twój profil");
 		if(bindingResult.hasErrors()) {
@@ -78,7 +78,7 @@ public class UserProfileController {
 
 	}
 	
-	@RequestMapping(path = "/profile/change-password", method = RequestMethod.POST)
+	@PostMapping(path = "/profile/change-password")
 	public String changePassword(@ModelAttribute("passwordForm") @Valid UserPasswordForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 		model.addAttribute("page_title", "Twój profil");
 		User user = userService.getCurrentlyLoggedUser();
