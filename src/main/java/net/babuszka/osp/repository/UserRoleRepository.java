@@ -11,7 +11,7 @@ import net.babuszka.osp.model.UserRole;
 public interface UserRoleRepository extends JpaRepository<UserRole, Integer>{
 	
 	@Modifying
-	@Query(value = "DELETE FROM user_roles t WHERE t.user_id = ?1", nativeQuery = true)
+	@Query(value = "DELETE FROM user_roles WHERE user_id = ?1", nativeQuery = true)
 	void deleteByUserId(Integer id);
 
 }

@@ -229,6 +229,7 @@ public class UserService {
 		userToDelete.setFirefighter(null);
 		userRepository.save(userToDelete);
 		deleteUserVerificationToken(id);
+		userRoleRepository.deleteByUserId(id);
 		userRepository.delete(userToDelete);	
 		
 	}

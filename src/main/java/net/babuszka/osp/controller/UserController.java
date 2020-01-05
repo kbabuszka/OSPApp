@@ -312,7 +312,12 @@ public class UserController {
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-danger");
 			return "redirect:/manage/users";
 		}
+		
+		
 		userService.deleteUser(id);
+		
+		
+		
 		if(userService.getUser(id) == null) {
 			redirectAttributes.addFlashAttribute("message", messageUserDeleted);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");

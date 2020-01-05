@@ -168,19 +168,8 @@
 		                                		<label th:for="${'role_'+roleCheckbox.role.id}" th:text="${roleCheckbox.role.name}"th:data-original-title="${roleCheckbox.role.description}" data-toggle="tooltip" data-placement="top" ></label>
 		                                	</th:block>   
 			                            </div> 
-<<<<<<< HEAD
 		                            </div>                  
-=======
-		                            </div>    
-		                            
-		                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-			                            <div class="demo-checkbox" style="margin-top: 6px;">
-		                                	<th:block th:each="roleCheckbox, i : ${userForm.roleCheckboxes}">
-		                                		<div th:text="${'id: ' + roleCheckbox.role.id + 'name: ' + roleCheckbox.role.name + ' checked: ' + roleCheckbox.checked}"></div>
-		                                	</th:block>   
-			                            </div> 
-		                            </div>                 
->>>>>>> d8b42a12eba08e4b3954e16bc8143c2977bbbf86
+
 								</div>
                                 <div class="row clearfix">
                                     <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
@@ -192,9 +181,7 @@
                     </div>
                 </div>
             </div>
-           
             <!-- #END# Actual content -->
-
         </div>
     </section>
     <!-- #END# Main content -->
