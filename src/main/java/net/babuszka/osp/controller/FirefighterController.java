@@ -124,7 +124,7 @@ public class FirefighterController {
 	
 	// Submit new firefighter form
 	@PostMapping(path = "/firefighters/add")
-	public String processAddFirefighterForm(@Valid Firefighter firefighter, BindingResult bindingResult, Model model,
+	public String processAddFirefighterForm(@Valid Firefighter firefighter, BindingResult bindingResult, Model model, 
 								RedirectAttributes redirectAttributes) {
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("page_title", "Dodaj strażaka");
