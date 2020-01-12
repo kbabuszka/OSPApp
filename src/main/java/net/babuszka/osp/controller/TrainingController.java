@@ -85,7 +85,7 @@ public class TrainingController {
 		
 		if(bindingResult.hasErrors()) {
 			model.addAttribute("page_title", "Zarządzaj rodzajami szkoleń");
-			model.addAttribute("wrapper", wrapper);
+			model.addAttribute("settings", wrapper);
 			model.addAttribute("training", new Training());
 			return "manage_trainings";
 		} else {

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+    <link th:href="@{/plugins/bootstrap-select/css/bootstrap-select.css}" rel="stylesheet" />
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+	<th:block th:include="html/preloader.html"></th:block>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <th:block th:include="html/search_bar.html"></th:block>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+	<th:block th:include="html/top_bar.html"></th:block>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+			<th:block th:include="html/user_info.html"></th:block>
+            <!-- #User Info -->
+            <!-- Menu -->
+			<th:block th:include="html/navigation.html"></th:block>
+            <!-- #Menu -->
+            <!-- Footer -->
+			<th:block th:include="html/footer.html"></th:block>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+		<th:block th:include="html/sidebar_right.html"></th:block>
+        <!-- #END# Right Sidebar -->
+    </section>
+    
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        	<!-- Modify below -->
+		
+            <!-- Actual content -->
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Ustawienia systemu
+                            </h2>
+                        </div>                       
+                        <div class="body">
+                        	<div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
+                            <form th:object="${settings}" th:action="@{'/settings'}" method="post">
+                            	<th:block th:each="setting, i : ${settings.settings}">
+	                            	<label th:for="${setting.name}" th:text="${setting.description}">Nazwa ustawienia</label>
+	                                <div class="form-group">
+	                                	<div th:if="${#fields.hasErrors('settings[__${i.index}__].value')}" th:errors="*{settings[__${i.index}__].value}" class="alert alert-danger" role="alert">
+                                  			Setting value error
+                                		</div>
+	                                    <div class="form-line">
+	                                    	<input th:field="*{settings[__${i.index}__].id}" type="hidden">
+	                                    	<input th:field="*{settings[__${i.index}__].name}" type="hidden">
+	                                    	<input th:field="*{settings[__${i.index}__].description}" type="hidden">
+	                                    	<input th:field="*{settings[__${i.index}__].example}" type="hidden">
+	                                        <input th:field="*{settings[__${i.index}__].value}" th:value="${setting.value}" type="text" th:id="${setting.name}" th:placeholder="${setting.example}" class="form-control" >
+	                                    </div>
+	                                </div>
+                            	</th:block>
+                                <br>
+                                <button type="submit" class="btn btn-primary m-t-15 waves-effect">Zapisz zmiany</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- #END# Input -->
+            <!-- #END# Actual content -->
+
+        </div>
+    </section>
+    <!-- #END# Main content -->
+    
+	<!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+	
+	<!-- Plugins import -->
+    <script th:src="@{/plugins/autosize/autosize.js}"></script>
+	
+	<!-- Custom Scripts for this page -->
+	
+	<!-- ################################## -->    
+   	<!-- #END# Page-specific scripts import -->   	
+</body>
+</html>
