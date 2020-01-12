@@ -130,35 +130,44 @@ public class UserController {
 		    model.addAttribute("roles", roleService.getAllRoles());
 		    model.addAttribute("newUserRoles", roles);
 		    return "manage_users_list";
-		} else {
-			User newUser = new User();
-			newUser.setUsername(userForm.getUsername());
-			newUser.setDisplayName(userForm.getDisplayName());
-			newUser.setEmail(userForm.getEmail());
-			String encryptedPassword = userUtils.encodePassword(userForm.getPassword());
-			newUser.setPassword(encryptedPassword);
-			Firefighter firefighter = userForm.getFirefighter();
-			newUser.setFirefighter(firefighter);
+		} 
+		
+		User newUser = new User();
+		newUser.setUsername(userForm.getUsername());
+		newUser.setDisplayName(userForm.getDisplayName());
+		newUser.setEmail(userForm.getEmail());
+		String encryptedPassword = userUtils.encodePassword(userForm.getPassword());
+		newUser.setPassword(encryptedPassword);
+		Firefighter firefighter = userForm.getFirefighter();
+		newUser.setFirefighter(firefighter);
+		try {
+			userService.addNewUser(newUser);
+		} catch (Exception e) {
+			model.addAttribute("message", messageUserNotEdited);
+		    model.addAttribute("alertClass", "alert-danger");
+			return "manage_user_edit";
+		}
+		
+		if(roles != null && roles.size() > 0) {
+			List<Role> roleTypes = roles.stream()
+					.map(id -> roleService.getRole(id))
+					.collect(Collectors.toList());		
+			for (Role role : roleTypes) {
+				UserRole userRole = new UserRole();
+				userRole.setRole(role);
+				userRole.setUser(newUser);
+				userService.saveUserRole(userRole);
+			}
+		}
+		
+		if (firefighter != null) {
 			firefighter.setUser(newUser);
 			firefighterService.saveFirefighter(firefighter);
-			userService.addNewUser(newUser);
-			if(roles != null && roles.size() > 0) {
-				List<Role> roleTypes = roles.stream()
-						.map(id -> roleService.getRole(id))
-						.collect(Collectors.toList());		
-				for (Role role : roleTypes) {
-					UserRole userRole = new UserRole();
-					userRole.setRole(role);
-					userRole.setUser(newUser);
-					userService.saveUserRole(userRole);
-				}
-			}
-			
-			
-			redirectAttributes.addFlashAttribute("message", messageUserAdded);
-		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-			return "redirect:/manage/users";
-		} 
+		}
+
+		redirectAttributes.addFlashAttribute("message", messageUserAdded);
+	    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/manage/users";
 	}
 	
 	//Display edit form
