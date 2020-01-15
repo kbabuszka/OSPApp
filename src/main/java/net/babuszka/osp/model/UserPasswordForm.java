@@ -5,7 +5,12 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Component
+@Getter
+@Setter
 public class UserPasswordForm {
 
 	@Autowired
@@ -21,30 +26,5 @@ public class UserPasswordForm {
 	
 	@NotEmpty
 	private String newPassword2;
-	
-	public String getOldPassword() {
-		return oldPassword;
-	}
-	
-	public void setOldPassword(String oldPassword) {
-		this.oldPassword = oldPassword;
-	}
-	
-	public String getNewPassword1() {
-		return newPassword1;
-	}
-	
-	public void setNewPassword1(String newPassword1) {
-		this.newPassword1 = newPassword1;
-	}
-	
-	public String getNewPassword2() {
-		return newPassword2;
-	}
-	
-	public void setNewPassword2(String newPassword2) {
-		this.newPassword2 = newPassword2;
-	}
-	
-	
+
 }

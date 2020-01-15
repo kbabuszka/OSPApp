@@ -11,8 +11,15 @@ import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "user_roles")
+@Getter
+@Setter
 public class UserRole {
 
 	@Autowired
@@ -26,6 +33,7 @@ public class UserRole {
 	private Integer id;
 	
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
 	private User user;
 	
@@ -33,28 +41,4 @@ public class UserRole {
 	@JoinColumn(name = "role_id", referencedColumnName = "id")
 	private Role role;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-	
 }

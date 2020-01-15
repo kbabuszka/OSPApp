@@ -42,7 +42,5 @@ public class Setting {
 	@Column(name = "value")
 	@NotEmpty(message = "{setting.name.empty}")
 	private String value;
-	
-	
-	
+
 }

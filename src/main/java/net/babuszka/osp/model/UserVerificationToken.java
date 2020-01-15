@@ -13,8 +13,13 @@ import javax.persistence.Table;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "user_verification_tokens")
+@Getter
+@Setter
 public class UserVerificationToken {
 
 	private static final Long EXPIRATION_TIME = (long) 24;
@@ -51,38 +56,6 @@ public class UserVerificationToken {
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime expiration = now.plusHours(EXPIRATION_TIME);
 		return expiration;
-	}
-	
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public LocalDateTime getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(LocalDateTime expirationDate) {
-		this.expirationDate = expirationDate;
 	}
 	
 }

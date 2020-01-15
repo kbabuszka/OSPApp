@@ -11,8 +11,13 @@ import javax.validation.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "firefighters_deleted")
+@Getter
+@Setter
 public class DeletedFirefighter {
 
 	@Id
@@ -37,46 +42,6 @@ public class DeletedFirefighter {
 	@Autowired
 	public DeletedFirefighter() {
 		super();
-	}
-		
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public LocalDateTime getDeletionDate() {
-		return deletionDate;
-	}
-
-	public void setDeletionDate(LocalDateTime deletionDate) {
-		this.deletionDate = deletionDate;
-	}
-
-	public String getDeletedByUser() {
-		return deletedByUser;
-	}
-
-	public void setDeletedByUser(String deletedByUser) {
-		this.deletedByUser = deletedByUser;
 	}
 	
 	@Override

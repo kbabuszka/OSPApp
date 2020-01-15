@@ -4,6 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class TrainingWrapper {
 
 	@Autowired
@@ -13,12 +18,4 @@ public class TrainingWrapper {
 
 	private List<Training> trainings;
 
-	public List<Training> getTrainings() {
-		return trainings;
-	}
-
-	public void setTrainings(List<Training> trainings) {
-		this.trainings = trainings;
-	}
-	
 }

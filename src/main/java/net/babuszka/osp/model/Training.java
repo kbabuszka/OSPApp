@@ -15,9 +15,14 @@ import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Table(name = "training_names")
+@Getter
+@Setter
 public class Training {
 
 	@Autowired
@@ -37,30 +42,6 @@ public class Training {
 
 	@OneToMany(mappedBy = "training", cascade = CascadeType.ALL)
 	private List<FirefighterTraining> trainings;
-	
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public List<FirefighterTraining> getTrainings() {
-		return trainings;
-	}
-
-	public void setTrainings(List<FirefighterTraining> trainings) {
-		this.trainings = trainings;
-	}
 
 	@Override
 	public String toString() {

@@ -14,10 +14,14 @@ import javax.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.babuszka.osp.utils.NotificationType;
 
 @Entity
 @Table(name = "notifications")
+@Getter
+@Setter
 public class Notification {
 	
 	@Autowired
@@ -51,55 +55,6 @@ public class Notification {
 	private Integer userId;
 	
 	@Column(name = "is_read")
-	private boolean isRead;
+	private Boolean isRead;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public NotificationType getNotificationType() {
-		return notificationType;
-	}
-
-	public void setNotificationType(NotificationType notificationType) {
-		this.notificationType = notificationType;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	public LocalDateTime getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public boolean isRead() {
-		return isRead;
-	}
-
-	public void setRead(boolean isRead) {
-		this.isRead = isRead;
-	}
-	
-	
 }
