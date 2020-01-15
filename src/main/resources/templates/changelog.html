@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+    <link th:href="@{/plugins/bootstrap-select/css/bootstrap-select.css}" rel="stylesheet" />
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+	<th:block th:include="html/preloader.html"></th:block>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <th:block th:include="html/search_bar.html"></th:block>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+	<th:block th:include="html/top_bar.html"></th:block>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+			<th:block th:include="html/user_info.html"></th:block>
+            <!-- #User Info -->
+            <!-- Menu -->
+			<th:block th:include="html/navigation.html"></th:block>
+            <!-- #Menu -->
+            <!-- Footer -->
+			<th:block th:include="html/footer.html"></th:block>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+		<th:block th:include="html/sidebar_right.html"></th:block>
+        <!-- #END# Right Sidebar -->
+    </section>
+    
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        	<!-- Modify below -->
+		
+            <!-- Actual content -->
+
+            <div class="row clearfix">
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Historia zmian w aplikacji</h2>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+                                    <div class="panel-group" id="accordion_1_0_3" role="tablist" aria-multiselectable="true">
+                                    
+                                        <div class="panel panel-col-teal">
+                                            <div class="panel-heading" role="tab" id="heading_1_0_3">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" href="#collapse_1_0_3" aria-expanded="true" aria-controls="collapse_1_0_3">
+                                                        1.0.3
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_1_0_3" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_1_0_3">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                    	<li>
+                                                    		<span class="font-bold">Moduł ustawień (dane jednostki)</span><br />
+                                                    		<span>Istnieje możliwość zmiany danych jednostki z poziomu aplikacji. W tym celu wybierz pozycję "Ustawienia" w menu głównym. Wymagane są uprawnienia Administratora.</span><br />
+                                                    	</li>
+														<li>
+															<span class="font-bold">Poprawki błędów</span>
+														</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="panel panel-col-teal">
+                                            <div class="panel-heading" role="tab" id="heading_1_0_2">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" href="#collapse_1_0_2" aria-expanded="true" aria-controls="collapse_1_0_2">
+                                                        1.0.2
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_1_0_2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_1_0_2">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                        <li>
+                                                    		<span class="font-bold">Obsługa e-maili</span><br />
+                                                    		<span>Aplikacja obsługuje wysyłanie e-maili do użytkowników.</span>
+                                                    	</li>
+                                                        <li>
+                                                    		<span class="font-bold">Zarządzanie użytkownikami</span><br />
+                                                    		<span>Z poziomu aplikacji istnieje możliwość zarządzania użytkownikami tj. dodawania, edycji i usuwania kont, przypisywanie ról, deaktywowania kont oraz ponownego wysyłania linków aktywanyjnych. W przypadku kiedy zostanie zmieniony adres e-mail użytkownika, konto zostaje automatycznie deaktywowane do czasu jego ponownej aktywacji poprzez kliknięcie w odnośnik wysłany na nowy adres.</span>
+                                                    	</li>
+                                                    	<li>
+                                                    		<span class="font-bold">Login użytkownika w widoku strażaka</span><br />
+                                                    		<span>W widoku szczegółowym strażaka wyświetla się login użytkownika z którym jest on połączony. Jeśli strażak nie posiada konta w systemie, wyświetlana jest informacja o jego braku.</span>
+                                                    	</li>
+														<li>
+															<span class="font-bold">Poprawki błędów</span>
+														</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="panel panel-col-teal">
+                                            <div class="panel-heading" role="tab" id="heading_1_0_1">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" href="#collapse_1_0_1" aria-expanded="true" aria-controls="collapse_1_0_1">
+                                                        1.0.1
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_1_0_1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_1_0_1">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                    	<li>
+                                                    		<span class="font-bold">Usunięci strażacy</span><br />
+                                                    		<span>Dane usunietych strażaków (identyfikator, imię oraz nazwisko) zostają przeniesione do osobnej tabeli w bazie danych. Wszystkie pozostałe dane zostają trwale usunięte. Jest to wymagane do poprawnego działania systemu (np. dla prawidłowego wyświetlenia historii zdarzeń).</span>
+                                                    	</li>
+                                                    	<li>
+                                                    		<span class="font-bold">Dane jednostki</span><br />
+                                                    		<span>Dane jednostki wyświetlane w wielu miejsach w aplikacji można edytować w pliku konfiguracyjnym app.config.</span>
+                                                    	</li>
+														<li>
+															<span class="font-bold">Poprawki błędów</span>
+														</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                          
+                                        <div class="panel panel-col-teal">
+                                            <div class="panel-heading" role="tab" id="heading_1_0_0">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" href="#collapse_1_0_0" aria-expanded="true" aria-controls="collapse_1_0_0">
+                                                        1.0.0
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_1_0_0" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_1_0_0">
+                                                <div class="panel-body">
+                                                    <ul>
+                                                    	<li>
+                                                    		<span class="font-bold">Moduł zarządzania strażakami</span><br />
+                                                    		<span>Moduł pozwalający na dodawanie, edytowanie oraz usuwanie strażaków z bazy danych. Jest również możliwość wygenerowania danych dotyczących członków JOT wraz z ich wyszkoleniem w formie czytelnej tabeli. Ponadto istnieje możliwość wyeksportowania danych do pliku Excel.</span>
+                                                    	</li>
+                                                    	<li>
+                                                    		<span class="font-bold">Zarządzanie rodzajami strażaków</span><br />
+                                                    		<span>Możliwość dodawania, edycji oraz usuwania rodzajów członków OSP. Istniejące rodzaje członków można następnie przypisać do poszczególnych strażaków (np. Członek zwyczajny, Członek MDP).</span>
+                                                    	</li>
+                                                    	<li>
+                                                    		<span class="font-bold">Zarządzanie rodzajami szkoleń</span><br />
+                                                    		<span>Możliwość dodawania, edycji oraz usuwania rodzajów szkoleń. W zależności od potrzeb jednostki, można dodać ponadprogramowe szkolenia (np. WOPR, sternik motorowodny itp.). Istniejące rodzaje szkoleń można następnie przypisać do poszczególnych strażaków</span>
+                                                    	</li>
+                                                    	<li>
+                                                    		<span class="font-bold">Ustawienia profilu użytkownika</span><br />
+                                                    		<span>Zmiana ustawień profilu możliwa jest dla obecnie zalogowane użytkownika. Aby zmienić swój adres e-mail, wyświetlaną nazwę lub hasło, kliknij na strzałkę obok nazwy swojego profilu nad głównym menu a następnie wybierz opcję "Profil".  </span>
+                                                    	</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>Planowane funkcjonalności</h2>
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+                                <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+                                    <div class="panel-group" id="accordion_1_0_3" role="tablist" aria-multiselectable="true">
+                                    
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading" role="tab" id="heading_planned_1">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" href="#collapse_planned_1" aria-expanded="true" aria-controls="collapse_planned_1">
+                                                        Gotowość strażaków
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse_planned_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading_planned_1">
+                                                <div class="panel-body">
+                                                    Moduł pozwalający na zgłoszenie przez strażaków gotowości lub jej braku do podjęcia działań ratowniczych. Zgłoszenia przyjmowane będą z aplikacji mobilnej. Przechowywana będzie pełna historia gotowości, pozwalająca na wygenerowanie statystyk gotowości dla każdego ze strażaków. Ponadto na pulpicie wyświetlana będzie aktualna liczba strażaków w gotowości oraz ostatnie zmiany statusów.
+                                                </div>
+                                            </div>
+                                        </div>
+                                     
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            <!-- #END# Actual content -->
+
+        </div>
+    </section>
+    <!-- #END# Main content -->
+    
+	<!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+	
+	<!-- Plugins import -->
+    <script th:src="@{/plugins/autosize/autosize.js}"></script>
+	
+	<!-- Custom Scripts for this page -->
+	
+	<!-- ################################## -->    
+   	<!-- #END# Page-specific scripts import -->   	
+</body>
+</html>

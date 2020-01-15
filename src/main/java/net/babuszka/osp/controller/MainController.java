@@ -47,4 +47,10 @@ public class MainController {
 		model.addAttribute("activated", userService.verifyUserEmail(token));
 		return "activate_account";
 	}
+	
+	@GetMapping(path = "/changelog")
+	public String initChangelogView(Model model) {
+		model.addAttribute("page_title", "Changelog");
+		return "changelog";
+	}
 }
