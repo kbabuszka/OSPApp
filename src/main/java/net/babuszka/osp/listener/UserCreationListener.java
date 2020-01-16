@@ -53,12 +53,20 @@ public class UserCreationListener implements ApplicationListener<OnUserCreationE
         String token = UUID.randomUUID().toString();
         userService.createUserVerificationToken(user, token);  
         String globalApplicationUrl = settingsService.getByName("DEPARTMENT_APP_URL").getValue();
+        String departmentFullName = settingsService.getByName("DEPARTMENT_FULL_NAME").getValue();
+        String departmentAddressStreet = settingsService.getByName("DEPARTMENT_ADDRESS_STREET").getValue();
+        String departmentAddressCity = settingsService.getByName("DEPARTMENT_ADDRESS_CITY").getValue();
+        String departmentAddressPostalCode = settingsService.getByName("DEPARTMENT_ADDRESS_POSTAL_CODE").getValue();
 		try {
 			Context context = new Context();
 			context.setVariable("displayName", user.getDisplayName());
 			context.setVariable("username", user.getUsername());
-			context.setVariable("global_application_url", globalApplicationUrl);
 			context.setVariable("token", token);
+			context.setVariable("global_application_url", globalApplicationUrl);
+			context.setVariable("department_full_name", departmentFullName);
+			context.setVariable("department_address_street", departmentAddressStreet);
+			context.setVariable("department_address_city", departmentAddressCity);
+			context.setVariable("department_address_postal_code", departmentAddressPostalCode);
 			mailService.sendHtmlMessage(user.getEmail(), userAddedEmailTitle, "accountCreated", context);
 		} catch (Exception e) {
 			e.printStackTrace();
