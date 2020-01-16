@@ -29,7 +29,7 @@ public class Setting {
 	@Column(name = "id")
 	private Integer id;
 	
-	@Column(name = "name")
+	@Column(name = "name", unique = true)
 	@NotEmpty(message = "{setting.name.empty}")
 	private String name;
 	

@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 import net.babuszka.osp.event.OnUserCreationEvent;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.service.MailService;
+import net.babuszka.osp.service.SettingsService;
 import net.babuszka.osp.service.UserService;
 
 @Component
@@ -18,12 +19,10 @@ public class UserCreationListener implements ApplicationListener<OnUserCreationE
 	
 	@Value("${email.newaccount.created.title}")
 	private String userAddedEmailTitle;
-	
-	@Value("${app.config.url}")
-	private String globalApplicationUrl;
 
 	private UserService userService;
 	private MailService mailService;
+	private SettingsService settingsService;
 	
 	@Autowired
 	public void setUserService(UserService userService) {
@@ -35,6 +34,15 @@ public class UserCreationListener implements ApplicationListener<OnUserCreationE
 		this.mailService = emailUtils;
 	}
 	
+	@Autowired
+	public void setSettingsService(SettingsService settingsService) {
+		this.settingsService = settingsService;
+	}
+	
+	public UserCreationListener() {
+		super();
+	}
+
 	@Override
 	public void onApplicationEvent(OnUserCreationEvent event) {
 		this.confirmUserEmail(event);	
@@ -44,6 +52,7 @@ public class UserCreationListener implements ApplicationListener<OnUserCreationE
 		User user = event.getUser();
         String token = UUID.randomUUID().toString();
         userService.createUserVerificationToken(user, token);  
+        String globalApplicationUrl = settingsService.getByName("DEPARTMENT_APP_URL").getValue();
 		try {
 			Context context = new Context();
 			context.setVariable("displayName", user.getDisplayName());
@@ -54,8 +63,5 @@ public class UserCreationListener implements ApplicationListener<OnUserCreationE
 		} catch (Exception e) {
 			e.printStackTrace();
 		}        
-
 	}
-
-	
 }

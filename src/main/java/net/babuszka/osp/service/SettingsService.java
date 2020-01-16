@@ -33,4 +33,8 @@ public class SettingsService {
 	public void saveAllSettings(List<Setting> settings) {
 		settingsRepository.saveAll(settings);
 	}
+	
+	public Setting getByName(String name) {
+		return settingsRepository.findByName(name);
+	}
 }

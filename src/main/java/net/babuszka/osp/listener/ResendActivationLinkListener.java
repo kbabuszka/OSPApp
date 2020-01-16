@@ -11,6 +11,7 @@ import org.thymeleaf.context.Context;
 import net.babuszka.osp.event.OnResendActivationLinkEvent;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.service.MailService;
+import net.babuszka.osp.service.SettingsService;
 import net.babuszka.osp.service.UserService;
 
 @Component
@@ -19,12 +20,10 @@ public class ResendActivationLinkListener implements ApplicationListener<OnResen
 	@Value("${email.resend.link.title}")
 	private String linkResentEmailTitle;
 	
-	@Value("${app.config.url}")
-	private String globalApplicationUrl;
-
 	private UserService userService;
 	private MailService mailService;
-	
+	private SettingsService settingsService;
+
 	@Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
@@ -35,6 +34,15 @@ public class ResendActivationLinkListener implements ApplicationListener<OnResen
 		this.mailService = emailUtils;
 	}
 	
+	@Autowired
+	public void setSettingsService(SettingsService settingsService) {
+		this.settingsService = settingsService;
+	}
+	
+	public ResendActivationLinkListener() {
+		super();
+	}
+
 	@Override
 	public void onApplicationEvent(OnResendActivationLinkEvent event) {
 		this.resendActivationLink(event);	
@@ -46,6 +54,7 @@ public class ResendActivationLinkListener implements ApplicationListener<OnResen
 			userService.deleteUserVerificationToken(user.getId());
 	        String token = UUID.randomUUID().toString();
 	        userService.createUserVerificationToken(user, token);  
+	        String globalApplicationUrl = settingsService.getByName("DEPARTMENT_APP_URL").getValue();
 			try {
 				Context context = new Context();
 				context.setVariable("displayName", user.getDisplayName());
