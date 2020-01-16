@@ -63,7 +63,6 @@
                                 <div class="tab-content">
                                                                
                                     <div th:if="${firefighter != null}" role="tabpanel" class="tab-pane fade active in" id="profile_settings">
-                                    
                                     	<div class="alert alert-warning">
 		                                	Twoje konto jest przypisane do strażaka w systemie. Nie możesz edytować poniższych danych z poziomu profilu.
 		                            	</div>
@@ -98,6 +97,9 @@
                                     </div>                                
 
                                     <div th:if="${firefighter == null}"  role="tabpanel" class="tab-pane fade active in" id="profile_settings">
+										<div class="alert alert-info">
+		                                	Jeśli zmienisz swój adres e-mail, zostaniesz wylogowany a Twoje konto deaktywowane. Nie będziesz mógł się zalogować do czasu ponownej aktywacji konta.
+		                            	</div>
                                         <form th:object="${user}" th:action="@{'/profile'}" method="post" class="form-horizontal">
                                             
                                             <div class="form-group">
