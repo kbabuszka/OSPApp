@@ -9,7 +9,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 @PropertySource(value = "classpath:config/application.properties", encoding = "UTF-8")
-@PropertySource(value = "classpath:config/appconfig.properties", encoding = "UTF-8")
 @PropertySource(value = "classpath:config/ValidationMessages.properties", encoding = "UTF-8")
 @PropertySource(value = "classpath:config/EmailMessages.properties", encoding = "UTF-8")
 

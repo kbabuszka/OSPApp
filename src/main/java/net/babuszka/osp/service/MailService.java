@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ import net.babuszka.osp.utils.GlobalVariables;
 public class MailService {
 
 	private Logger LOG = LoggerFactory.getLogger(Logger.class);
-	private JavaMailSender emailSender;
+	private JavaMailSenderImpl emailSender;
 	private TemplateEngine templateEngine;
 	private GlobalVariables globalVariables;
 	 
 	@Autowired
-	public void setEmailSender(JavaMailSender emailSender) {
+	public void setEmailSender(JavaMailSenderImpl emailSender) {
 		this.emailSender = emailSender;
 	}
 	 
@@ -34,6 +34,10 @@ public class MailService {
 	@Autowired
 	public void setGlobalVariables(GlobalVariables globalVariables) {
 		this.globalVariables = globalVariables;
+	}
+
+	public MailService() {
+		super();
 	}
 
 	public void sendSimpleMessage(String to, String subject, String message) throws Exception {

@@ -18,7 +18,7 @@ public class GlobalVariables {
 	private static final String SETTING_NAME_DEPARTMENT_ADDRESS_CITY = "DEPARTMENT_ADDRESS_CITY";
 	private static final String SETTING_NAME_DEPARTMENT_ADDRESS_POSTAL_CODE = "DEPARTMENT_ADDRESS_POSTAL_CODE";
 	private static final String SETTING_NAME_DEPARTMENT_APP_URL = "DEPARTMENT_APP_URL";
-	
+
 	private static final String APPLICATION_NAME = "OSP Manager";
 	private static final String APPLICATION_VERSION = "1.0.3";
 	private static final String APPLICATION_WEBSITE = "ospapp.pl";
@@ -37,7 +37,6 @@ public class GlobalVariables {
 	}
 	
 	// Department variables
-
 	@ModelAttribute("global_config_title")
 	public String getPageTitle() {
 		return getDepartmentNamePrefix() + " " + getDepartmentName();
@@ -80,7 +79,6 @@ public class GlobalVariables {
 	
 	
 	// App variables
-	
 	@ModelAttribute("global_application_name")
 	public String getAppName() {
 		return APPLICATION_NAME;
@@ -105,5 +103,9 @@ public class GlobalVariables {
 	public String getAppAuthorWebsite() {
 		return APPLICATION_AUTHOR_WEBSITE;
 	}
+	
+	// Email settings
+	
+
 	
 }
