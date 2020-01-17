@@ -25,7 +25,6 @@ import net.babuszka.osp.repository.UserRepository;
 import net.babuszka.osp.repository.UserRoleRepository;
 import net.babuszka.osp.repository.UserVerificationTokenRepository;
 import net.babuszka.osp.utils.SessionUtils;
-import net.babuszka.osp.utils.UserUtils;
 
 @Service
 public class UserService {
@@ -36,7 +35,6 @@ public class UserService {
 	private UserRoleRepository userRoleRepository;
 	private FirefighterRepository firefighterRepository;
 	private PasswordEncoder passwordEncoder;
-	private UserUtils userUtils;
 	
 	private ApplicationEventPublisher eventPublisher;
 	
@@ -63,11 +61,6 @@ public class UserService {
 	@Autowired
 	public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
 		this.passwordEncoder = passwordEncoder;
-	}
-	
-	@Autowired
-	public void setUserUtils(UserUtils userUtils) {
-		this.userUtils = userUtils;
 	}
 	
 	@Autowired
@@ -151,13 +144,6 @@ public class UserService {
 		if(user == null)
 			throw new UsernameNotFoundException("No user found");
 		return user;
-	}
-
-	public void updateUserPassword(User user) {
-		String plainPassword = user.getPassword();
-		String encodedPassword = userUtils.encodePassword(plainPassword);
-		user.setPassword(encodedPassword);
-		userRepository.save(user);
 	}
 
 	public void createUserVerificationToken(User user, String token) {

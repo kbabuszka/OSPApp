@@ -45,77 +45,44 @@
     <section class="content">
         <div class="container-fluid">
         	<!-- Modify below -->
-		
             <!-- Actual content -->
-            
 			<div class="row clearfix">
 			    <div class="col-xs-12 col-sm-12">
                     <div class="card">
+                        <div class="header">
+                            <h2>
+                                Edytuj swój profil
+                            </h2>
+                        </div>
                         <div class="body">
                             <div>
-                                <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#profile_settings" aria-controls="settings" role="tab" data-toggle="tab">Ustawienia profilu</a></li>
-                                    <li role="presentation"><a href="#change_password_settings" aria-controls="settings" role="tab" data-toggle="tab">Zmień hasło</a></li>
-                                </ul>
-                                <br />
 								<div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
-
                                 <div class="tab-content">
-                                                               
-                                    <div th:if="${firefighter != null}" role="tabpanel" class="tab-pane fade active in" id="profile_settings">
-                                    	<div class="alert alert-warning">
-		                                	Twoje konto jest przypisane do strażaka w systemie. Nie możesz edytować poniższych danych z poziomu profilu.
+                                    <div role="tabpanel" class="tab-pane fade active in" id="profile_settings">
+										<div th:if="${userProfileForm.firefighter == null}" class="alert alert-info">
+		                                	Jeśli zmienisz swój adres e-mail zostaniesz wylogowany, a Twoje konto deaktywowane. Nie będziesz mógł się zalogować do czasu jego ponownej aktywacji.
 		                            	</div>
-                                        <form th:object="${user}" class="form-horizontal">
+		                            	<div th:if="${userProfileForm.firefighter != null}" class="alert alert-warning">
+		                                	Twoje konto jest przypisane do strażaka w systemie. Nie możesz edytować wyświetlanej nazwy użytkownika.
+		                            	</div>
+                                        <form th:object="${userProfileForm}" th:action="@{'/profile'}" method="post" class="form-horizontal">
                                             
                                             <div class="form-group">
                                                 <label for="username" class="col-sm-2 control-label">Nazwa użytkownika (login)</label>
                                                 <div class="col-sm-10">
                                                     <div class="form-line">
-                                                        <input th:value="${user.username}" disabled="disabled" type="text" class="form-control" id="username" name="username">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="NameSurname" class="col-sm-2 control-label">Nazwa wyświetlana</label>
-                                                <div class="col-sm-10">
-                                                    <div class="form-line">
-                                                        <input th:value="${firefighter.firstName + ' ' + firefighter.lastName}" disabled="disabled" type="text" class="form-control" id="NameSurname" name="NameSurname">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="Email" class="col-sm-2 control-label">E-mail</label>
-                                                <div class="col-sm-10">
-                                                    <div class="form-line">
-                                                        <input th:value="${firefighter.email}" disabled="disabled" type="email" class="form-control" id="Email" name="Email">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </form>
-                                    </div>                                
-
-                                    <div th:if="${firefighter == null}"  role="tabpanel" class="tab-pane fade active in" id="profile_settings">
-										<div class="alert alert-info">
-		                                	Jeśli zmienisz swój adres e-mail, zostaniesz wylogowany a Twoje konto deaktywowane. Nie będziesz mógł się zalogować do czasu ponownej aktywacji konta.
-		                            	</div>
-                                        <form th:object="${user}" th:action="@{'/profile'}" method="post" class="form-horizontal">
-                                            
-                                            <div class="form-group">
-                                                <label for="username" class="col-sm-2 control-label">Nazwa użytkownika (login)</label>
-                                                <div class="col-sm-10">
-                                                    <div class="form-line">
+                                                    	<input th:field="*{id}" type="hidden">
                                                     	<input th:field="*{username}" type="hidden">
                                                         <input th:value="*{username}" disabled="disabled" type="text" class="form-control" id="username" name="username">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="NameSurname" class="col-sm-2 control-label">Nazwa wyświetlana</label>
+                                                <label for="DisplayName" class="col-sm-2 control-label">Nazwa wyświetlana</label>
                                                 <div class="col-sm-10">
                                                     <div class="form-line">
-                                                        <input th:field="*{displayName}" type="text" class="form-control" id="NameSurname" name="NameSurname">
+                                                        <input th:if="${userProfileForm.firefighter == null}" th:field="*{displayName}" type="text" class="form-control" id="DisplayName" name="DisplayName">
+                                                        <input th:unless="${userProfileForm.firefighter == null}" th:value="${userProfileForm.firefighter.firstName + ' ' + userProfileForm.firefighter.lastName}" disabled="disabled" type="text" class="form-control" id="NameSurname" name="NameSurname">
                                                     </div>
                                                     <div th:if="${#fields.hasErrors('displayName')}" th:errors="*{displayName}"  class="alert alert-danger" role="alert">
 				                          				User display name error
@@ -133,25 +100,12 @@
 			                          					User email error
 			                        				</div>
                                                 </div>
-
                                             </div>
-
-
                                             <div class="form-group">
-                                                <div class="col-sm-offset-2 col-sm-10">
-                                                    <button type="submit" class="btn btn-success">Zapisz</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    
-                                    <div role="tabpanel" class="tab-pane fade in" id="change_password_settings">
-                                        <form th:action="@{'/profile/change-password'}" th:object="${passwordForm}" method="post" class="form-horizontal">
-                                            <div class="form-group">
-                                                <label for="old_password" class="col-sm-3 control-label">Obecne hasło</label>
-                                                <div class="col-sm-9">
+                                                <label for="old_password" class="col-sm-2 control-label">Obecne hasło</label>
+                                                <div class="col-sm-10">
                                                     <div class="form-line">
-                                                        <input th:field="*{oldPassword}" type="password" class="form-control" id="old_password" name="old_password" placeholder="Old Password" required>
+                                                        <input th:field="*{oldPassword}" type="password" class="form-control" id="old_password" name="old_password">
                                                     </div>
                                                     <div th:if="${#fields.hasErrors('oldPassword')}" th:errors="*{oldPassword}"  class="alert alert-danger" role="alert">
 				                          				Old password error
@@ -159,28 +113,27 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="new_password_1" class="col-sm-3 control-label">Nowe hasło</label>
-                                                <div class="col-sm-9">
+                                                <label for="new_password_1" class="col-sm-2 control-label">Nowe hasło</label>
+                                                <div class="col-sm-10">
                                                     <div class="form-line">
-                                                        <input th:field="*{newPassword1}" type="password" class="form-control" id="new_password_1" name="new_password_1" placeholder="New Password" required>
+                                                        <input th:field="*{newPassword}" type="password" class="form-control" id="new_password_1" name="new_password_1">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="new_password_2" class="col-sm-3 control-label">Powtórz nowe hasło</label>
-                                                <div class="col-sm-9">
+                                                <label for="new_password_2" class="col-sm-2 control-label">Powtórz nowe hasło</label>
+                                                <div class="col-sm-10">
                                                     <div class="form-line">
-                                                        <input th:field="*{newPassword2}" type="password" class="form-control" id="new_password_2" name="new_password_2" placeholder="New Password (Confirm)" required>
+                                                        <input th:field="*{confirmNewPassword}" type="password" class="form-control" id="new_password_2" name="new_password_2">
                                                     </div>
-                                                    <div th:if="${#fields.hasErrors('newPassword2')}" th:errors="*{newPassword2}"  class="alert alert-danger" role="alert">
+                                                    <div th:if="${#fields.hasErrors('confirmNewPassword')}" th:errors="*{confirmNewPassword}"  class="alert alert-danger" role="alert">
 				                          				New password error
 				                        			</div>
                                                 </div>
                                             </div>
-
                                             <div class="form-group">
-                                                <div class="col-sm-offset-3 col-sm-9">
-                                                    <button type="submit" class="btn btn-success">Zmień hasło</button>
+                                                <div class="col-sm-offset-2 col-sm-10">
+                                                    <button type="submit" class="btn btn-success">Zapisz</button>
                                                 </div>
                                             </div>
                                         </form>

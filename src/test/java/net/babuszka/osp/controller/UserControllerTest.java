@@ -36,12 +36,12 @@ import net.babuszka.osp.service.UserService;
 import net.bytebuddy.utility.RandomString;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(properties = "spring.profiles.active=test")
+@SpringBootTest(properties = "spring.profiles.active=junit")
 @WebAppConfiguration
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @AutoConfigureMockMvc(addFilters = false)
 public class UserControllerTest {
-
+	
 	@Autowired
 	private UserService userService;
 	

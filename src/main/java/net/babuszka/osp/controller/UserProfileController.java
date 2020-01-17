@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import net.babuszka.osp.model.Firefighter;
 import net.babuszka.osp.model.User;
-import net.babuszka.osp.model.UserPasswordForm;
+import net.babuszka.osp.model.UserProfileForm;
 import net.babuszka.osp.service.UserService;
+import net.babuszka.osp.utils.UserUtils;
 
 @Controller
 public class UserProfileController {
@@ -33,82 +33,89 @@ public class UserProfileController {
 	private String messageProfileNotUpdated;
 	
 	private UserService userService;
+	private UserUtils userUtils;
 	
 	@Autowired
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
 	
+	@Autowired
+	public void setUserUtils(UserUtils userUtils) {
+		this.userUtils = userUtils;
+	}
+
 	@GetMapping(path = "/profile")
 	public String initEditProfileForm(Model model) {
-		model.addAttribute("page_title", "Twój profil");
 		User user = userService.getCurrentlyLoggedUser();
-		Firefighter firefighter = user.getFirefighter();
-		model.addAttribute("user", user);
-		model.addAttribute("firefighter", firefighter);
-		model.addAttribute("passwordForm", new UserPasswordForm());
+		model.addAttribute("page_title", "Twój profil");
+		model.addAttribute("userProfileForm", new UserProfileForm(user));
 		return "user_profile";
 	}
 	
 	@PostMapping(path = "/profile")
-	public String processEditProfileForm(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
+	public String processEditProfileForm(@ModelAttribute("userProfileForm") @Valid UserProfileForm userProfileForm, 
+			BindingResult bindingResult, 
+			Model model, 
+			RedirectAttributes redirectAttributes) {
+		Integer userId = userProfileForm.getId();
+		User user = userService.getUser(userId);
+		String oldPassword = userProfileForm.getOldPassword();
+		String newPassword = userProfileForm.getNewPassword();
+		String confirmNewPassword = userProfileForm.getConfirmNewPassword();
 		model.addAttribute("page_title", "Twój profil");
-		if(bindingResult.hasErrors()) {
-			int totalErrors = bindingResult.getErrorCount();
-			int passwordErrors = bindingResult.getFieldErrorCount("password");
-			if(totalErrors != passwordErrors) {
-				model.addAttribute("message", messageProfileNotUpdated);
-			    model.addAttribute("alertClass", "alert-danger");
-				model.addAttribute("user", user);
-				model.addAttribute("passwordForm", new UserPasswordForm());
-				return "user_profile";
-			} else {
-				// if there is only password error, update the user
-				redirectAttributes.addFlashAttribute("message", messageProfileUpdated);
-			    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-				userService.updateUser(user);
-				return "redirect:/profile";
-			}
-		} else {
-			redirectAttributes.addFlashAttribute("message", messageProfileUpdated);
-		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-			userService.updateUser(user);
-			return "redirect:/profile";
-		}
-
-	}
-	
-	@PostMapping(path = "/profile/change-password")
-	public String processPasswordChangeForm(@ModelAttribute("passwordForm") @Valid UserPasswordForm form, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
-		model.addAttribute("page_title", "Twój profil");
-		User user = userService.getCurrentlyLoggedUser();
-		Firefighter firefighter = user.getFirefighter();
-		String oldPassword = form.getOldPassword();
-		String newPassword1 = form.getNewPassword1();
-		String newPassword2 = form.getNewPassword2();
-			
-		if(userService.checkIfPasswordMatch(user, oldPassword)) {
-			if(newPassword1.equals(newPassword2) ) {
-				user.setPassword(newPassword1);
-				userService.updateUserPassword(user);
-				redirectAttributes.addFlashAttribute("message", messagePasswordChanged);
-			    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
-				return "redirect:/profile";
-			} else {
-				model.addAttribute("message", messagePasswordNotChanged);
-			    model.addAttribute("alertClass", "alert-danger");
-				bindingResult.rejectValue("newPassword2", "user.passwordchange.password2.nomatch");
-			}
-		} else {
-			model.addAttribute("message", messagePasswordNotChanged);
-			model.addAttribute("alertClass", "alert-danger");
+		
+		if(userProfileForm.getEmail().isEmpty())
+			bindingResult.rejectValue("email", "user.email.empty");
+		
+		if(userService.findUserByEmail(userProfileForm.getEmail()) != null
+				&& userService.findUserByEmail(userProfileForm.getEmail()) != user)
+			bindingResult.rejectValue("email", "user.email.duplicate");
+		
+		if(userService.findUserByUsername(userProfileForm.getUsername()) != null
+				&& userService.findUserByUsername(userProfileForm.getUsername()) != user)
+			bindingResult.rejectValue("username", "user.username.duplicate");
+		
+		if(!(oldPassword == null) && !(oldPassword.equals(""))
+				&& !userService.checkIfPasswordMatch(user, oldPassword)) {
 			bindingResult.rejectValue("oldPassword", "user.passwordchange.oldpassword.nomatch");
 		}
 		
-		model.addAttribute("user", user);
-		model.addAttribute("firefighter", firefighter);
-		model.addAttribute("passwordForm", form);
-		return "user_profile";
+		if(!(newPassword == null) && !(newPassword.equals("")) 
+				&& !(newPassword.equals(confirmNewPassword))) {
+			bindingResult.rejectValue("confirmNewPassword", "user.add.password2.nomatch");
+		}
+		
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("message", messageProfileNotUpdated);
+		    model.addAttribute("alertClass", "alert-danger");
+			model.addAttribute("userProfileForm", userProfileForm);
+			return "user_profile";
+		}
+		
+		String oldEmail = user.getEmail();
+		user.setUsername(userProfileForm.getUsername());
+		user.setDisplayName(userProfileForm.getDisplayName());
+		user.setEmail(userProfileForm.getEmail());
+		String encryptedPassword = userUtils.encodePassword(newPassword);					
+		user.setPassword(encryptedPassword);
+		
+		try {
+			userService.saveUser(user);
+		} catch (Exception e) {
+			model.addAttribute("message", messageProfileNotUpdated);
+		    model.addAttribute("alertClass", "alert-danger");
+			return "user_profile";
+		}	
+		
+		if(!oldEmail.equals(userProfileForm.getEmail())) {
+			userService.deactivateUser(userId);
+			userService.resendActivationLink(userId);
+		}
+		
+		redirectAttributes.addFlashAttribute("message", messageProfileUpdated);
+	    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+		userService.updateUser(user);
+		return "redirect:/profile";
 	}
-	
 }
