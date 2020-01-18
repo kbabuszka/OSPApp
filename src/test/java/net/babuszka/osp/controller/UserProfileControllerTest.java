@@ -48,11 +48,11 @@ public class UserProfileControllerTest {
 	public void testInitUserProfile() throws Exception {	
 		mockMvc.perform(get("/profile"))
 			.andExpect(status().isOk())
-			.andExpect(model().attributeExists("user"))
-			.andExpect(model().attributeExists("passwordForm"))
+			.andExpect(model().attributeExists("page_title"))
+			.andExpect(model().attributeExists("userProfileForm"))
 			.andExpect(view().name("user_profile"));
 	}
-	
+		
 	@Test
 	@WithMockUser(username = "junit")
 	public void testSubmitEditUserProfileForm() throws Exception {
@@ -65,6 +65,9 @@ public class UserProfileControllerTest {
 			.param("username", "junit")
 			.param("email", "junit@osp.babuszka.net")
 			.param("displayName", newName)
+			.param("oldPassword", "")
+			.param("newPassword", "")
+			.param("confirmNewPassword", "")
 			)
 			.andExpect(status().is3xxRedirection())
 			.andExpect(view().name("redirect:/profile"))
@@ -81,10 +84,15 @@ public class UserProfileControllerTest {
 		String oldName = user.getDisplayName();
 		String newName = "ab";
 		
+		// Too short disaplyName
 		mockMvc.perform(post("/profile")
 			.param("id", "2")
 			.param("username", "junit")
+			.param("email", "junit@osp.babuszka.net")
 			.param("displayName", newName)
+			.param("oldPassword", "")
+			.param("newPassword", "")
+			.param("confirmNewPassword", "")
 			)
 			.andExpect(status().isOk())
 			.andExpect(view().name("user_profile"))
@@ -92,5 +100,129 @@ public class UserProfileControllerTest {
 			.andExpect(model().attribute("alertClass", is("alert-danger")));
 		User userCheck = userService.findUserByUsername("junit");
 		assertEquals(oldName, userCheck.getDisplayName());
+		
+		//No email address
+		newName = new RandomString().make(8);
+		mockMvc.perform(post("/profile")
+			.param("id", "2")
+			.param("username", "junit")
+			.param("email", "")
+			.param("displayName", newName)
+			.param("oldPassword", "")
+			.param("newPassword", "")
+			.param("confirmNewPassword", "")
+			)
+			.andExpect(status().isOk())
+			.andExpect(view().name("user_profile"))
+			.andExpect(model().attributeExists("message"))
+			.andExpect(model().attribute("alertClass", is("alert-danger")));
+		userCheck = userService.findUserByUsername("junit");
+		assertEquals(oldName, userCheck.getDisplayName());
+		
+		//Taken email address
+		newName = new RandomString().make(8);
+		mockMvc.perform(post("/profile")
+			.param("id", "2")
+			.param("username", "junit")
+			.param("email", "kamil@osp.slawa.pl")
+			.param("displayName", newName)
+			.param("oldPassword", "")
+			.param("newPassword", "")
+			.param("confirmNewPassword", "")
+			)
+			.andExpect(status().isOk())
+			.andExpect(view().name("user_profile"))
+			.andExpect(model().attributeExists("message"))
+			.andExpect(model().attribute("alertClass", is("alert-danger")));
+		userCheck = userService.findUserByUsername("junit");
+		assertEquals(oldName, userCheck.getDisplayName());
+	}
+	
+	@Test
+	@WithMockUser(username = "junit")
+	public void testPasswordChange() throws Exception {
+		User user = userService.getCurrentlyLoggedUser();
+		String currentEncryptedPassword = user.getPassword();
+		String currentPassword = "junitpass";
+		String newPassword = new RandomString().make(8);
+		
+		mockMvc.perform(post("/profile")
+			.param("id", "2")
+			.param("username", "junit")
+			.param("email", "junit@osp.babuszka.net")
+			.param("displayName", user.getDisplayName())
+			.param("oldPassword", currentPassword)		
+			.param("newPassword", newPassword)
+			.param("confirmNewPassword", newPassword)
+			)
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/profile"))
+			.andExpect(flash().attributeExists("message"))
+			.andExpect(flash().attribute("alertClass", is("alert-success")));
+		User userCheck = userService.findUserByUsername("junit");
+		assertNotEquals(currentEncryptedPassword, userCheck.getPassword());
+		user.setPassword(currentEncryptedPassword);
+		userService.saveUser(user);
+	}	
+	
+	@Test
+	@WithMockUser(username = "junit")
+	public void testPasswordChangeWithErrors() throws Exception {
+		User user = userService.getCurrentlyLoggedUser();
+		String currentEncryptedPassword = user.getPassword();
+		String currentPassword = "junitpass";
+		String wrongPassword = "wrongjunitpass";
+		String newPassword = new RandomString().make(8);
+		
+		//Wrong current password
+		mockMvc.perform(post("/profile")
+			.param("id", "2")
+			.param("username", "junit")
+			.param("email", "junit@osp.babuszka.net")
+			.param("displayName", user.getDisplayName())
+			.param("oldPassword", wrongPassword)		
+			.param("newPassword", newPassword)
+			.param("confirmNewPassword", newPassword)
+			)
+			.andExpect(status().isOk())
+			.andExpect(view().name("user_profile"))
+			.andExpect(model().attributeExists("message"))
+			.andExpect(model().attribute("alertClass", is("alert-danger")));
+		User userCheck = userService.findUserByUsername("junit");
+		assertEquals(currentEncryptedPassword, userCheck.getPassword());
+
+		//New passwords not match
+		mockMvc.perform(post("/profile")
+			.param("id", "2")
+			.param("username", "junit")
+			.param("email", "junit@osp.babuszka.net")
+			.param("displayName", user.getDisplayName())
+			.param("oldPassword", currentPassword)		
+			.param("newPassword", newPassword)
+			.param("confirmNewPassword", wrongPassword)
+			)
+			.andExpect(status().isOk())
+			.andExpect(view().name("user_profile"))
+			.andExpect(model().attributeExists("message"))
+			.andExpect(model().attribute("alertClass", is("alert-danger")));
+		userCheck = userService.findUserByUsername("junit");
+		assertEquals(currentEncryptedPassword, userCheck.getPassword());
+		
+		//New passwords empty
+		mockMvc.perform(post("/profile")
+			.param("id", "2")
+			.param("username", "junit")
+			.param("email", "junit@osp.babuszka.net")
+			.param("displayName", user.getDisplayName())
+			.param("oldPassword", currentPassword)		
+			.param("newPassword", "")
+			.param("confirmNewPassword", "")
+			)
+			.andExpect(status().is3xxRedirection())
+			.andExpect(view().name("redirect:/profile"))
+			.andExpect(flash().attributeExists("message"))
+			.andExpect(flash().attribute("alertClass", is("alert-success")));
+		userCheck = userService.findUserByUsername("junit");
+		assertEquals(currentEncryptedPassword, userCheck.getPassword());	
 	}	
 }
