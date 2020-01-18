@@ -97,8 +97,11 @@ public class UserProfileController {
 		user.setUsername(userProfileForm.getUsername());
 		user.setDisplayName(userProfileForm.getDisplayName());
 		user.setEmail(userProfileForm.getEmail());
-		String encryptedPassword = userUtils.encodePassword(newPassword);					
-		user.setPassword(encryptedPassword);
+		
+		if(!(oldPassword.equals("")) && !(newPassword.equals(""))) {
+			String encryptedPassword = userUtils.encodePassword(newPassword);					
+			user.setPassword(encryptedPassword);
+		}
 		
 		try {
 			userService.saveUser(user);
