@@ -25,7 +25,6 @@ public class MainController {
 		this.firefighterService = firefighterService;
 	}
 	
-	
 	@GetMapping(path = "/")
 	public String initDashboardView(Model model) {
 		model.addAttribute("page_title", "Pulpit");

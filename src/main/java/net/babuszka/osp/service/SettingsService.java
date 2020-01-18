@@ -13,10 +13,6 @@ public class SettingsService {
 
 	private SettingsRepository settingsRepository;
 
-	public SettingsService() {
-		super();
-	}
-
 	@Autowired
 	public void setSettingsRepository(SettingsRepository settingsRepository) {
 		this.settingsRepository = settingsRepository;

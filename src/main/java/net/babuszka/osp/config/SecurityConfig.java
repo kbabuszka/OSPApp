@@ -49,7 +49,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/activate-account/**").permitAll()
 				.anyRequest().authenticated()
 				.and()
-			.exceptionHandling().accessDeniedPage("/error/403")
+			.exceptionHandling().accessDeniedPage("/error")
 				.and()
 			.formLogin()
 				.loginPage("/login").permitAll()
