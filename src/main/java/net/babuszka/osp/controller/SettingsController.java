@@ -60,7 +60,13 @@ public class SettingsController {
 			return "settings";
 		} else {
 			List<Setting> settings = wrapper.getSettings();
-			settingsService.saveAllSettings(settings);
+			for (Setting setting : settings) {
+				Integer id = setting.getId();
+				String value = setting.getValue();
+				Setting settingFromDb = settingsService.getSetting(id);
+				settingFromDb.setValue(value);
+				settingsService.saveSetting(settingFromDb);
+			}
 			redirectAttributes.addFlashAttribute("message", messageSettingsSaved);
 		    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 			return "redirect:/settings";
