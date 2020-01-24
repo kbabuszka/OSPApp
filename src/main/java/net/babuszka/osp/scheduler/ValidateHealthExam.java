@@ -1,4 +1,4 @@
-package net.babuszka.osp.scheduling;
+package net.babuszka.osp.scheduler;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,7 +16,7 @@ import net.babuszka.osp.service.NotificationService;
 import net.babuszka.osp.utils.NotificationType;
 
 
-@Component
+@Component("ValidateHealthExamScheduler")
 public class ValidateHealthExam {
 	
 	private Logger LOG = LoggerFactory.getLogger(ValidateHealthExam.class);

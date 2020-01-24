@@ -13,7 +13,6 @@ public class CustomErrorController implements ErrorController {
 	@GetMapping(path = "/error")
     public String handleError(HttpServletResponse response) {
 		Integer status = response.getStatus();
-		System.out.println(status);
         if(status == HttpStatus.FORBIDDEN.value()) {
             return "error-403";
         }
