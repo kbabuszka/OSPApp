@@ -20,7 +20,7 @@ public class GlobalVariables {
 	private static final String SETTING_NAME_DEPARTMENT_APP_URL = "DEPARTMENT_APP_URL";
 
 	private static final String APPLICATION_NAME = "OSP Manager";
-	private static final String APPLICATION_VERSION = "1.0.3";
+	private static final String APPLICATION_VERSION = "1.0.4";
 	private static final String APPLICATION_WEBSITE = "ospapp.pl";
 	private static final String APPLICATION_AUTHOR = "Kamil Babuszka";
 	private static final String APPLICATION_AUTHOR_WEBSITE = "http://babuszka.net";
