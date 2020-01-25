@@ -198,7 +198,10 @@ public class UserController {
 			BindingResult bindingResult) {
 		
 		model.addAttribute("page_title", "Edytuj użytkownika");
-		User user = userService.getUser(userForm.getId());
+		Integer userId = userForm.getId();
+		User user = userService.getUser(userId);
+		String newPassword = userForm.getPassword();
+		String confirmNewPassword = userForm.getConfirmPassword();
 		
 		if(user == null) {
 			redirectAttributes.addFlashAttribute("message", messageUserNotExist);
@@ -209,10 +212,10 @@ public class UserController {
 		if(userForm.getEmail().isEmpty())
 			bindingResult.rejectValue("email", "user.email.empty");
 		
-		if(!(userForm.getPassword().equals("")) 
-				&& !(userForm.getPassword().equals(userForm.getConfirmPassword()))) {
+		if(!(newPassword == null) && !(newPassword.equals("")) 
+				&& !(newPassword.equals(confirmNewPassword))) {
 			bindingResult.rejectValue("confirmPassword", "user.add.password2.nomatch");
-		}			
+		}
 
 		if(userService.findUserByEmail(userForm.getEmail()) != null
 				&& userService.findUserByEmail(userForm.getEmail()) != user)
@@ -223,9 +226,10 @@ public class UserController {
 			bindingResult.rejectValue("username", "user.username.duplicate");
 			
 		if(bindingResult.hasErrors()) {
+			
 			model.addAttribute("message", messageUserNotEdited);
 		    model.addAttribute("alertClass", "alert-danger");
-			model.addAttribute("userForm", userForm);
+		    model.addAttribute("userForm", userForm);
 			model.addAttribute("firefighters", firefighterService.getFirefightersWithNoAccount());
 			model.addAttribute("roles", roleService.getAllRoles());
 			model.addAttribute("newUserRoles", roles);
@@ -236,8 +240,12 @@ public class UserController {
 		user.setUsername(userForm.getUsername());
 		user.setDisplayName(userForm.getDisplayName());
 		user.setEmail(userForm.getEmail());
-		String encryptedPassword = userUtils.encodePassword(userForm.getPassword());					
-		user.setPassword(encryptedPassword);
+		
+		if(!(newPassword.equals("")) && !(confirmNewPassword.equals(""))) {
+			String encryptedPassword = userUtils.encodePassword(newPassword);					
+			user.setPassword(encryptedPassword);
+		}
+		
 		Firefighter usersFirefighter = user.getFirefighter();
 		Firefighter firefighter = userForm.getFirefighter();
 		user.setFirefighter(firefighter);
