@@ -77,5 +77,11 @@ public class FirefighterAvailabilityService {
 	
 	public Integer getAvailableFirefightersCount() {
 		return firefighterAvailabilityRepository.countAvailableFirefighters();
+	}
+
+	public List<FirefighterAvailability> getFirefighterAvailabilityHistory(Integer id, Integer amount) {
+		List<FirefighterAvailability> latest = firefighterAvailabilityRepository.findFirefighterStatusChanges(id, amount);
+		LOG.info("Got " + latest.size() + " status changes for firefighter with ID: " + id);
+		return latest;
 	}	
 }

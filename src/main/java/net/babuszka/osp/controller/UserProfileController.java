@@ -1,5 +1,7 @@
 package net.babuszka.osp.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,13 +139,17 @@ public class UserProfileController {
 		User user = userService.getCurrentlyLoggedUser();
 		Firefighter firefighter = user.getFirefighter();
 		FirefighterAvailability firefighterAvailability = null;
+		List<FirefighterAvailability> firefighterAvailabilityHistory = null;
 		if(firefighter != null) {
 			firefighterAvailability = firefighterAvailabilityService
 					.getCurrentFirefighterAvailability(firefighter.getId());
+			firefighterAvailabilityHistory = firefighterAvailabilityService
+					.getFirefighterAvailabilityHistory(firefighter.getId(), 50);
 		}
 		model.addAttribute("page_title", "Twoja gotowość do działań");
 		model.addAttribute("firefighter", firefighter);
 		model.addAttribute("firefighterAvailability", firefighterAvailability);
+		model.addAttribute("firefighterAvailabilityHistory", firefighterAvailabilityHistory);
 		return "user_profile_firefighter_status";
 	}
 	

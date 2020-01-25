@@ -121,6 +121,62 @@
 	                            </div>                                 
 								<div role="tabpanel" class="tab-pane fade in" id="status_history">
 									Historia zmian statusu
+									
+									
+									<div class="body table-responsive">
+			                            <table class="table table-hover">
+			                                <thead>
+			                                    <tr>
+			                                        <th>#</th>
+			                                        <th>STRAŻAK</th>
+			                                        <th>DATA ZMIANY</th>
+			                                        <th>STATUS</th>
+			                                        <th></th>
+			                                    </tr>
+			                                </thead>
+			                                <tbody>
+			                                    <tr th:each="status, i : ${firefighterAvailabilityHistory}">
+			                                        <th th:text="${i.count}" scope="row">1</th>
+			                                        <td th:text="${status.firefighter.firstName + ' ' + status.firefighter.lastName}">Imię i nazwisko</td>
+			                                        <td th:text="${#temporals.format(status.validFrom, 'dd-MM-yyyy, HH:mm:ss')}">Data</td>
+			                                        <td th:text="${status.type == T(net.babuszka.osp.model.FirefighterAvailabilityType).AVAILABLE} ? 'W GOTOWOŚCI' : 'Brak gotowości'">Status</td>
+			                                        <td>
+														<i th:text="${status.type == T(net.babuszka.osp.model.FirefighterAvailabilityType).AVAILABLE} ? 'verified_user' : 'clear'" class="material-icons col-teal">clear</i>
+													</td>
+			                                    </tr>
+			                                </tbody>
+			                            </table>
+			                        </div>					
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
 	                            </div>     
 	                        </div>                   
                         </div>
