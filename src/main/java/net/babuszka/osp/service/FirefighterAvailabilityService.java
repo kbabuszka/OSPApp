@@ -1,5 +1,6 @@
 package net.babuszka.osp.service;
 
+import java.util.List;
 import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
@@ -66,5 +67,11 @@ public class FirefighterAvailabilityService {
 			newAvailability.setValidFrom(LocalDateTime.now());
 			firefighterAvailabilityRepository.save(newAvailability);
 		}
+	}
+	
+	public List<FirefighterAvailability> getLatestStatusChanges(Integer amount) {
+		List<FirefighterAvailability> latest = firefighterAvailabilityRepository.findLatestStatusChanges(amount);
+		LOG.info("Got " + latest.size() + " latest status changes from database.");
+		return latest;
 	}
 }

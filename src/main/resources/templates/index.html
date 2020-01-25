@@ -156,53 +156,24 @@
                     </div>
                 </div>
                 <!-- #END# Visitors -->
-                <!-- Latest Social Trends -->
+                <!-- Latest status changes -->
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="card">
                         <div class="body bg-light-green">
                             <div class="m-b--35 font-bold">OSTATNIE ZMIANY STATUSÓW</div>
                             <ul class="dashboard-stat-list">
-                                <li>
-                                    JAN KOWALSKI
+                                <li th:each="status, i : ${card_latest_status_changes}" >
+                                    <th:block th:text="${#strings.toUpperCase(status.firefighter.firstName + ' ' + status.firefighter.lastName)}">JAN KOWALSKI</th:block>
                                     <span class="pull-right">
-                                        <i class="material-icons">clear</i>
-                                    </span>
-                                </li>
-                                <li>
-                                    JAN KOWALSKI
-                                    <span class="pull-right">
-                                        <i class="material-icons">verified_user</i>
-                                    </span>
-                                </li>
-                                <li>
-                                    JAN KOWALSKI
-                                    <span class="pull-right">
-                                        <i class="material-icons">clear</i>
-                                    </span>
-                                </li>
-                                <li>
-                                    JAN NOWAK
-                                    <span class="pull-right">
-                                        <i class="material-icons">clear</i>
-                                    </span>
-                                </li>
-                                <li>
-                                    JAN NOWAK
-                                    <span class="pull-right">
-                                        <i class="material-icons">verified_user</i>
-                                    </span>
-                                </li>
-                                <li>
-                                    PIOTR WOJCIECHOWSKI
-                                    <span class="pull-right">
-                                        <i class="material-icons">verified_user</i>
+                                        <i th:text="${status.type == T(net.babuszka.osp.model.FirefighterAvailabilityType).AVAILABLE} ? 'verified_user' : 'clear'" class="material-icons">clear</i>
                                     </span>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <!-- #END# Latest Social Trends -->
+               
+                <!-- #END# Latest status changes -->
                 <!-- Answered Tickets -->
                 <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                     <div class="card">
