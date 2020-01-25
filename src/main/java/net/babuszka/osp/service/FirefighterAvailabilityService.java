@@ -74,4 +74,8 @@ public class FirefighterAvailabilityService {
 		LOG.info("Got " + latest.size() + " latest status changes from database.");
 		return latest;
 	}
+	
+	public Integer getAvailableFirefightersCount() {
+		return firefighterAvailabilityRepository.countAvailableFirefighters();
+	}	
 }

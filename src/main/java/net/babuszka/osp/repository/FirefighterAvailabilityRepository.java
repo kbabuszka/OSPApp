@@ -14,4 +14,7 @@ public interface FirefighterAvailabilityRepository extends JpaRepository<Firefig
 
 	@Query(value = "SELECT * FROM firefighter_availability LIMIT ?1", nativeQuery = true)
 	List<FirefighterAvailability> findLatestStatusChanges(Integer amount);
+	
+	@Query(value = "SELECT COUNT(DISTINCT firefighter_id) FROM firefighter_availability WHERE (availability = 1 AND valid_before IS NULL)", nativeQuery = true)
+	Integer countAvailableFirefighters();
 }

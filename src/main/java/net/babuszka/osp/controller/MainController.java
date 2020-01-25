@@ -38,15 +38,15 @@ public class MainController {
 	@GetMapping(path = "/")
 	public String initDashboardView(Model model) {
 		model.addAttribute("page_title", "Pulpit");
-		
 		//Infoboxes
 		Integer firefightersAmount = firefighterService.getAllFirefighters().size();
 		model.addAttribute("infobox_firefighters_total_amount", firefightersAmount);
+		Integer availableFirefightersCount = firefighterAvailabilityService.getAvailableFirefightersCount();
+		model.addAttribute("infobox_firefighters_available", availableFirefightersCount);
 		
 		// Cards
 		List<FirefighterAvailability> latestStatusChanges = firefighterAvailabilityService.getLatestStatusChanges(8);
 		model.addAttribute("card_latest_status_changes", latestStatusChanges);
-		
 		return "index";
 	}
 	
