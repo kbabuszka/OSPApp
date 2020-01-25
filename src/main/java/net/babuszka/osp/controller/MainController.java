@@ -45,7 +45,7 @@ public class MainController {
 		model.addAttribute("infobox_firefighters_available", availableFirefightersCount);
 		
 		// Cards
-		List<FirefighterAvailability> latestStatusChanges = firefighterAvailabilityService.getLatestStatusChanges(8);
+		List<FirefighterAvailability> latestStatusChanges = firefighterAvailabilityService.getLatestStatusChanges(7);
 		model.addAttribute("card_latest_status_changes", latestStatusChanges);
 		return "index";
 	}
