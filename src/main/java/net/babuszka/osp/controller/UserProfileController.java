@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import net.babuszka.osp.model.Firefighter;
+import net.babuszka.osp.model.FirefighterAvailability;
 import net.babuszka.osp.model.User;
 import net.babuszka.osp.model.UserProfileForm;
+import net.babuszka.osp.service.FirefighterAvailabilityService;
 import net.babuszka.osp.service.UserService;
 import net.babuszka.osp.utils.UserUtils;
 
@@ -34,6 +37,7 @@ public class UserProfileController {
 	
 	private UserService userService;
 	private UserUtils userUtils;
+	private FirefighterAvailabilityService firefighterAvailabilityService;
 	
 	@Autowired
 	public void setUserService(UserService userService) {
@@ -43,6 +47,11 @@ public class UserProfileController {
 	@Autowired
 	public void setUserUtils(UserUtils userUtils) {
 		this.userUtils = userUtils;
+	}
+	
+	@Autowired
+	public void setFirefighterAvailabilityService(FirefighterAvailabilityService firefighterAvailabilityService) {
+		this.firefighterAvailabilityService = firefighterAvailabilityService;
 	}
 
 	@GetMapping(path = "/profile")
@@ -120,5 +129,32 @@ public class UserProfileController {
 	    redirectAttributes.addFlashAttribute("alertClass", "alert-success");
 		userService.updateUser(user);
 		return "redirect:/profile";
+	}
+	
+	// Display user's firefighter availability and history
+	@GetMapping(path = "/profile/availability")
+	public String initUserFirefighterAvailability(Model model) {
+		User user = userService.getCurrentlyLoggedUser();
+		Firefighter firefighter = user.getFirefighter();
+		FirefighterAvailability firefighterAvailability = null;
+		if(firefighter != null) {
+			firefighterAvailability = firefighterAvailabilityService
+					.getCurrentFirefighterAvailability(firefighter.getId());
+		}
+		model.addAttribute("page_title", "Twoja gotowość do działań");
+		model.addAttribute("firefighter", firefighter);
+		model.addAttribute("firefighterAvailability", firefighterAvailability);
+		return "user_profile_firefighter_status";
+	}
+	
+	// Toggle user's firefighter availability
+	@GetMapping(path = "/profile/availability/toggle")
+	public String toggleFirefighterAvailability(RedirectAttributes redirectAttributes) {
+		User user = userService.getCurrentlyLoggedUser();
+		Firefighter firefighter = user.getFirefighter();
+		if(firefighter != null) {
+			firefighterAvailabilityService.toggleFirefighterAvailabilty(firefighter.getId());
+		}
+		return "redirect:/profile/availability";
 	}
 }

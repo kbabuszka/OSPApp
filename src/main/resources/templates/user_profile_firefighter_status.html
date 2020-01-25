@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:include="html/head.html"></th:block>
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+	<th:block th:include="html/preloader.html"></th:block>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <th:block th:include="html/search_bar.html"></th:block>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+	<th:block th:include="html/top_bar.html"></th:block>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside id="leftsidebar" class="sidebar">
+            <!-- User Info -->
+			<th:block th:include="html/user_info.html"></th:block>
+            <!-- #User Info -->
+            <!-- Menu -->
+			<th:block th:include="html/navigation.html"></th:block>
+            <!-- #Menu -->
+            <!-- Footer -->
+			<th:block th:include="html/footer.html"></th:block>
+            <!-- #Footer -->
+        </aside>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+		<th:block th:include="html/sidebar_right.html"></th:block>
+        <!-- #END# Right Sidebar -->
+    </section>
+    
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        	<!-- Modify below -->
+            <!-- Actual content -->
+			<div class="row clearfix">
+			    <div class="col-xs-12 col-sm-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Twoja gotowość do działań
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <div th:if="${firefighter == null}" class="alert alert-warning">
+                            	Żaden strażak nie jest przypisany do Twojego konta.
+                        	</div>
+	                        <ul class="nav nav-tabs" role="tablist">
+	                            <li role="presentation" class="active"><a href="#actual_status" aria-controls="settings" role="tab" data-toggle="tab">Stan gotowości</a></li>
+	                            <li role="presentation"><a href="#status_history" aria-controls="settings" role="tab" data-toggle="tab">Historia</a></li>
+	                        </ul>
+                            <br />
+                            
+							<div class="tab-content">
+								<div role="tabpanel" class="tab-pane fade active in" id="actual_status">
+											
+									<div th:if="${firefighter != null}"  class="row">
+										<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+											<div class="info-box-4">
+						                        <div class="icon">
+						                            <i class="material-icons">face</i>
+						                        </div>
+						                        <div class="content">
+						                            <div class="text">Strażak:</div>
+						                            <div th:text="${firefighter.firstName + ' ' + firefighter.lastName}" class="number">Imie i nazwisko</div>
+						                        </div>
+						                    </div>
+						                    
+						                    <div class="info-box-4 hover-zoom-effect">
+						                        <div class="icon">
+						                            <i class="material-icons col-light-blue">access_alarm</i>
+						                        </div>
+						                        <div class="content">
+						                            <div class="text">Ostatnia zmiana statusu</div>
+						                            <div th:text="${firefighterAvailability != null} ? ${#temporals.format(firefighterAvailability.validFrom, 'dd-MM-yyyy, HH:mm:ss')} : '-'" class="number"></div>
+						                        </div>
+						                    </div>
+											<th:block th:if="${firefighterAvailability != null}">				
+												<th:block th:if="${firefighterAvailability.type == T(net.babuszka.osp.model.FirefighterAvailabilityType).AVAILABLE}">
+													<div class="info-box bg-light-green hover-expand-effect">
+								                        <div class="icon">
+								                            <i class="material-icons">verified_user</i>
+								                        </div>
+								                        <div class="content">
+								                            <div class="text">Aktualny status:</div>
+								                            <div class="number">W GOTOWOŚCI</div>
+								                        </div>
+								                    </div>
+							                    </th:block>
+							                    
+							                    <th:block th:if="${firefighterAvailability.type == T(net.babuszka.osp.model.FirefighterAvailabilityType).UNAVAILABLE}">
+								                    <div class="info-box bg-deep-orange">
+								                        <div class="icon">
+															<i class="material-icons">clear</i>
+								                        </div>
+								                        <div class="content">
+								                            <div class="text">Aktualny status:</div>
+								                            <div class="number">BRAK GOTOWOŚCI</div>
+								                        </div>
+								                    </div>
+							                    </th:block>
+						                    </th:block>
+				                    		<a th:href="@{/profile/availability/toggle}" class="btn btn-success waves-effect">
+			                                    <i class="material-icons">verified_user</i>
+			                                    <span>Zmień status</span>
+			                                </a>
+				                    	</div>
+				                    </div>
+	                            </div>                                 
+								<div role="tabpanel" class="tab-pane fade in" id="status_history">
+									Historia zmian statusu
+	                            </div>     
+	                        </div>                   
+                        </div>
+                    </div>
+                </div>
+
+            <!-- #END# Actual content -->
+			</div>
+        </div>
+    </section>
+    <!-- #END# Main content -->
+    
+	<!-- Common scripts import -->
+	<th:block th:include="html/scripts_import.html"></th:block>
+	<!-- #END# Common scripts import -->
+	
+	<!-- Page-specific scripts import -->
+
+   	<!-- #END# Page-specific scripts import -->
+   	
+</body>
+</html>

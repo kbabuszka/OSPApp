@@ -261,5 +261,4 @@ public class FirefighterController {
 		model.addAttribute("firefighters", firefighters);
 		return "firefighters_deleted";
 	}
-
 }
